@@ -1,4 +1,5 @@
 from .day3part1 import data_coordinates, spiral_manhattan_distance
+from .day3part2 import first_spiral_value_larger
 
 
 def test_data_coordinates():
@@ -27,3 +28,18 @@ def test_part1():
 
     for puzzle_input, expected in test_cases:
         assert spiral_manhattan_distance(puzzle_input) == expected
+
+
+def test_part2():
+    test_cases = [
+        (1, 2),
+        (4, 5),
+        (5, 10),
+        (8, 10),
+        (100, 122),
+        (300, 304),
+        (-1, 1),
+    ]
+
+    for puzzle_input, expected in test_cases:
+        assert first_spiral_value_larger(puzzle_input) == expected
