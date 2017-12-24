@@ -3,11 +3,11 @@ def is_valid_passphrase(passphrase):
     return len(words) == len(set(words))
 
 
-def num_valid_passphrases(passphrases):
+def num_valid_passphrases(passphrases, passphrase_checking_fn):
     passphrases = passphrases.split('\n')
     num_valid = 0
     for phrase in passphrases:
-        if is_valid_passphrase(phrase):
+        if passphrase_checking_fn(phrase):
             num_valid += 1
     return num_valid
 
@@ -524,4 +524,4 @@ xzzpiy cjwss jwscs apb bpa
 ydjhhf yeltadb lwi cjdcb ovaox xrdm vkxub
 zax xza admbc lvpzfeh auxn rwasj
 kebx eild nrskdr meja jxczomh gcne"""
-    print(num_valid_passphrases(puzzle_input))
+    print(num_valid_passphrases(puzzle_input, is_valid_passphrase))

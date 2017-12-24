@@ -24,9 +24,16 @@ def test_is_valid_passphrase():
 def test_part1():
     passphrases = '\n'.join([test_case[0] for test_case in PART1_TEST_CASES])
     num_valid = sum([test_case[1] for test_case in PART1_TEST_CASES])
-    assert num_valid_passphrases(passphrases) == num_valid
+    assert num_valid_passphrases(passphrases, is_valid_passphrase) == num_valid
 
 
 def test_is_valid_anagram_passphrase():
     for phrase, expected in PART2_TEST_CASES:
         assert is_valid_anagram_passphrase(phrase) == expected
+
+
+def test_part2():
+    passphrases = '\n'.join([test_case[0] for test_case in PART2_TEST_CASES])
+    num_valid = sum([test_case[1] for test_case in PART2_TEST_CASES])
+    assert num_valid_passphrases(passphrases,
+                                 is_valid_anagram_passphrase) == num_valid
