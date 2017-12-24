@@ -11,8 +11,7 @@ def num_valid_passphrases(passphrases, passphrase_checking_fn):
             num_valid += 1
     return num_valid
 
-if __name__ == '__main__':
-    puzzle_input = """sayndz zfxlkl attjtww cti sokkmty brx fhh suelqbp
+PUZZLE_INPUT = """sayndz zfxlkl attjtww cti sokkmty brx fhh suelqbp
 xmuf znkhaes pggrlp zia znkhaes znkhaes
 nti rxr bogebb zdwrin
 sryookh unrudn zrkz jxhrdo gctlyz
@@ -524,4 +523,6 @@ xzzpiy cjwss jwscs apb bpa
 ydjhhf yeltadb lwi cjdcb ovaox xrdm vkxub
 zax xza admbc lvpzfeh auxn rwasj
 kebx eild nrskdr meja jxczomh gcne"""
-    print(num_valid_passphrases(puzzle_input, is_valid_passphrase))
+
+if __name__ == '__main__':
+    print(num_valid_passphrases(PUZZLE_INPUT, is_valid_passphrase))
