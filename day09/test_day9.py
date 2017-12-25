@@ -1,4 +1,4 @@
-from day9part1 import score_stream
+from day9 import num_canceled_characters, score_stream
 
 
 def test_score_stream():
@@ -15,3 +15,18 @@ def test_score_stream():
 
     for puzzle_input, expected in test_cases:
         assert score_stream(puzzle_input) == expected
+
+
+def test_num_canceled_characters():
+    test_cases = (
+        ('<>', 0),
+        ('<random characters>', 17),
+        ('<<<<>', 3),
+        ('<{!>}>', 2),
+        ('<!!>', 0),
+        ('<!!!>>', 0),
+        ('<{o"i!a,<{i<a>', 10),
+    )
+
+    for puzzle_input, expected in test_cases:
+        assert num_canceled_characters(puzzle_input) == expected

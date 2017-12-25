@@ -41,6 +41,9 @@ def score_stream(stream):
     return score
 
 
+def num_canceled_characters(stream):
+    return 0
+
 if __name__ == '__main__':
     with open(op.join(op.dirname(__file__), 'puzzle_input.txt'), 'r') as f:
         puzzle_input = f.read()
