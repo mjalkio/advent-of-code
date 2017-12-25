@@ -44,16 +44,23 @@ def parse_input(puzzle_input):
     return instructions, registers
 
 
-def get_largest_register_value(puzzle_input):
+def execute_instructions(puzzle_input):
     instructions, register_names = parse_input(puzzle_input)
     registers = {reg: 0 for reg in register_names}
+    max_value_seen = 0
     for instruction in instructions:
         register, reg_op, amount, bool_reg, bool_op, bool_val = instruction
         if bool_op(registers[bool_reg], bool_val):
             registers[register] = reg_op(registers[register], amount)
-    return max(registers.values())
+
+            if registers[register] > max_value_seen:
+                max_value_seen = registers[register]
+
+    return max(registers.values()), max_value_seen
 
 
 if __name__ == '__main__':
     puzzle_input = get_input()
-    print(get_largest_register_value(puzzle_input))
+    max_val, max_ever = execute_instructions(puzzle_input)
+    print("Max at end: {val}".format(val=max_val))
+    print("Max ever: {val}".format(val=max_ever))
