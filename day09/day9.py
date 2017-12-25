@@ -15,18 +15,25 @@ def find_garbage_indices(stream):
     return stream.find(GARBAGE_START_CHAR), stream.find(GARBAGE_END_CHAR)
 
 
-def score_stream(stream):
-    # Remove all of the !s
+def remove_ignored_characters(stream):
     ignore_char_idx = find_ignored_character_index(stream)
     while ignore_char_idx != -1:
         stream = stream[:ignore_char_idx] + stream[ignore_char_idx + 2:]
         ignore_char_idx = find_ignored_character_index(stream)
+    return stream
 
-    # Now remove the garbage blocks
+
+def remove_garbage_blocks(stream):
     garbage_start_idx, garbage_end_idx = find_garbage_indices(stream)
     while garbage_start_idx != -1 and garbage_end_idx != -1:
         stream = stream[:garbage_start_idx] + stream[garbage_end_idx + 1:]
         garbage_start_idx, garbage_end_idx = find_garbage_indices(stream)
+    return stream
+
+
+def score_stream(stream):
+    stream = remove_ignored_characters(stream)
+    stream = remove_garbage_blocks(stream)
 
     # Finally go through the stream counting the score
     score = 0
