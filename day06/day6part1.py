@@ -1,3 +1,12 @@
+import os.path as op
+
+
+def get_initial_config():
+    with open(op.join(op.dirname(__file__), 'puzzle_input.txt'), 'r') as f:
+        puzzle_input = f.read()
+    return [int(blocks) for blocks in puzzle_input.split()]
+
+
 def num_cycles(config):
     config = tuple(config)
     past_configs = set()
@@ -19,3 +28,7 @@ def num_cycles(config):
             idx += 1
         config = tuple(config)
     return num_cycles
+
+if __name__ == '__main__':
+    initial_config = get_initial_config()
+    print(num_cycles(initial_config))
