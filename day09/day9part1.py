@@ -1,3 +1,5 @@
+import os.path as op
+
 IGNORE_CHAR = '!'
 GARBAGE_START_CHAR = '<'
 GARBAGE_END_CHAR = '>'
@@ -37,3 +39,9 @@ def score_stream(stream):
             groups_started -= 1
 
     return score
+
+
+if __name__ == '__main__':
+    with open(op.join(op.dirname(__file__), 'puzzle_input.txt'), 'r') as f:
+        puzzle_input = f.read()
+    print(score_stream(puzzle_input))
