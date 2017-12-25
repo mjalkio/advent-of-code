@@ -2,7 +2,7 @@ import operator
 import os.path as op
 
 
-def get_input(filename):
+def get_input(filename='puzzle_input.txt'):
     with open(op.join(op.dirname(__file__), filename), 'r') as f:
         puzzle_input = f.read()
     return puzzle_input
@@ -52,3 +52,8 @@ def get_largest_register_value(puzzle_input):
         if bool_op(registers[bool_reg], bool_val):
             registers[register] = reg_op(registers[register], amount)
     return max(registers.values())
+
+
+if __name__ == '__main__':
+    puzzle_input = get_input()
+    print(get_largest_register_value(puzzle_input))
