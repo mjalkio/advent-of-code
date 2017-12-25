@@ -24,16 +24,18 @@ def remove_ignored_characters(stream):
 
 
 def remove_garbage_blocks(stream):
+    num_removed_chars = 0
     garbage_start_idx, garbage_end_idx = find_garbage_indices(stream)
     while garbage_start_idx != -1 and garbage_end_idx != -1:
+        num_removed_chars += garbage_end_idx - garbage_start_idx - 1
         stream = stream[:garbage_start_idx] + stream[garbage_end_idx + 1:]
         garbage_start_idx, garbage_end_idx = find_garbage_indices(stream)
-    return stream
+    return stream, num_removed_chars
 
 
 def score_stream(stream):
     stream = remove_ignored_characters(stream)
-    stream = remove_garbage_blocks(stream)
+    stream, _ = remove_garbage_blocks(stream)
 
     # Finally go through the stream counting the score
     score = 0
@@ -49,7 +51,9 @@ def score_stream(stream):
 
 
 def num_canceled_characters(stream):
-    return 0
+    stream = remove_ignored_characters(stream)
+    _, num_removed_chars = remove_garbage_blocks(stream)
+    return num_removed_chars
 
 if __name__ == '__main__':
     with open(op.join(op.dirname(__file__), 'puzzle_input.txt'), 'r') as f:
