@@ -14,7 +14,7 @@ def flatten(list_of_lists):
 
 def get_root(puzzle_input):
     lines = puzzle_input.strip().split('\n')
-    programs = [line[0:4] for line in lines]
+    programs = [line.split('(')[0].strip() for line in lines]
     child_programs = flatten([line.split('->')[1].strip().split(', ')
                               for line in lines
                               if '->' in line])
