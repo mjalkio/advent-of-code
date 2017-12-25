@@ -1,5 +1,7 @@
 from collections import Counter
 
+from day7part1 import get_input
+
 
 def parse_program_name(line):
     return line.split('(')[0].strip()
@@ -23,6 +25,20 @@ def get_program_weights(lines):
 def get_program_children(lines):
     return {parse_program_name(line): parse_program_children(line)
             for line in lines if parse_program_children(line) is not None}
+
+
+def has_no_unbalanced_children(program, program_children, weights):
+    if program not in program_children:
+        # Has no children, so they can't be unbalanced
+        return True
+
+    children = program_children[program]
+    child_weights = [weights[child] for child in children]
+    if len(set(child_weights)) != 1:
+        return False
+
+    return all([has_no_unbalanced_children(child, program_children, weights)
+                for child in children])
 
 
 def wrong_weight_disc_correction(puzzle_input):
@@ -67,10 +83,19 @@ def wrong_weight_disc_correction(puzzle_input):
         msg = 'Should only have one correct weight and one incorrect weight'
         assert len(counts) == 2, msg
 
-        good_weight, bad_weight = list(counts)
+        good_weight, bad_weight = [w for (w, cnt) in counts.most_common()]
         adjustment = good_weight - bad_weight
         for child, weight in child_weights.items():
             if weight == bad_weight:
-                return program_weights[child] + adjustment
+                if has_no_unbalanced_children(child,
+                                              program_children,
+                                              program_balanced_weights):
+                    # Needs to be the root of the problem to return
+                    return program_weights[child] + adjustment
 
     raise ValueError("Michael messed up this problem.")
+
+
+if __name__ == '__main__':
+    puzzle_input = get_input('puzzle_input.txt')
+    print(wrong_weight_disc_correction(puzzle_input))
