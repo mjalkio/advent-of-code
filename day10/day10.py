@@ -29,6 +29,10 @@ def to_ascii(string):
     return [ord(char) for char in string]
 
 
+def to_hex(numbers):
+    return ''.join([hex(num)[2:].zfill(2) for num in numbers])
+
+
 def convert_input(string):
     return to_ascii(string) + [17, 31, 73, 47, 23]
 

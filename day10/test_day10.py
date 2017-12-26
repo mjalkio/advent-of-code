@@ -1,5 +1,5 @@
 from day10 import (convert_input, dense_hash, knot_hash,
-                   sparse_hash, to_ascii, xor)
+                   sparse_hash, to_ascii, to_hex, xor)
 
 
 def test_knot_hash():
@@ -30,3 +30,8 @@ def test_hashes():
 def test_xor():
     num_list = [65, 27, 9, 1, 4, 3, 40, 50, 91, 7, 6, 0, 2, 5, 68, 22]
     assert xor(num_list=num_list) == 64
+
+
+def test_to_hex():
+    num_list = [64, 7, 255]
+    assert to_hex(numbers=num_list) == '4007ff'
