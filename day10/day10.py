@@ -33,6 +33,17 @@ def convert_input(string):
     return to_ascii(string) + [17, 31, 73, 47, 23]
 
 
+def sparse_hash(lengths, num_list):
+    current_position = 0
+    skip_size = 0
+    num_rounds = 64
+    for _ in range(num_rounds):
+        num_list, current_position, skip_size = hash_round(
+            lengths=lengths, num_list=num_list,
+            current_position=current_position, skip_size=skip_size)
+    return num_list
+
+
 if __name__ == '__main__':
     puzzle_input = '197,97,204,108,1,29,5,71,0,50,2,255,248,78,254,63'
     lengths = [int(length) for length in puzzle_input.split(',')]
