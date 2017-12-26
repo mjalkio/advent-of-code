@@ -10,15 +10,19 @@ def reverse_list(lst, start, length):
 
 
 def knot_hash(lengths, num_list):
-    current_position = 0
-    skip_size = 0
+    num_list, _, _ = hash_round(lengths=lengths, num_list=num_list,
+                                current_position=0, skip_size=0)
+    return num_list[0] * num_list[1]
+
+
+def hash_round(lengths, num_list, current_position, skip_size):
     for length in lengths:
         num_list = reverse_list(lst=num_list,
                                 start=current_position,
                                 length=length)
         current_position += (length + skip_size) % len(num_list)
         skip_size += 1
-    return num_list[0] * num_list[1]
+    return num_list, current_position, skip_size
 
 
 def to_ascii(string):
