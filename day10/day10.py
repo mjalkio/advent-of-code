@@ -20,6 +20,10 @@ def knot_hash(lengths, num_list):
         skip_size += 1
     return num_list[0] * num_list[1]
 
+
+def to_ascii(string):
+    return [ord(char) for char in string]
+
 if __name__ == '__main__':
     puzzle_input = '197,97,204,108,1,29,5,71,0,50,2,255,248,78,254,63'
     lengths = [int(length) for length in puzzle_input.split(',')]
