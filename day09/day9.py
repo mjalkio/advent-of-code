@@ -58,4 +58,6 @@ def num_canceled_characters(stream):
 if __name__ == '__main__':
     with open(op.join(op.dirname(__file__), 'puzzle_input.txt'), 'r') as f:
         puzzle_input = f.read()
-    print(score_stream(puzzle_input))
+    print("Stream score: {score}".format(score=score_stream(puzzle_input)))
+    print("Num canceled characters: {num}".format(
+        num=num_canceled_characters(puzzle_input)))
