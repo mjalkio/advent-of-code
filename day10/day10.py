@@ -61,6 +61,11 @@ def dense_hash(sparse_hash):
         dense_hash.append(xor(sparse_hash[start_idx:start_idx + 16]))
     return dense_hash
 
+
+def real_knot_hash(string):
+    return ''
+
+
 if __name__ == '__main__':
     puzzle_input = '197,97,204,108,1,29,5,71,0,50,2,255,248,78,254,63'
     lengths = [int(length) for length in puzzle_input.split(',')]
