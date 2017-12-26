@@ -63,7 +63,10 @@ def dense_hash(sparse_hash):
 
 
 def real_knot_hash(string):
-    return ''
+    lengths = convert_input(string=string)
+    sparse_hashing = sparse_hash(lengths=lengths, num_list=range(256))
+    dense_hashing = dense_hash(sparse_hash=sparse_hashing)
+    return to_hex(dense_hashing)
 
 
 if __name__ == '__main__':
