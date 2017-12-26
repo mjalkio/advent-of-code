@@ -1,4 +1,5 @@
-from day10 import convert_input, knot_hash, sparse_hash, to_ascii, xor
+from day10 import (convert_input, dense_hash, knot_hash,
+                   sparse_hash, to_ascii, xor)
 
 
 def test_knot_hash():
@@ -18,11 +19,12 @@ def test_convert_input():
     assert convert_input(string_input) == expected
 
 
-def test_sparse_hash():
+def test_hashes():
     # Just want to check that it runs...
-    num_list = range(5)
+    num_list = range(256)
     lengths = (3, 4, 1, 5)
-    sparse_hash(lengths=lengths, num_list=num_list)
+    sparse_hashing = sparse_hash(lengths=lengths, num_list=num_list)
+    dense_hash(sparse_hashing)
 
 
 def test_xor():

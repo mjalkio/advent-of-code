@@ -48,6 +48,15 @@ def xor(num_list):
     return reduce((lambda x, y: x ^ y), num_list)
 
 
+def dense_hash(sparse_hash):
+    if len(sparse_hash) != 256:
+        raise ValueError('Invalid sparse hash provided.')
+    dense_hash = []
+    for i in range(16):
+        start_idx = i * 16
+        dense_hash.append(xor(sparse_hash[start_idx:start_idx + 16]))
+    return dense_hash
+
 if __name__ == '__main__':
     puzzle_input = '197,97,204,108,1,29,5,71,0,50,2,255,248,78,254,63'
     lengths = [int(length) for length in puzzle_input.split(',')]
