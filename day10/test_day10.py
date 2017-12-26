@@ -1,4 +1,4 @@
-from day10 import convert_input, knot_hash, sparse_hash, to_ascii
+from day10 import convert_input, knot_hash, sparse_hash, to_ascii, xor
 
 
 def test_knot_hash():
@@ -23,3 +23,8 @@ def test_sparse_hash():
     num_list = range(5)
     lengths = (3, 4, 1, 5)
     sparse_hash(lengths=lengths, num_list=num_list)
+
+
+def test_xor():
+    num_list = [65, 27, 9, 1, 4, 3, 40, 50, 91, 7, 6, 0, 2, 5, 68, 22]
+    assert xor(num_list=num_list) == 64
