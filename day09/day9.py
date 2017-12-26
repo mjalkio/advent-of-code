@@ -50,7 +50,7 @@ def score_stream(stream):
     return score
 
 
-def num_canceled_characters(stream):
+def num_garbage_characters(stream):
     stream = remove_ignored_characters(stream)
     _, num_removed_chars = remove_garbage_blocks(stream)
     return num_removed_chars
@@ -59,5 +59,5 @@ if __name__ == '__main__':
     with open(op.join(op.dirname(__file__), 'puzzle_input.txt'), 'r') as f:
         puzzle_input = f.read()
     print("Stream score: {score}".format(score=score_stream(puzzle_input)))
-    print("Num canceled characters: {num}".format(
-        num=num_canceled_characters(puzzle_input)))
+    print("Num garbage characters: {num}".format(
+        num=num_garbage_characters(puzzle_input)))
