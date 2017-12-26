@@ -73,4 +73,7 @@ if __name__ == '__main__':
     puzzle_input = '197,97,204,108,1,29,5,71,0,50,2,255,248,78,254,63'
     lengths = [int(length) for length in puzzle_input.split(',')]
     num_list = range(256)
-    print(knot_hash(lengths=lengths, num_list=num_list))
+    print("Part one: {hash}".format(
+        hash=knot_hash(lengths=lengths, num_list=num_list)))
+    print("Part two: {hash}".format(
+        hash=real_knot_hash(puzzle_input)))
