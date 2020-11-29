@@ -11,6 +11,7 @@ def calculate_checksum(puzzle_input):
 
     return checksum
 
+
 if __name__ == '__main__':
     puzzle_input = """
         278 1689    250 1512    1792    1974    175 1639    235 1635    1690    1947    810 224 928 859

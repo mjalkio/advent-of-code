@@ -35,6 +35,7 @@ def loop_size(config):
         config = redistribute(config)
     return loop_size
 
+
 if __name__ == '__main__':
     initial_config = get_initial_config()
     print(loop_size(initial_config))

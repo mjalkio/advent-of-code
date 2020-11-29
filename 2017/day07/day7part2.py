@@ -86,12 +86,16 @@ def wrong_weight_disc_correction(puzzle_input):
         good_weight, bad_weight = [w for (w, cnt) in counts.most_common()]
         adjustment = good_weight - bad_weight
         for child, weight in child_weights.items():
-            if weight == bad_weight:
-                if has_no_unbalanced_children(child,
-                                              program_children,
-                                              program_balanced_weights):
-                    # Needs to be the root of the problem to return
-                    return program_weights[child] + adjustment
+            if (
+                weight == bad_weight
+                and has_no_unbalanced_children(
+                    child,
+                    program_children,
+                    program_balanced_weights,
+                )
+            ):
+                # Needs to be the root of the problem to return
+                return program_weights[child] + adjustment
 
     raise ValueError("Michael messed up this problem.")
 

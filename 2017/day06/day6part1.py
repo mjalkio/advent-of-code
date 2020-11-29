@@ -16,9 +16,11 @@ def num_cycles(config):
         num_cycles += 1
 
         config = list(config)
-        max_index, max_blocks = max(enumerate(config),
-                                    # Was originally lambda (idx, blocks): blocks
-                                    key=lambda config: config[1])
+        max_index, max_blocks = max(
+            enumerate(config),
+            # Was originally lambda (idx, blocks): blocks
+            key=lambda config: config[1],
+        )
         config[max_index] = 0
         config = [blocks + int(max_blocks / len(config)) for blocks in config]
         remaining_blocks = max_blocks % len(config)
@@ -29,6 +31,7 @@ def num_cycles(config):
             idx += 1
         config = tuple(config)
     return num_cycles
+
 
 if __name__ == '__main__':
     initial_config = get_initial_config()

@@ -41,6 +41,7 @@ def spiral_manhattan_distance(loc):
     coords = data_coordinates(loc)
     return manhattan_distance(coords, (0, 0))
 
+
 if __name__ == '__main__':
     puzzle_input = 361527
     print(spiral_manhattan_distance(puzzle_input))

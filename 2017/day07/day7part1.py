@@ -22,6 +22,7 @@ def get_root(puzzle_input):
     assert len(root) == 1, 'Should only have a single root'
     return root[0]
 
+
 if __name__ == '__main__':
     puzzle_input = get_input('puzzle_input.txt')
     print(get_root(puzzle_input))

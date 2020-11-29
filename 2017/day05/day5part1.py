@@ -17,6 +17,7 @@ def num_jumps(instructions):
 
     return num_jumps
 
+
 if __name__ == '__main__':
     instructions = get_instructions()
     print(num_jumps(instructions))
