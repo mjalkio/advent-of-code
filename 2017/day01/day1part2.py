@@ -1,7 +1,7 @@
 def sum_matches2(puzzle_input):
     match_sum = 0
     for i in range(len(puzzle_input)):
-        compare_index = (i + len(puzzle_input) / 2) % len(puzzle_input)
+        compare_index = int((i + len(puzzle_input) / 2) % len(puzzle_input))
         if puzzle_input[i] == puzzle_input[compare_index]:
             match_sum += int(puzzle_input[i])
     return match_sum

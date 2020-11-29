@@ -1,6 +1,6 @@
 from collections import Counter
 
-from day4part1 import num_valid_passphrases, PUZZLE_INPUT
+from .day4part1 import num_valid_passphrases, PUZZLE_INPUT
 
 
 def is_valid_anagram_passphrase(phrase):

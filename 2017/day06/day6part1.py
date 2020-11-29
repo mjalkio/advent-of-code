@@ -17,9 +17,10 @@ def num_cycles(config):
 
         config = list(config)
         max_index, max_blocks = max(enumerate(config),
-                                    key=lambda (idx, blocks): blocks)
+                                    # Was originally lambda (idx, blocks): blocks
+                                    key=lambda config: config[1])
         config[max_index] = 0
-        config = [blocks + max_blocks / len(config) for blocks in config]
+        config = [blocks + int(max_blocks / len(config)) for blocks in config]
         remaining_blocks = max_blocks % len(config)
         idx = max_index + 1
         while remaining_blocks > 0:

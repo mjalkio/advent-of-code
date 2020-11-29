@@ -1,5 +1,8 @@
+from functools import reduce
+
+
 def reverse_list(lst, start, length):
-    for i in range(length / 2):
+    for i in range(int(length / 2)):
         idx1 = (start + i) % len(lst)
         idx2 = (start + length - 1 - i) % len(lst)
 
@@ -64,7 +67,7 @@ def dense_hash(sparse_hash):
 
 def real_knot_hash(string):
     lengths = convert_input(string=string)
-    sparse_hashing = sparse_hash(lengths=lengths, num_list=range(256))
+    sparse_hashing = sparse_hash(lengths=lengths, num_list=list(range(256)))
     dense_hashing = dense_hash(sparse_hash=sparse_hashing)
     return to_hex(dense_hashing)
 
@@ -72,7 +75,7 @@ def real_knot_hash(string):
 if __name__ == '__main__':
     puzzle_input = '197,97,204,108,1,29,5,71,0,50,2,255,248,78,254,63'
     lengths = [int(length) for length in puzzle_input.split(',')]
-    num_list = range(256)
+    num_list = list(range(256))
     print("Part one: {hash}".format(
         hash=knot_hash(lengths=lengths, num_list=num_list)))
     print("Part two: {hash}".format(

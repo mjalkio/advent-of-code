@@ -3,7 +3,7 @@ from day10 import (convert_input, dense_hash, knot_hash, real_knot_hash,
 
 
 def test_knot_hash():
-    num_list = range(5)
+    num_list = list(range(5))
     lengths = (3, 4, 1, 5)
     assert knot_hash(lengths=lengths, num_list=num_list) == 12
 
@@ -21,7 +21,7 @@ def test_convert_input():
 
 def test_hashes():
     # Just want to check that it runs...
-    num_list = range(256)
+    num_list = list(range(256))
     lengths = (3, 4, 1, 5)
     sparse_hashing = sparse_hash(lengths=lengths, num_list=num_list)
     dense_hash(sparse_hashing)

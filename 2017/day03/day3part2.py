@@ -23,20 +23,20 @@ def first_spiral_value_larger(num):
     while True:
         side_length += 2
 
-        while y < side_length / 2:
+        while y < int(side_length / 2):
             y += 1
             spiral[(x, y)] = new_spiral_value(x, y, spiral)
-        while x > -(side_length / 2):
+        while x > -1 * int(side_length / 2):
             x -= 1
             spiral[(x, y)] = new_spiral_value(x, y, spiral)
-        while y > -(side_length / 2):
+        while y > -1 * int(side_length / 2):
             y -= 1
             spiral[(x, y)] = new_spiral_value(x, y, spiral)
-        while x < side_length / 2:
+        while x < int(side_length / 2):
             x += 1
             spiral[(x, y)] = new_spiral_value(x, y, spiral)
 
-        current_values = spiral.values()
+        current_values = list(spiral.values())
         current_values.sort()
         for val in current_values:
             if val > num:
