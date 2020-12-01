@@ -1,4 +1,4 @@
-from .expense_report import sum_to_2020_product
+from year_2020.day01.expense_report import sum_to_2020_product
 
 
 def test_sum_to_2020_product():
