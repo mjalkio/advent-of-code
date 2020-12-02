@@ -2,7 +2,7 @@ from collections import Counter
 from pathlib import Path
 
 
-def is_valid_password(character, min_usages, max_usages, password):
+def is_valid_password_part_1(character, min_usages, max_usages, password):
     password_character_counts = Counter(password)
     if (
             password_character_counts[character] >= min_usages
@@ -13,7 +13,7 @@ def is_valid_password(character, min_usages, max_usages, password):
     return False
 
 
-def num_valid_passwords(puzzle_input):
+def num_valid_passwords_part_1(puzzle_input):
     lines = [
         line
         for line
@@ -26,9 +26,17 @@ def num_valid_passwords(puzzle_input):
         policy, password = line.split(':')
         character_range, character = policy.split(' ')
         min_usages, max_usages = [int(num) for num in character_range.split('-')]
-        if is_valid_password(character, min_usages, max_usages, password):
+        if is_valid_password_part_1(character, min_usages, max_usages, password):
             num_valid += 1
     return num_valid
+
+
+def is_valid_password_part_2(character, position_1, position_2, password):
+    return None
+
+
+def num_valid_passwords_part_2(puzzle_input):
+    return None
 
 
 if __name__ == '__main__':
@@ -36,4 +44,4 @@ if __name__ == '__main__':
     with puzzle_input_path.open() as f:
         puzzle_input = f.read()
 
-    print(f"Part 1: {num_valid_passwords(puzzle_input)}")
+    print(f"Part 1: {num_valid_passwords_part_1(puzzle_input)}")
