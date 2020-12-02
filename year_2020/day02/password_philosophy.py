@@ -32,7 +32,9 @@ def num_valid_passwords_part_1(puzzle_input):
 
 
 def is_valid_password_part_2(character, position_1, position_2, password):
-    return None
+    is_char_at_position_1 = password[position_1 - 1] == character
+    is_char_at_position_2 = password[position_2 - 1] == character
+    return is_char_at_position_1 != is_char_at_position_2
 
 
 def num_valid_passwords_part_2(puzzle_input):
