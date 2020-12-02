@@ -57,7 +57,18 @@ def is_valid_password_part_2(character, position_1, position_2, password):
 
 
 def num_valid_passwords_part_2(puzzle_input):
-    return None
+    parsed_input = _parse_puzzle_input(puzzle_input)
+
+    num_valid = 0
+    for password_data in parsed_input:
+        if is_valid_password_part_2(
+            character=password_data['character'],
+            position_1=password_data['num_1'],
+            position_2=password_data['num_2'],
+            password=password_data['password'],
+        ):
+            num_valid += 1
+    return num_valid
 
 
 if __name__ == '__main__':
@@ -66,3 +77,4 @@ if __name__ == '__main__':
         puzzle_input = f.read()
 
     print(f"Part 1: {num_valid_passwords_part_1(puzzle_input)}")
+    print(f"Part 2: {num_valid_passwords_part_2(puzzle_input)}")
