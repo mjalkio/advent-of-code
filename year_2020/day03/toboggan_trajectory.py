@@ -19,9 +19,30 @@ def num_trees_hit(tree_map, horizontal_change=1, vertical_change=1):
     return num_trees_hit
 
 
+def part_2(tree_map):
+    product = 1
+    slopes = (
+        (1, 1),
+        (3, 1),
+        (5, 1),
+        (7, 1),
+        (1, 2),
+    )
+
+    for horizontal_change, vertical_change in slopes:
+        product *= num_trees_hit(
+            tree_map=tree_map,
+            horizontal_change=horizontal_change,
+            vertical_change=vertical_change,
+        )
+
+    return product
+
+
 if __name__ == '__main__':
     puzzle_input_path = Path(Path(__file__).parent, 'puzzle_input.txt')
     with puzzle_input_path.open() as f:
         puzzle_input = f.read()
 
     print(f"Part 1: {num_trees_hit(tree_map=puzzle_input, horizontal_change=3, vertical_change=1)}")
+    print(f"Part 2: {part_2(tree_map=puzzle_input)}")
