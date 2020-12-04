@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def passport_batch_to_tuple(passport_batch):
     # Two newlines in a row mean there was a blank line
     passports = passport_batch.split('\n\n')
@@ -21,4 +24,13 @@ def passport_is_valid(
 
 
 def num_valid_passports(passport_batch):
-    return None
+    passports = passport_batch_to_tuple(passport_batch)
+    return sum(passport_is_valid(passport) for passport in passports)
+
+
+if __name__ == '__main__':
+    puzzle_input_path = Path(Path(__file__).parent, 'puzzle_input.txt')
+    with puzzle_input_path.open() as f:
+        puzzle_input = f.read()
+
+    print(f"Part 1: {num_valid_passports(passport_batch=puzzle_input)}")
