@@ -13,24 +13,14 @@ def passport_batch_to_tuple(passport_batch):
     )
 
 
-def passport_is_valid(
-    passport,
-    required_fields=('byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid',),
-    optional_fields=('cid',),
-    check_values=False,
-):
-    passport_data = {
-        pair.split(':')[0]: pair.split(':')[1]
-        for pair
-        in passport.split(' ')
-    }
+def _required_fields_are_present(passport_data, required_fields):
     for field in required_fields:
         if field not in passport_data:
             return False
+    return True
 
-    if not check_values:
-        return True
 
+def _numeric_fields_are_valid(passport_data):
     numeric_field_ranges = {
         'byr': (1920, 2002),
         'iyr': (2010, 2020),
@@ -44,8 +34,10 @@ def passport_is_valid(
         numeric_value = int(passport_data[field])
         if numeric_value < min_value or numeric_value > max_value:
             return False
+    return True
 
-    hgt = passport_data['hgt']
+
+def _hgt_is_valid(hgt):
     if 'in' in hgt:
         min_hgt = 59
         max_hgt = 76
@@ -61,12 +53,50 @@ def passport_is_valid(
         return False
     if int(hgt_value) < min_hgt or int(hgt_value) > max_hgt:
         return False
+    return True
 
+
+def _hcl_is_valid(hcl):
     hcl_pattern = re.compile(r'^#[0-9a-f]{6}')
-    if not hcl_pattern.match(passport_data['hcl']):
+    if not hcl_pattern.match(hcl):
+        return False
+    return True
+
+
+def _ecl_is_valid(ecl):
+    return ecl in ('amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth')
+
+
+def passport_is_valid(
+    passport,
+    required_fields=('byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid',),
+    check_values=False,
+):
+    passport_data = {
+        pair.split(':')[0]: pair.split(':')[1]
+        for pair
+        in passport.split(' ')
+    }
+
+    if not _required_fields_are_present(
+        passport_data=passport_data,
+        required_fields=required_fields,
+    ):
         return False
 
-    if passport_data['ecl'] not in ('amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'):
+    if not check_values:
+        return True
+
+    if not _numeric_fields_are_valid(passport_data):
+        return False
+
+    if not _hgt_is_valid(passport_data['hgt']):
+        return False
+
+    if not _hcl_is_valid(passport_data['hcl']):
+        return False
+
+    if not _ecl_is_valid(passport_data['ecl']):
         return False
 
     return True
