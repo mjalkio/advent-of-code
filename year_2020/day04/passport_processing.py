@@ -28,12 +28,16 @@ def _numeric_fields_are_valid(passport_data):
         'pid': (0, 999999999),
     }
     for field, (min_value, max_value) in numeric_field_ranges.items():
-        if not passport_data[field].isnumeric():
+        if not passport_data[field].isdigit():
             return False
 
         numeric_value = int(passport_data[field])
         if numeric_value < min_value or numeric_value > max_value:
             return False
+
+    if len(passport_data['pid']) != 9:
+        return False
+
     return True
 
 
@@ -57,7 +61,7 @@ def _hgt_is_valid(hgt):
 
 
 def _hcl_is_valid(hcl):
-    hcl_pattern = re.compile(r'^#[0-9a-f]{6}')
+    hcl_pattern = re.compile(r'^#[0-9a-f]{6}$')
     if not hcl_pattern.match(hcl):
         return False
     return True
