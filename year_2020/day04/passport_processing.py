@@ -16,16 +16,30 @@ def passport_is_valid(
     passport,
     required_fields=('byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid',),
     optional_fields=('cid',),
+    check_values=False,
 ):
+    passport_data = {
+        pair.split(':')[0]: pair.split(':')[1]
+        for pair
+        in passport.split(' ')
+    }
     for field in required_fields:
-        if f"{field}:" not in passport:
+        if field not in passport_data:
             return False
-    return True
+
+    if not check_values:
+        return True
+
+    return None
 
 
-def num_valid_passports(passport_batch):
+def num_valid_passports(passport_batch, check_values=False):
     passports = passport_batch_to_tuple(passport_batch)
-    return sum(passport_is_valid(passport) for passport in passports)
+    return sum(
+        passport_is_valid(passport=passport, check_values=check_values)
+        for passport
+        in passports
+    )
 
 
 if __name__ == '__main__':
