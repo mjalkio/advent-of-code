@@ -9,8 +9,15 @@ def passport_batch_to_tuple(passport_batch):
     )
 
 
-def passport_is_valid(passport):
-    return None
+def passport_is_valid(
+    passport,
+    required_fields=('byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid',),
+    optional_fields=('cid',),
+):
+    for field in required_fields:
+        if f"{field}:" not in passport:
+            return False
+    return True
 
 
 def num_valid_passports(passport_batch):
