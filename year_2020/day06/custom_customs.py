@@ -14,8 +14,19 @@ def sum_questions_answered_by_group(puzzle_input):
     return sum(num_questions_answered_by_group(gi) for gi in group_inputs)
 
 
+def num_questions_answered_by_whole_group(group_input):
+    individual_questions_answered = [
+        set(questions)
+        for questions
+        in group_input.split('\n')
+        if questions != ''
+    ]
+    return len(set.intersection(*individual_questions_answered))
+
+
 def sum_questions_answered_by_whole_group(puzzle_input):
-    return None
+    group_inputs = puzzle_input.split('\n\n')
+    return sum(num_questions_answered_by_whole_group(gi) for gi in group_inputs)
 
 
 if __name__ == '__main__':
