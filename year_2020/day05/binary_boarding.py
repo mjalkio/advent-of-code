@@ -66,8 +66,22 @@ def seat_id(space_partitioning, num_rows=128, num_columns=8):
     return row * 8 + column
 
 
+def highest_seat_id(puzzle_input):
+    space_partitionings = puzzle_input.split('\n')
+    return max(seat_id(space_partitioning=sp) for sp in space_partitionings)
+
+
+def my_seat(puzzle_input):
+    space_partitionings = puzzle_input.split('\n')
+    taken_seats = [seat_id(space_partitioning=sp) for sp in space_partitionings]
+    taken_seats.sort()
+    for i in range(len(taken_seats)):
+        if taken_seats[i] == taken_seats[i + 1] - 2:
+            return taken_seats[i] + 1
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
-    print(f"Part 1: {None}")
-    print(f"Part 2: {None}")
+    print(f"Part 1: {highest_seat_id(puzzle_input)}")
+    print(f"Part 2: {my_seat(puzzle_input)}")
