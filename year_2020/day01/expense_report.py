@@ -1,5 +1,6 @@
 from math import prod
-from pathlib import Path
+
+from util import read_puzzle_input
 
 
 def sum_two_to_2020_product(expense_report_entries):
@@ -28,9 +29,7 @@ def sum_three_to_2020_product(expense_report_entries):
 
 
 if __name__ == '__main__':
-    puzzle_input_path = Path(Path(__file__).parent, 'puzzle01_input.txt')
-    with puzzle_input_path.open() as f:
-        puzzle_input = f.read()
+    puzzle_input = read_puzzle_input()
 
     expense_report_entries = [int(entry) for entry in puzzle_input.split('\n') if entry != '']
     print(f"Part 1: {sum_two_to_2020_product(expense_report_entries)}")

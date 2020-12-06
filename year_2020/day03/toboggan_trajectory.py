@@ -1,4 +1,4 @@
-from pathlib import Path
+from util import read_puzzle_input
 
 TREE = '#'
 
@@ -40,9 +40,7 @@ def part_2(tree_map):
 
 
 if __name__ == '__main__':
-    puzzle_input_path = Path(Path(__file__).parent, 'puzzle_input.txt')
-    with puzzle_input_path.open() as f:
-        puzzle_input = f.read()
+    puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_trees_hit(tree_map=puzzle_input, horizontal_change=3, vertical_change=1)}")
     print(f"Part 2: {part_2(tree_map=puzzle_input)}")

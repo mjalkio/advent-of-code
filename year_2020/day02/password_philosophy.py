@@ -1,5 +1,6 @@
 from collections import Counter
-from pathlib import Path
+
+from util import read_puzzle_input
 
 
 def _parse_puzzle_input(puzzle_input):
@@ -72,9 +73,7 @@ def num_valid_passwords_part_2(puzzle_input):
 
 
 if __name__ == '__main__':
-    puzzle_input_path = Path(Path(__file__).parent, 'part1_input.txt')
-    with puzzle_input_path.open() as f:
-        puzzle_input = f.read()
+    puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_valid_passwords_part_1(puzzle_input)}")
     print(f"Part 2: {num_valid_passwords_part_2(puzzle_input)}")

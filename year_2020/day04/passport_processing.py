@@ -1,5 +1,6 @@
 import re
-from pathlib import Path
+
+from util import read_puzzle_input
 
 
 def passport_batch_to_tuple(passport_batch):
@@ -116,9 +117,7 @@ def num_valid_passports(passport_batch, check_values=False):
 
 
 if __name__ == '__main__':
-    puzzle_input_path = Path(Path(__file__).parent, 'puzzle_input.txt')
-    with puzzle_input_path.open() as f:
-        puzzle_input = f.read()
+    puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_valid_passports(passport_batch=puzzle_input)}")
     # 113 -> too high
