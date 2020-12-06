@@ -10,7 +10,8 @@ def num_questions_answered_by_group(group_input):
 
 
 def sum_questions_answered_by_group(puzzle_input):
-    return None
+    group_inputs = puzzle_input.split('\n\n')
+    return sum(num_questions_answered_by_group(gi) for gi in group_inputs)
 
 
 if __name__ == '__main__':
