@@ -26,7 +26,7 @@ TEST_CASES = [
         'id': 119,
     },
     {
-        'space_partitioning': 'FBFBBFFRLR',
+        'space_partitioning': 'BBFFBBFRLL',
         'row': 102,
         'column': 4,
         'id': 820,
@@ -36,7 +36,7 @@ TEST_CASES = [
 
 @pytest.mark.parametrize(
     'column_space_partitioning,expected',
-    [(case['space_partitioning'][:7], case['row']) for case in TEST_CASES]
+    [(case['space_partitioning'][7:], case['column']) for case in TEST_CASES]
 )
 def test_seat_column(column_space_partitioning, expected):
     assert seat_column(column_space_partitioning=column_space_partitioning) == expected
@@ -52,7 +52,7 @@ def test_seat_id(space_partitioning, expected):
 
 @pytest.mark.parametrize(
     'row_space_partitioning,expected',
-    [(case['space_partitioning'][7:], case['id']) for case in TEST_CASES]
+    [(case['space_partitioning'][:7], case['row']) for case in TEST_CASES]
 )
 def test_seat_row(row_space_partitioning, expected):
     assert seat_row(row_space_partitioning=row_space_partitioning) == expected
