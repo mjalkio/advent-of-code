@@ -14,8 +14,12 @@ def sum_questions_answered_by_group(puzzle_input):
     return sum(num_questions_answered_by_group(gi) for gi in group_inputs)
 
 
+def sum_questions_answered_by_whole_group(puzzle_input):
+    return None
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {sum_questions_answered_by_group(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {sum_questions_answered_by_whole_group(puzzle_input)}")

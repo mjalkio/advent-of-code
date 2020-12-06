@@ -1,6 +1,7 @@
 from year_2020.day06.custom_customs import (
     num_questions_answered_by_group,
     sum_questions_answered_by_group,
+    sum_questions_answered_by_whole_group,
 )
 
 TEST_CASE_1 = """
@@ -34,3 +35,7 @@ def test_num_questions_answered_by_group():
 
 def test_sum_questions_answered_by_group():
     assert sum_questions_answered_by_group(TEST_INPUT_1) == 11
+
+
+def test_sum_questions_answered_by_whole_group():
+    assert sum_questions_answered_by_whole_group(TEST_INPUT_1) == 6
