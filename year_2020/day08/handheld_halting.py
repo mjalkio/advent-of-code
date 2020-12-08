@@ -31,6 +31,10 @@ def get_acc_at_infinite_loop_start(puzzle_input):
     return accumulator
 
 
+def get_acc_at_program_termination(puzzle_input):
+    return None
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
