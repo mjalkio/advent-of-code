@@ -6,13 +6,16 @@ def _parse_instruction(instruction_line):
     return (operation, int(argument[1:]) if argument[0] == '+' else -1 * int(argument[1:]))
 
 
-def get_acc_at_infinite_loop_start(puzzle_input):
-    instructions = [
+def _parse_input(puzzle_input):
+    return [
         _parse_instruction(line)
         for line
         in puzzle_input.split('\n')
         if line != ''
     ]
+
+
+def _run_program(instructions):
     accumulator = 0
     curr_instruction = 0
     visited_instructions = set()
@@ -29,6 +32,11 @@ def get_acc_at_infinite_loop_start(puzzle_input):
         curr_instruction += 1
 
     return accumulator
+
+
+def get_acc_at_infinite_loop_start(puzzle_input):
+    instructions = _parse_input(puzzle_input)
+    return _run_program(instructions)
 
 
 def get_acc_at_program_termination(puzzle_input):
