@@ -55,7 +55,21 @@ def num_bags_colors_can_contain_my_bag(puzzle_input, my_bag='shiny gold'):
 
 
 def num_bags_contained_in_my_bag(puzzle_input, my_bag='shiny gold'):
-    return None
+    rules = _get_bag_rules(puzzle_input)
+    num_bags_in = {}
+    while my_bag not in num_bags_in:
+        for bag, contained_bags in rules.items():
+            if all([
+                contained_bag in num_bags_in
+                for contained_bag
+                in contained_bags
+            ]):
+                num_bags_in[bag] = sum(
+                    contained_bag_quantity + contained_bag_quantity * num_bags_in[contained_bag]
+                    for contained_bag, contained_bag_quantity
+                    in contained_bags.items()
+                )
+    return num_bags_in[my_bag]
 
 
 if __name__ == '__main__':
