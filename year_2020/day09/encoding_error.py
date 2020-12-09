@@ -24,6 +24,15 @@ def first_invalid_number(puzzle_input, preamble_size=25):
 
 
 def encryption_weakness(puzzle_input, preamble_size=25):
+    invalid_number = first_invalid_number(puzzle_input, preamble_size=preamble_size)
+    encrypted_data = _parse_input(puzzle_input)
+    for i in range(len(encrypted_data) - 1):
+        for j in range(i + 1, len(encrypted_data)):
+            contiguous_set = encrypted_data[i:j + 1]
+            if sum(contiguous_set) == invalid_number:
+                return max(contiguous_set) + min(contiguous_set)
+            elif sum(contiguous_set) > invalid_number:
+                break
     return None
 
 
