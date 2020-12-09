@@ -1,8 +1,9 @@
 import pytest
 
 from year_2020.day09.encoding_error import (
-    has_pair_that_sums,
+    encryption_weakness,
     first_invalid_number,
+    has_pair_that_sums,
 )
 
 EXAMPLE_1_PREAMBLE = range(1, 26)
@@ -52,3 +53,7 @@ def test_has_pair_that_sums(number, preamble, expected):
 
 def test_first_invalid_number():
     assert first_invalid_number(TEST_INPUT, preamble_size=5) == 127
+
+
+def test_encryption_weakness():
+    assert encryption_weakness(TEST_INPUT, preamble_size=5) == 62
