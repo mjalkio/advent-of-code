@@ -30,11 +30,24 @@ def get_joltage_difference_counts(
 
 
 def _get_num_ways_to_arrange_adapters(
-    adapters,
+    sorted_adapters,
     starting_joltage,
-    allowed_differences=(1, 2, 3),
+    max_joltage_diff=3,
 ):
-    return None
+    if len(sorted_adapters) == 0:
+        return 1
+
+    num_ways = 0
+    for i, adapter_joltage in enumerate(sorted_adapters):
+        joltage_diff = adapter_joltage - starting_joltage
+        if joltage_diff <= max_joltage_diff:
+            num_ways += _get_num_ways_to_arrange_adapters(
+                sorted_adapters=sorted_adapters[i + 1:],
+                starting_joltage=adapter_joltage,
+            )
+        else:
+            break
+    return num_ways
 
 
 def get_num_ways_to_arrange_adapters(
@@ -42,7 +55,11 @@ def get_num_ways_to_arrange_adapters(
     charging_outlet_joltage=0,
     device_joltage_difference=3,
 ):
-    return None
+    adapters = _parse_input(puzzle_input)
+    adapters.sort()
+    adapters.append(adapters[-1] + device_joltage_difference)
+
+    return _get_num_ways_to_arrange_adapters(sorted_adapters=adapters, starting_joltage=0)
 
 
 if __name__ == '__main__':
