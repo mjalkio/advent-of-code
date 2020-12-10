@@ -1,4 +1,7 @@
-from year_2020.day10.adapter_array import get_joltage_difference_counts
+from year_2020.day10.adapter_array import (
+    get_joltage_difference_counts,
+    get_num_ways_to_arrange_adapters,
+)
 
 TEST_INPUT_1 = """
 16
@@ -52,3 +55,8 @@ TEST_INPUT_2 = """
 def test_get_joltage_difference_counts():
     assert get_joltage_difference_counts(TEST_INPUT_1) == (7, 0, 5)
     assert get_joltage_difference_counts(TEST_INPUT_2) == (22, 0, 10)
+
+
+def test_get_num_ways_to_arrange_adapters():
+    assert get_num_ways_to_arrange_adapters(TEST_INPUT_1) == 8
+    assert get_num_ways_to_arrange_adapters(TEST_INPUT_2) == 19208

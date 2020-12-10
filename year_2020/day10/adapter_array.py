@@ -29,9 +29,25 @@ def get_joltage_difference_counts(
     return tuple(joltage_differences[diff] for diff in allowed_differences)
 
 
+def _get_num_ways_to_arrange_adapters(
+    adapters,
+    starting_joltage,
+    allowed_differences=(1, 2, 3),
+):
+    return None
+
+
+def get_num_ways_to_arrange_adapters(
+    puzzle_input,
+    charging_outlet_joltage=0,
+    device_joltage_difference=3,
+):
+    return None
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     part_1_differences = get_joltage_difference_counts(puzzle_input)
     print(f"Part 1: {part_1_differences[0] * part_1_differences[2]}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_num_ways_to_arrange_adapters(puzzle_input)}")
