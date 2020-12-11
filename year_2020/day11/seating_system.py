@@ -8,9 +8,9 @@ OCCUPIED_SEAT = '#'
 def _get_seat_layout(puzzle_input):
     lines = [line for line in puzzle_input.split('\n') if line != '']
     seat_layout = {}
-    for i in range(len(lines)):
-        for j in range(len(lines[i])):
-            seat_layout[(i, j)] = lines[i][j]
+    for j in range(len(lines)):
+        for i in range(len(lines[j])):
+            seat_layout[(i, j)] = lines[j][i]
     return seat_layout
 
 
@@ -22,7 +22,7 @@ def _get_num_occupied_seats_around(i, j, seat_layout):
     num_occupied_seats_around = 0
     for ii in range(i - 1, i + 2):
         for jj in range(j - 1, j + 2):
-            if ii == 0 and jj == 0:
+            if ii == i and jj == j:
                 continue
 
             if seat_layout.get((ii, jj)) == OCCUPIED_SEAT:
@@ -72,7 +72,6 @@ def get_num_occupied_seats_at_convergence(puzzle_input):
     seat_layout = _get_seat_layout(puzzle_input)
     next_seat_layout = _get_next_seat_layout(seat_layout)
     while not _are_layouts_the_same(seat_layout, next_seat_layout):
-        import pdb; pdb.set_trace()
         seat_layout = next_seat_layout
         next_seat_layout = _get_next_seat_layout(seat_layout)
     return _get_num_occupied_seats(seat_layout)
