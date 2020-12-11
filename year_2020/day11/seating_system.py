@@ -49,10 +49,19 @@ def _get_next_seat_layout(seat_layout):
     return next_seat_layout
 
 
+def _are_layouts_the_same(seat_layout_1, seat_layout_2):
+    if len(seat_layout_1) != len(seat_layout_2):
+        raise ValueError('Seat layouts being compared have different numbers of seats!')
+    for i, j in seat_layout_1:
+        if seat_layout_1[(i, j)] != seat_layout_2[(i, j)]:
+            return False
+    return True
+
+
 def get_num_occupied_seats_at_convergence(puzzle_input):
     seat_layout = _get_seat_layout(puzzle_input)
     next_seat_layout = _get_next_seat_layout(seat_layout)
-    while seat_layout != next_seat_layout:
+    while not _are_layouts_the_same(seat_layout, next_seat_layout):
         seat_layout = next_seat_layout
         next_seat_layout = _get_next_seat_layout(seat_layout)
     return _get_num_occupied_seats(seat_layout)
