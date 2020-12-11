@@ -35,6 +35,23 @@ def _get_surrounding_chairs(seat_layout):
 
 def get_surrounding_chairs_part_2(seat_layout):
     surrounding_chairs = defaultdict(list)
+    directions = []
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            if i != 0 or j != 0:
+                directions.append((i, j))
+
+    for (x, y) in seat_layout.keys():
+        for dx, dy in directions:
+            possible_surrounding_x = x + dx
+            possible_surrounding_y = y + dy
+            while seat_layout.get((possible_surrounding_x, possible_surrounding_y)) == FLOOR:
+                possible_surrounding_x += dx
+                possible_surrounding_y += dy
+            if seat_layout.get((possible_surrounding_x, possible_surrounding_y)) in (
+                EMPTY_SEAT, OCCUPIED_SEAT
+            ):
+                surrounding_chairs[(x, y)].append((possible_surrounding_x, possible_surrounding_y))
     return surrounding_chairs
 
 
