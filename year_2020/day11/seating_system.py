@@ -14,9 +14,13 @@ def _get_seat_layout(puzzle_input):
     return seat_layout
 
 
+def _get_num_occupied_seats(seat_layout):
+    return sum(seat == OCCUPIED_SEAT for seat in seat_layout.values())
+
+
 def get_num_occupied_seats_at_convergence(puzzle_input):
     seat_layout = _get_seat_layout(puzzle_input)
-    return None
+    return _get_num_occupied_seats(seat_layout)
 
 
 if __name__ == '__main__':
