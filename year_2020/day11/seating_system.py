@@ -33,6 +33,11 @@ def _get_surrounding_chairs(seat_layout):
     return surrounding_chairs
 
 
+def get_surrounding_chairs_part_2(seat_layout):
+    surrounding_chairs = defaultdict(list)
+    return surrounding_chairs
+
+
 def _get_num_occupied_seats_around(i, j, seat_layout, surrounding_chairs):
     return sum(seat_layout[(ii, jj)] == OCCUPIED_SEAT for ii, jj in surrounding_chairs[(i, j)])
 
@@ -47,7 +52,10 @@ def _get_next_seat_layout(seat_layout, surrounding_chairs, max_surrounding_occup
             next_seat_layout[(i, j)] = OCCUPIED_SEAT
         elif (
             current_state == OCCUPIED_SEAT
-            and _get_num_occupied_seats_around(i, j, seat_layout, surrounding_chairs) >= max_surrounding_occupied
+            and (
+                _get_num_occupied_seats_around(i, j, seat_layout, surrounding_chairs)
+                >= max_surrounding_occupied
+            )
         ):
             next_seat_layout[(i, j)] = EMPTY_SEAT
         else:
@@ -78,14 +86,22 @@ def print_layout(seat_layout):
 def get_num_occupied_seats_at_convergence(
     puzzle_input,
     surrounding_chair_fn=_get_surrounding_chairs,
-
+    max_surrounding_occupied=4,
 ):
     seat_layout = _get_seat_layout(puzzle_input)
     surrounding_chairs = surrounding_chair_fn(seat_layout)
-    next_seat_layout = _get_next_seat_layout(seat_layout, surrounding_chairs)
+    next_seat_layout = _get_next_seat_layout(
+        seat_layout=seat_layout,
+        surrounding_chairs=surrounding_chairs,
+        max_surrounding_occupied=max_surrounding_occupied,
+    )
     while not _are_layouts_the_same(seat_layout, next_seat_layout):
         seat_layout = next_seat_layout
-        next_seat_layout = _get_next_seat_layout(seat_layout, surrounding_chairs)
+        next_seat_layout = _get_next_seat_layout(
+            seat_layout=seat_layout,
+            surrounding_chairs=surrounding_chairs,
+            max_surrounding_occupied=max_surrounding_occupied,
+        )
     return _get_num_occupied_seats(seat_layout)
 
 
@@ -93,4 +109,9 @@ if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_occupied_seats_at_convergence(puzzle_input)}")
-    print(f"Part 2: {None}")
+    part_2_answer = get_num_occupied_seats_at_convergence(
+        puzzle_input=puzzle_input,
+        surrounding_chair_fn=get_surrounding_chairs_part_2,
+        max_surrounding_occupied=5,
+    )
+    print(f"Part 2: {part_2_answer}")
