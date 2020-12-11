@@ -25,7 +25,7 @@ def _get_num_occupied_seats_around(i, j, seat_layout):
             if ii == 0 and jj == 0:
                 continue
 
-            if seat_layout.get((i, j)) == OCCUPIED_SEAT:
+            if seat_layout.get((ii, jj)) == OCCUPIED_SEAT:
                 num_occupied_seats_around += 1
     return num_occupied_seats_around
 
@@ -58,10 +58,21 @@ def _are_layouts_the_same(seat_layout_1, seat_layout_2):
     return True
 
 
+def print_layout(seat_layout):
+    width = max(x for x, y in seat_layout.keys()) + 1
+    height = max(y for x, y in seat_layout.keys()) + 1
+    for j in range(height):
+        line = []
+        for i in range(width):
+            line.append(seat_layout[(i, j)])
+        print(''.join(line))
+
+
 def get_num_occupied_seats_at_convergence(puzzle_input):
     seat_layout = _get_seat_layout(puzzle_input)
     next_seat_layout = _get_next_seat_layout(seat_layout)
     while not _are_layouts_the_same(seat_layout, next_seat_layout):
+        import pdb; pdb.set_trace()
         seat_layout = next_seat_layout
         next_seat_layout = _get_next_seat_layout(seat_layout)
     return _get_num_occupied_seats(seat_layout)
