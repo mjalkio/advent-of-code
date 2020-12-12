@@ -43,7 +43,29 @@ def get_navigation_destination_with_waypoint(
     waypoint_x=10,
     waypoint_y=1,
 ):
-    return 0, 0
+    instructions = [(line[0], int(line[1:])) for line in puzzle_input.split('\n') if line != '']
+    for action, value in instructions:
+        if action in RIGHT:
+            num_rotations = value // 90
+            for i in range(num_rotations):
+                waypoint_x, waypoint_y = waypoint_y, -1 * waypoint_x
+        elif action == LEFT:
+            num_rotations = value // 90
+            for i in range(num_rotations):
+                waypoint_x, waypoint_y = -1 * waypoint_y, waypoint_x
+        elif action == NORTH:
+            waypoint_y += value
+        elif action == SOUTH:
+            waypoint_y -= value
+        elif action == EAST:
+            waypoint_x += value
+        elif action == WEST:
+            waypoint_x -= value
+        elif action == FORWARD:
+            x += (waypoint_x * value)
+            y += (waypoint_y * value)
+
+    return x, y
 
 
 def get_manhattan_distance_after_navigation(
