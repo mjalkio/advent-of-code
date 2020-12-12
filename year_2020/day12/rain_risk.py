@@ -35,12 +35,27 @@ def get_navigation_destination(puzzle_input, x=0, y=0, initial_direction=EAST):
     return x, y
 
 
-def get_manhattan_distance_after_navigation(puzzle_input, starting_x=0, starting_y=0):
-    ending_x, ending_y = get_navigation_destination(
-        puzzle_input=puzzle_input,
-        x=starting_x,
-        y=starting_y,
-    )
+def get_navigation_destination_with_waypoint(
+    puzzle_input,
+    x=0,
+    y=0,
+    initial_direction=EAST,
+    waypoint_x=10,
+    waypoint_y=1,
+):
+    return 0, 0
+
+
+def get_manhattan_distance_after_navigation(
+    puzzle_input,
+    starting_x=0,
+    starting_y=0,
+    use_waypoint=False,
+):
+    if use_waypoint:
+        ending_x, ending_y = get_navigation_destination_with_waypoint(puzzle_input=puzzle_input)
+    else:
+        ending_x, ending_y = get_navigation_destination(puzzle_input=puzzle_input,)
     return abs(ending_x - starting_x) + abs(ending_y - starting_y)
 
 
@@ -48,4 +63,4 @@ if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_manhattan_distance_after_navigation(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_manhattan_distance_after_navigation(puzzle_input, use_waypoint=True)}")
