@@ -35,8 +35,13 @@ def get_navigation_destination(puzzle_input, x=0, y=0, initial_direction=EAST):
     return x, y
 
 
-def get_manhattan_distance_after_navigation(puzzle_input, x=0, y=0):
-    return None
+def get_manhattan_distance_after_navigation(puzzle_input, starting_x=0, starting_y=0):
+    ending_x, ending_y = get_navigation_destination(
+        puzzle_input=puzzle_input,
+        x=starting_x,
+        y=starting_y,
+    )
+    return abs(ending_x - starting_x) + abs(ending_y - starting_y)
 
 
 if __name__ == '__main__':
