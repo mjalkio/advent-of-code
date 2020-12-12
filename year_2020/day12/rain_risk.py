@@ -45,14 +45,13 @@ def get_navigation_destination_with_waypoint(
 ):
     instructions = [(line[0], int(line[1:])) for line in puzzle_input.split('\n') if line != '']
     for action, value in instructions:
-        if action in RIGHT:
+        if action in (RIGHT, LEFT):
             num_rotations = value // 90
             for i in range(num_rotations):
-                waypoint_x, waypoint_y = waypoint_y, -1 * waypoint_x
-        elif action == LEFT:
-            num_rotations = value // 90
-            for i in range(num_rotations):
-                waypoint_x, waypoint_y = -1 * waypoint_y, waypoint_x
+                waypoint_x, waypoint_y = (
+                    (-1 if action == LEFT else 1) * waypoint_y,
+                    (-1 if action == RIGHT else 1) * waypoint_x
+                )
         elif action == NORTH:
             waypoint_y += value
         elif action == SOUTH:
