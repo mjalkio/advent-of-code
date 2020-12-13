@@ -11,4 +11,4 @@ TEST_INPUT = """
 
 def test_part_1():
     assert get_bus_id_times_wait_time(TEST_INPUT) == 295
-    assert get_earliest_bus_and_wait_time_for_airport(TEST_INPUT) == 59, 5
+    assert get_earliest_bus_and_wait_time_for_airport(TEST_INPUT) == (59, 5)
