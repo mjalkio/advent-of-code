@@ -1,5 +1,7 @@
 from util import read_puzzle_input
 
+MASK_PREFIX = 'mask = '
+
 
 def get_masked_value(value, mask):
     binary_value = bin(value)[2:].zfill(len(mask))
@@ -13,7 +15,18 @@ def get_masked_value(value, mask):
 
 
 def get_memory_sum(puzzle_input):
-    return None
+    initialization_program = [line for line in puzzle_input.split('\n') if line != '']
+    memory = {}
+    mask = None
+    for line in initialization_program:
+        if line.startswith(MASK_PREFIX):
+            mask = line.replace(MASK_PREFIX, '')
+            continue
+        mem_instruction, value = line.split(' = ')
+        # Instructions are of the form mem[XXX]
+        mem_location = int(mem_instruction[4:-1])
+        memory[mem_location] = get_masked_value(value=int(value), mask=mask)
+    return sum(memory.values())
 
 
 if __name__ == '__main__':
