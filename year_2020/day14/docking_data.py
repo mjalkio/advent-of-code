@@ -37,8 +37,6 @@ def _get_memory_locations_for_masked_address(masked_address):
     for bit in masked_address[1:]:
         if bit in ('1', '0'):
             for memory_location in memory_locations:
-                if memory_location is None:
-                    import pdb; pdb.set_trace()
                 memory_location.append(bit)
             continue
 
