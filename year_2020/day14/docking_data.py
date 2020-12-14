@@ -4,7 +4,16 @@ MASK_PREFIX = 'mask = '
 
 
 def get_masked_address(value, mask):
-    return None
+    binary_value = bin(value)[2:].zfill(len(mask))
+    masked_value_bits = []
+    for i in range(len(mask)):
+        if mask[i] == '0':
+            masked_value_bits.append(binary_value[i])
+        elif mask[i] == '1':
+            masked_value_bits.append('1')
+        else:
+            masked_value_bits.append('X')
+    return ''.join(masked_value_bits)
 
 
 def get_masked_value(value, mask):
