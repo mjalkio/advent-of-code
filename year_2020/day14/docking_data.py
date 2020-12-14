@@ -3,6 +3,10 @@ from util import read_puzzle_input
 MASK_PREFIX = 'mask = '
 
 
+def get_masked_address(value, mask):
+    return None
+
+
 def get_masked_value(value, mask):
     binary_value = bin(value)[2:].zfill(len(mask))
     masked_value_bits = []
@@ -14,7 +18,7 @@ def get_masked_value(value, mask):
     return int(''.join(masked_value_bits), base=2)
 
 
-def get_memory_sum(puzzle_input):
+def get_memory_sum(puzzle_input, use_version_2=False):
     initialization_program = [line for line in puzzle_input.split('\n') if line != '']
     memory = {}
     mask = None
@@ -33,4 +37,4 @@ if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_memory_sum(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_memory_sum(puzzle_input, use_version_2=True)}")
