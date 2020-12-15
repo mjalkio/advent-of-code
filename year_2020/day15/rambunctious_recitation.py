@@ -23,4 +23,4 @@ def get_number_spoken(puzzle_input, num_turns=2020):
 
 if __name__ == '__main__':
     print(f"Part 1: {get_number_spoken(PUZZLE_INPUT)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_number_spoken(PUZZLE_INPUT, num_turns=30000000)}")
