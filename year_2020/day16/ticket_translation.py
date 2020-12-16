@@ -84,7 +84,13 @@ def get_field_order(puzzle_input):
 
 
 def get_departure_sum(puzzle_input):
-    return None
+    _, my_ticket, _ = _parse_input(puzzle_input)
+
+    departure_sum = 0
+    for i, field_name in enumerate(get_field_order(puzzle_input)):
+        if field_name.startswith('departure'):
+            departure_sum += my_ticket[i]
+    return departure_sum
 
 
 if __name__ == '__main__':
