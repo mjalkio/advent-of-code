@@ -83,18 +83,19 @@ def get_field_order(puzzle_input):
     return [possible_fields[position][0] for position in range(len(my_ticket))]
 
 
-def get_departure_sum(puzzle_input):
+def get_departure_product(puzzle_input):
     _, my_ticket, _ = _parse_input(puzzle_input)
+    field_order = get_field_order(puzzle_input)
 
-    departure_sum = 0
-    for i, field_name in enumerate(get_field_order(puzzle_input)):
+    departure_product = 1
+    for i, field_name in enumerate(field_order):
         if field_name.startswith('departure'):
-            departure_sum += my_ticket[i]
-    return departure_sum
+            departure_product *= my_ticket[i]
+    return departure_product
 
 
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_ticket_scanning_error_rate(puzzle_input)}")
-    print(f"Part 2: {get_departure_sum(puzzle_input)}")
+    print(f"Part 2: {get_departure_product(puzzle_input)}")
