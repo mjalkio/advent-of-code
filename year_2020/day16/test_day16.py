@@ -1,4 +1,7 @@
-from year_2020.day16.ticket_translation import get_ticket_scanning_error_rate
+from year_2020.day16.ticket_translation import (
+    get_field_order,
+    get_ticket_scanning_error_rate,
+)
 
 TEST_INPUT = """
 class: 1-3 or 5-7
@@ -18,3 +21,7 @@ nearby tickets:
 
 def test_get_ticket_scanning_error_rate():
     assert get_ticket_scanning_error_rate(TEST_INPUT) == 71
+
+
+def test_get_field_order():
+    assert get_field_order(TEST_INPUT) == ['row', 'class', 'seat']
