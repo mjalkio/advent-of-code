@@ -55,16 +55,34 @@ def get_num_active_cubes(puzzle_input, num_cycles=6):
     for cycle in range(num_cycles):
         curr_max_z = max(energy_source.keys())
         curr_min_z = min(energy_source.keys())
+        curr_max_x = max(x for x, y in energy_source[0])
+        curr_min_x = min(x for x, y in energy_source[0])
+        curr_max_y = max(y for x, y in energy_source[0])
+        curr_min_y = min(y for x, y in energy_source[0])
 
         next_state = {}
         for z in range(curr_min_z - 1, curr_max_z + 2):
             layer = {}
+            for x in range(curr_min_x - 1, curr_max_x + 2):
+                for y in range(curr_min_y - 1, curr_max_y + 2):
+                    curr_cube_state = energy_source.get(z, {}).get((x, y), INACTIVE)
+                    num_active_neighbors = _get_num_active_neighbors(x, y, z, energy_source)
+                    if curr_cube_state == ACTIVE:
+                        if num_active_neighbors in (2, 3):
+                            layer[(x, y)] = ACTIVE
+                        else:
+                            layer[(x, y)] = INACTIVE
+                    else:
+                        if num_active_neighbors == 3:
+                            layer[(x, y)] = ACTIVE
+                        else:
+                            layer[(x, y)] = INACTIVE
             next_state[z] = layer
         energy_source = EnergySource(next_state)
 
     num_active_cubes = 0
     for layer in energy_source.values():
-        num_active_cubes += sum(cube == ACTIVE for cube in layer)
+        num_active_cubes += sum(cube == ACTIVE for cube in layer.values())
     return num_active_cubes
 
 
