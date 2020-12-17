@@ -37,7 +37,20 @@ def _get_energy_source(puzzle_input):
 
 def get_num_active_cubes(puzzle_input, num_cycles=6):
     energy_source = _get_energy_source(puzzle_input)
-    return None
+    for cycle in range(num_cycles):
+        curr_max_z = max(energy_source.keys())
+        curr_min_z = min(energy_source.keys())
+
+        next_state = {}
+        for z in range(curr_min_z - 1, curr_max_z + 2):
+            layer = {}
+            next_state[z] = layer
+        energy_source = EnergySource(next_state)
+
+    num_active_cubes = 0
+    for layer in energy_source.values():
+        num_active_cubes += sum(cube == ACTIVE for cube in layer)
+    return num_active_cubes
 
 
 if __name__ == '__main__':
