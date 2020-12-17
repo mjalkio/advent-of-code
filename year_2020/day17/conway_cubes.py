@@ -86,8 +86,12 @@ def get_num_active_cubes(puzzle_input, num_cycles=6):
     return num_active_cubes
 
 
+def get_num_active_cubes_4d(puzzle_input, num_cycles=6):
+    return None
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_active_cubes(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_num_active_cubes_4d(puzzle_input)}")
