@@ -1,7 +1,29 @@
+from collections import UserDict
+
 from util import read_puzzle_input
 
 ACTIVE = '#'
 INACTIVE = '.'
+
+
+class EnergySource(UserDict):
+    def __repr__(self):
+        output = []
+        z_coordinates = list(self.keys())
+        z_coordinates.sort()
+        for z in z_coordinates:
+            output.append(f"z={z}")
+            layer = self[z]
+            width = max(x for x, y in layer.keys()) + 1
+            height = max(y for x, y in layer.keys()) + 1
+            for y in range(height):
+                line = []
+                for x in range(width):
+                    line.append(layer[(x, y)])
+                output.append(''.join(line))
+            output.append('\n')
+
+        return '\n'.join(output)
 
 
 def _get_energy_source(puzzle_input):
@@ -10,22 +32,7 @@ def _get_energy_source(puzzle_input):
     for y in range(len(lines)):
         for x in range(len(lines[y])):
             initial_slice[(x, y)] = lines[y][x]
-    return {0: initial_slice}
-
-
-def print_energy_source(energy_source):
-    z_coordinates = list(energy_source.keys())
-    z_coordinates.sort()
-    for z in z_coordinates:
-        print(f"z={z}")
-        layer = energy_source[z]
-        width = max(x for x, y in layer.keys()) + 1
-        height = max(y for x, y in layer.keys()) + 1
-        for y in range(height):
-            line = []
-            for x in range(width):
-                line.append(layer[(x, y)])
-            print(''.join(line))
+    return EnergySource({0: initial_slice})
 
 
 def get_num_active_cubes(puzzle_input, num_cycles=6):
