@@ -35,6 +35,21 @@ def _get_energy_source(puzzle_input):
     return EnergySource({0: initial_slice})
 
 
+def _get_num_active_neighbors(x, y, z, energy_source):
+    num_active_neighbors = 0
+    for neighbor_z in range(z - 1, z + 2):
+        layer = energy_source.get(neighbor_z, {})
+
+        for neighbor_x in range(x - 1, x + 2):
+            for neighbor_y in range(y - 1, y + 2):
+                if neighbor_x == x and neighbor_y == y and neighbor_z == z:
+                    continue
+
+                if layer.get((neighbor_x, neighbor_y), INACTIVE) == ACTIVE:
+                    num_active_neighbors += 1
+    return num_active_neighbors
+
+
 def get_num_active_cubes(puzzle_input, num_cycles=6):
     energy_source = _get_energy_source(puzzle_input)
     for cycle in range(num_cycles):
