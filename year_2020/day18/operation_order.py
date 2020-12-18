@@ -53,7 +53,10 @@ def _split_expression(expression):
     return left_part, operator, right_part, remainder
 
 
-def evaluate_expression(expression):
+def evaluate_expression(expression, advanced_math=False):
+    if advanced_math:
+        expression = transform_to_advanced_math(expression)
+
     left_part, operator, right_part, remainder = _split_expression(expression)
 
     if left_part.startswith('('):
@@ -73,8 +76,17 @@ def evaluate_expression(expression):
     return evaluate_expression(f"{operation_result}{remainder}")
 
 
+def transform_to_advanced_math(expression):
+    return None
+
+
 def sum_of_expressions(puzzle_input):
-    return sum(evaluate_expression(expression) for expression in puzzle_input.split('\n') if expression != '')
+    return sum(
+        evaluate_expression(expression)
+        for expression
+        in puzzle_input.split('\n')
+        if expression != ''
+    )
 
 
 if __name__ == '__main__':
