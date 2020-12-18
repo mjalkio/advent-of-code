@@ -57,7 +57,7 @@ def evaluate_expression(expression):
     left_part, operator, right_part, remainder = _split_expression(expression)
 
     if left_part.startswith('('):
-        evaluated_left_part = evaluate_expression(left_part)
+        evaluated_left_part = evaluate_expression(left_part[1:-1])
     else:
         evaluated_left_part = int(left_part)
 
@@ -65,7 +65,7 @@ def evaluate_expression(expression):
         return evaluated_left_part
 
     if right_part.startswith('('):
-        evaluated_right_part = evaluate_expression(right_part)
+        evaluated_right_part = evaluate_expression(right_part[1:-1])
     else:
         evaluated_right_part = int(right_part)
 
