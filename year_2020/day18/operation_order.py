@@ -74,7 +74,7 @@ def evaluate_expression(expression):
 
 
 def sum_of_expressions(puzzle_input):
-    return None
+    return sum(evaluate_expression(expression) for expression in puzzle_input.split('\n') if expression != '')
 
 
 if __name__ == '__main__':
