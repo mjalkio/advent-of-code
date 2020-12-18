@@ -24,6 +24,7 @@ def _parse_out_number(expression):
     for i in range(len(expression)):
         if expression[i] in OPERATORS or expression[i] == '(':
             return expression[:i].strip(), expression[i:].strip()
+    return expression, ''
 
 
 def _parse_out_operator(expression):
@@ -54,7 +55,22 @@ def _split_expression(expression):
 
 def evaluate_expression(expression):
     left_part, operator, right_part, remainder = _split_expression(expression)
-    return None
+
+    if left_part.startswith('('):
+        evaluated_left_part = evaluate_expression(left_part)
+    else:
+        evaluated_left_part = int(left_part)
+
+    if operator is None:
+        return evaluated_left_part
+
+    if right_part.startswith('('):
+        evaluated_right_part = evaluate_expression(right_part)
+    else:
+        evaluated_right_part = int(right_part)
+
+    operation_result = operator(evaluated_left_part, evaluated_right_part)
+    return evaluate_expression(f"{operation_result}{remainder}")
 
 
 def sum_of_expressions(puzzle_input):
