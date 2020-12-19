@@ -87,21 +87,42 @@ def transform_to_advanced_math(expression):
         right_paren_idx = i + 2
         if expression[right_paren_idx] == '(':
             # keep going right until you exit the parens
-            pass
-        else:
-            while right_paren_idx < len(expression) and expression[right_paren_idx] != ' ':
+            num_open_parens = 1
+            while True:
                 right_paren_idx += 1
-            expression.insert(right_paren_idx, ')')
+                if num_open_parens == 0:
+                    break
+                elif expression[right_paren_idx] == '(':
+                    num_open_parens += 1
+                elif expression[right_paren_idx] == ')':
+                    num_open_parens -= 1
+        else:
+            while right_paren_idx < len(expression) and expression[right_paren_idx] not in (' ', ')'):
+                right_paren_idx += 1
 
         left_paren_idx = i - 2
         if expression[left_paren_idx] == ')':
             # keep going left until you exit the parens
-            pass
-        else:
-            while expression[left_paren_idx - 1] != ' ' and left_paren_idx > 0:
+            num_close_parens = 1
+            while True:
                 left_paren_idx -= 1
-            expression.insert(left_paren_idx, '(')
+                if expression[left_paren_idx] == ')':
+                    num_close_parens += 1
+                elif expression[left_paren_idx] == '(':
+                    num_close_parens -= 1
+                    if num_close_parens == 0:
+                        break
+        else:
+            while expression[left_paren_idx - 1] not in (' ', '(') and left_paren_idx > 0:
+                left_paren_idx -= 1
+
         i += 2
+        if left_paren_idx == 0 and right_paren_idx == len(expression):
+            continue
+        if expression[left_paren_idx - 1] == '(' and expression[right_paren_idx] == ')':
+            continue
+        expression.insert(right_paren_idx, ')')
+        expression.insert(left_paren_idx, '(')
 
     return ''.join(expression)
 
