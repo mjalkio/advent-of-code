@@ -69,7 +69,8 @@ def get_valid_messages(rule_definitions):
 
 
 def does_message_match_rules(rules, rule_num, message):
-    return None
+    valid_messages = get_valid_messages(rules)
+    return message in valid_messages[rule_num]
 
 
 def num_messages_match_rule(puzzle_input, rule_num=0):
