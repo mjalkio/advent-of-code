@@ -68,13 +68,27 @@ def get_valid_messages(rule_definitions):
     return rules_to_valid_messages
 
 
-def does_message_match_rules(rules, rule_num, message):
-    valid_messages = get_valid_messages(rules)
+def does_message_match_rules(rules, rule_num, message, valid_messages=None):
+    if valid_messages is None:
+        # It takes time to get valid messages, allow us to calculate once
+        valid_messages = get_valid_messages(rules)
     return message in valid_messages[rule_num]
 
 
 def num_messages_match_rule(puzzle_input, rule_num=0):
-    return None
+    rule_definitions, messages = puzzle_input.split('\n\n')
+    valid_messages = get_valid_messages(rule_definitions)
+
+    return sum(
+        does_message_match_rules(
+            rules=rule_definitions,
+            rule_num=rule_num,
+            message=m,
+            valid_messages=valid_messages
+        )
+        for m
+        in messages.split('\n')
+    )
 
 
 if __name__ == '__main__':
