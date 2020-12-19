@@ -76,6 +76,26 @@ def evaluate_expression(expression, advanced_math=False):
     return evaluate_expression(f"{operation_result}{remainder}")
 
 
+def _get_right_paren_idx(expression, plus_idx):
+    right_paren_idx = plus_idx + 2  # The + should have a space after it, so skip that
+    if expression[right_paren_idx] == '(':
+        # keep going right until you exit the parens
+        num_open_parens = 1
+        while True:
+            right_paren_idx += 1
+            if num_open_parens == 0:
+                return right_paren_idx
+            elif expression[right_paren_idx] == '(':
+                num_open_parens += 1
+            elif expression[right_paren_idx] == ')':
+                num_open_parens -= 1
+    while right_paren_idx < len(expression) and expression[right_paren_idx].isdigit():
+        # If we hit the end of the expression, that has to be where the parenthesis goes
+        # Otherwise we're in a number. Keep going until we get to the end of the number.
+        right_paren_idx += 1
+    return right_paren_idx
+
+
 def transform_to_advanced_math(expression):
     expression = list(expression)
     i = 0
@@ -84,24 +104,7 @@ def transform_to_advanced_math(expression):
             i += 1
             continue
 
-        right_paren_idx = i + 2
-        if expression[right_paren_idx] == '(':
-            # keep going right until you exit the parens
-            num_open_parens = 1
-            while True:
-                right_paren_idx += 1
-                if num_open_parens == 0:
-                    break
-                elif expression[right_paren_idx] == '(':
-                    num_open_parens += 1
-                elif expression[right_paren_idx] == ')':
-                    num_open_parens -= 1
-        else:
-            while (
-                right_paren_idx < len(expression)
-                and expression[right_paren_idx] not in (' ', ')')
-            ):
-                right_paren_idx += 1
+        right_paren_idx = _get_right_paren_idx(expression, plus_idx=i)
 
         left_paren_idx = i - 2
         if expression[left_paren_idx] == ')':
