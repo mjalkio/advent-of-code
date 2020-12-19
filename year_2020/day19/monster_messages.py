@@ -54,10 +54,14 @@ def get_valid_messages(rule_definitions):
                     if valid_messages_for_list is None:
                         valid_messages_for_list = valid_messages_for_subrule
                     else:
-                        valid_messages_for_list = itertools.product(
-                            valid_messages_for_list,
-                            valid_messages_for_subrule
-                        )
+                        valid_messages_for_list = set([
+                            ''.join(message_parts)
+                            for message_parts
+                            in itertools.product(
+                                valid_messages_for_list,
+                                valid_messages_for_subrule
+                            )
+                        ])
                 valid_messages_for_rule = valid_messages_for_rule.union(valid_messages_for_list)
             rules_to_valid_messages[rule_num] = valid_messages_for_rule
 
