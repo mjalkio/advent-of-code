@@ -97,7 +97,10 @@ def transform_to_advanced_math(expression):
                 elif expression[right_paren_idx] == ')':
                     num_open_parens -= 1
         else:
-            while right_paren_idx < len(expression) and expression[right_paren_idx] not in (' ', ')'):
+            while (
+                right_paren_idx < len(expression)
+                and expression[right_paren_idx] not in (' ', ')')
+            ):
                 right_paren_idx += 1
 
         left_paren_idx = i - 2
@@ -127,9 +130,9 @@ def transform_to_advanced_math(expression):
     return ''.join(expression)
 
 
-def sum_of_expressions(puzzle_input):
+def sum_of_expressions(puzzle_input, advanced_math=False):
     return sum(
-        evaluate_expression(expression)
+        evaluate_expression(expression, advanced_math=advanced_math)
         for expression
         in puzzle_input.split('\n')
         if expression != ''
@@ -140,4 +143,4 @@ if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {sum_of_expressions(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {sum_of_expressions(puzzle_input, advanced_math=True)}")
