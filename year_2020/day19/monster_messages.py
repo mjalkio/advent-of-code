@@ -102,6 +102,30 @@ def _get_possible_starts(message, rule_42_valid_messages):
     return possible_starts
 
 
+def _get_possible_endings(message, rule_31_valid_messages):
+    possible_endings = set()
+    i = 1
+    while True:
+        new_possible_endings = {''}
+        for _ in range(i):
+            new_possible_endings = set([
+                ''.join(message_parts)
+                for message_parts
+                in itertools.product(
+                    rule_31_valid_messages,
+                    new_possible_endings
+                )
+                if message.endswith(''.join(message_parts))
+            ])
+
+        if len(new_possible_endings) == 0:
+            break
+        for new_possible_ending in new_possible_endings:
+            possible_endings.add((new_possible_ending, i))
+        i += 1
+    return possible_endings
+
+
 def does_message_match_rules(rules, rule_num, message, valid_messages=None):
     if valid_messages is None:
         # It takes time to get valid messages, allow us to calculate once
@@ -130,26 +154,10 @@ def does_message_match_rules(rules, rule_num, message, valid_messages=None):
     # 42 42 31 31
     # 42 42 42 31 31 31
     # Here we start backwards and find possible endings.
-    possible_endings = set()
-    i = 1
-    while True:
-        new_possible_endings = {''}
-        for _ in range(i):
-            new_possible_endings = set([
-                ''.join(message_parts)
-                for message_parts
-                in itertools.product(
-                    valid_messages[31],
-                    new_possible_endings
-                )
-                if message.endswith(''.join(message_parts))
-            ])
-
-        if len(new_possible_endings) == 0:
-            break
-        for new_possible_ending in new_possible_endings:
-            possible_endings.add((new_possible_ending, i))
-        i += 1
+    possible_endings = _get_possible_endings(
+        message=message,
+        rule_31_valid_messages=valid_messages[31],
+    )
 
     if len(possible_endings) == 0:
         return False
