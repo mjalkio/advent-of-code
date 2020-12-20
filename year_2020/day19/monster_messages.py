@@ -24,10 +24,11 @@ def _parse_rules(rule_definitions):
     return rules
 
 
-def get_valid_messages(rule_definitions):
+def get_valid_messages(rule_definitions, max_valid_message_length=100):
     rules_to_valid_messages = {}
     rules = _parse_rules(rule_definitions)
     while len(rules_to_valid_messages) < len(rules):
+        num_rules_handled = len(rules_to_valid_messages)
         for rule_num, subrule_lists in rules.items():
             if rule_num in rules_to_valid_messages.keys():
                 # We've already included the valid messages for this rule
@@ -65,6 +66,14 @@ def get_valid_messages(rule_definitions):
                 valid_messages_for_rule = valid_messages_for_rule.union(valid_messages_for_list)
             rules_to_valid_messages[rule_num] = valid_messages_for_rule
 
+        if num_rules_handled == len(rules_to_valid_messages):
+            # No new rules were defined in this iteration.
+            # This means we have infinite loops.
+            # We should generate valid messages up to the max length of the valid messages in our input.
+            # We happen to know that only rules 8 and 11 contain infinite loops.
+            rule_8 = rules[8]
+            rule_11 = rules[11]
+            break
     return rules_to_valid_messages
 
 
@@ -75,8 +84,17 @@ def does_message_match_rules(rules, rule_num, message, valid_messages=None):
     return message in valid_messages[rule_num]
 
 
-def num_messages_match_rule(puzzle_input, rule_num=0):
+def num_messages_match_rule(puzzle_input, add_infinite_loops=False, rule_num=0):
     rule_definitions, messages = puzzle_input.split('\n\n')
+    if add_infinite_loops:
+        rule_lines = rule_definitions.split('\n')
+        for i in range(len(rule_lines)):
+            if rule_lines[i].startswith('8:'):
+                rule_lines[i] = '8: 42 | 42 8'
+            elif rule_lines[i].startswith('11:'):
+                rule_lines[i] = '11: 42 31 | 42 11 31'
+        rule_definitions = '\n'.join(rule_lines)
+
     valid_messages = get_valid_messages(rule_definitions)
 
     return sum(
@@ -95,4 +113,4 @@ if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_messages_match_rule(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {num_messages_match_rule(puzzle_input, add_infinite_loops=True)}")
