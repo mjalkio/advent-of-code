@@ -62,6 +62,10 @@ def get_corner_ids_product(puzzle_input):
     return prod(corner_tile_ids)
 
 
+def get_water_roughness(puzzle_input):
+    return None
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
