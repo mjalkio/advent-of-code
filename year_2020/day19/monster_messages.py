@@ -126,6 +126,25 @@ def _get_possible_endings(message, rule_31_valid_messages):
     return possible_endings
 
 
+def _get_possible_endings_with_middles(message, possible_endings, rule_42_valid_messages):
+    possible_endings_with_middles = set()
+    for possible_ending, num_42s_to_add in possible_endings:
+        new_possible_endings = {possible_ending}
+        for _ in range(num_42s_to_add):
+            new_possible_endings = set([
+                ''.join(message_parts)
+                for message_parts
+                in itertools.product(
+                    rule_42_valid_messages,
+                    new_possible_endings
+                )
+                if message.endswith(''.join(message_parts))
+            ])
+
+        possible_endings_with_middles = possible_endings_with_middles.union(new_possible_endings)
+    return possible_endings_with_middles
+
+
 def does_message_match_rules(rules, rule_num, message, valid_messages=None):
     if valid_messages is None:
         # It takes time to get valid messages, allow us to calculate once
@@ -163,21 +182,12 @@ def does_message_match_rules(rules, rule_num, message, valid_messages=None):
         return False
 
     # For each of these possible endings we need to see if we can add 42s
-    possible_endings_with_middles = set()
-    for possible_ending, num_42s_to_add in possible_endings:
-        new_possible_endings = {possible_ending}
-        for _ in range(num_42s_to_add):
-            new_possible_endings = set([
-                ''.join(message_parts)
-                for message_parts
-                in itertools.product(
-                    valid_messages[42],
-                    new_possible_endings
-                )
-                if message.endswith(''.join(message_parts))
-            ])
+    possible_endings_with_middles = _get_possible_endings_with_middles(
+        message=message,
+        possible_endings=possible_endings,
+        rule_42_valid_messages=valid_messages[42],
+    )
 
-        possible_endings_with_middles = possible_endings_with_middles.union(new_possible_endings)
     for possible_start in possible_starts:
         for possible_ending in possible_endings_with_middles:
             if f"{possible_start}{possible_ending}" == message:
