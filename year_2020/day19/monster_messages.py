@@ -74,6 +74,34 @@ def get_valid_messages(rule_definitions, max_valid_message_length=100):
     return rules_to_valid_messages
 
 
+def _get_possible_starts(message, rule_42_valid_messages):
+    # These rules say that we have to start with rule 42 repeated as much as needed.
+    possible_starts = set([
+        valid_message
+        for valid_message
+        in rule_42_valid_messages
+        if message.startswith(valid_message)
+    ])
+
+    while True:
+        num_possible_starts_defined = len(possible_starts)
+        new_possible_starts = set([
+            ''.join(message_parts)
+            for message_parts
+            in itertools.product(
+                possible_starts,
+                rule_42_valid_messages
+            )
+            if message.startswith(''.join(message_parts))
+        ])
+        possible_starts = possible_starts.union(new_possible_starts)
+        if len(possible_starts) == num_possible_starts_defined:
+            # There aren't more possibilities to determine
+            break
+        num_possible_starts_defined = len(possible_starts)
+    return possible_starts
+
+
 def does_message_match_rules(rules, rule_num, message, valid_messages=None):
     if valid_messages is None:
         # It takes time to get valid messages, allow us to calculate once
@@ -89,33 +117,13 @@ def does_message_match_rules(rules, rule_num, message, valid_messages=None):
     # 11: 42 31 | 42 11 31
     # So really the question is if we can make the message with these rules.
 
-    # These rules say that we have to start with rule 42 repeated as much as needed.
-    possible_starts = set([
-        valid_message
-        for valid_message
-        in valid_messages[42]
-        if message.startswith(valid_message)
-    ])
+    possible_starts = _get_possible_starts(
+        message=message,
+        rule_42_valid_messages=valid_messages[42],
+    )
 
     if len(possible_starts) == 0:
         return False
-
-    while True:
-        num_possible_starts_defined = len(possible_starts)
-        new_possible_starts = set([
-            ''.join(message_parts)
-            for message_parts
-            in itertools.product(
-                possible_starts,
-                valid_messages[42]
-            )
-            if message.startswith(''.join(message_parts))
-        ])
-        possible_starts = possible_starts.union(new_possible_starts)
-        if len(possible_starts) == num_possible_starts_defined:
-            # There aren't more possibilities to determine
-            break
-        num_possible_starts_defined = len(possible_starts)
 
     # Now we need to see if we can end it with rule 11. It takes forms like this:
     # 42 31
