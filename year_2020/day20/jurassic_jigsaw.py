@@ -1,4 +1,4 @@
-from math import prod
+import math
 
 import numpy as np
 
@@ -45,24 +45,136 @@ def _get_potential_neighbors(tiles):
     return potential_neighbors
 
 
+def _get_corner_tile_ids(potential_neighbors):
+    return [
+        tile_id
+        for tile_id
+        in potential_neighbors
+        if len(potential_neighbors[tile_id]) == 2
+    ]
+
+
 def get_corner_ids_product(puzzle_input):
     tiles = _parse_tiles(puzzle_input)
     potential_neighbors = _get_potential_neighbors(tiles)
 
     # If a tile only has two neighbors, it MUST be a corner tile.
     # The "potential" neighbors are definitely its neighbors.
-    corner_tile_ids = [
-        tile_id
-        for tile_id
-        in potential_neighbors
-        if len(potential_neighbors[tile_id]) == 2
-    ]
+    corner_tile_ids = _get_corner_tile_ids(potential_neighbors)
     if len(corner_tile_ids) > 4:
         raise ValueError('Have not implemented for this situation...')
-    return prod(corner_tile_ids)
+    return math.prod(corner_tile_ids)
+
+
+def _has_border(tile, border):
+    reversed_border = border[::-1]
+    tile_sides = [tile[0], tile[-1], tile[:, 0], tile[:, -1]]
+    return any(np.array_equal(border, s) or np.array_equal(reversed_border, s) for s in tile_sides)
+
+
+def _match_left_right(left_tile, right_tile):
+    return np.array_equal(left_tile[:, -1], right_tile[:, 0])
+
+
+def _match_top_bottom(top_tile, bottom_tile):
+    return np.array_equal(top_tile[-1], bottom_tile[0])
+
+
+def _find_fit(tile, left_tile_info, top_tile_info):
+    # A tile can be rotated/flipped into eight positions. Try them all.
+    tile_possibilities = [
+        tile,
+        np.rot90(tile),
+        np.rot90(np.rot90(tile)),
+        np.rot90(np.rot90(np.rot90(tile))),
+        np.fliplr(tile),
+        np.rot90(np.fliplr(tile)),
+        np.rot90(np.rot90(np.fliplr(tile))),
+        np.rot90(np.rot90(np.rot90(np.fliplr(tile)))),
+    ]
+
+    for possibility in tile_possibilities:
+        if top_tile_info is not None:
+            if not _match_top_bottom(top_tile_info[1], possibility):
+                continue
+        if left_tile_info is not None:
+            if not _match_left_right(left_tile_info[1], possibility):
+                continue
+        return possibility
+    return None
+
+
+def _get_potential_next_tiles(left_tile_info, top_tile_info, potential_neighbors, placed_tile_ids):
+    if left_tile_info is not None and top_tile_info is not None:
+        potentials = potential_neighbors[left_tile_info[0]].intersection(
+            potential_neighbors[top_tile_info[0]]
+        )
+    elif left_tile_info is not None:
+        potentials = potential_neighbors[left_tile_info[0]]
+    elif top_tile_info is not None:
+        potentials = potentials = potential_neighbors[top_tile_info[0]]
+
+    return [p for p in potentials if p not in placed_tile_ids]
 
 
 def get_water_roughness(puzzle_input):
+    tiles = _parse_tiles(puzzle_input)
+    potential_neighbors = _get_potential_neighbors(tiles)
+    corner_tile_ids = _get_corner_tile_ids(potential_neighbors)
+
+    # Let's place one of the corners, and start building out from there
+    first_tile_id = corner_tile_ids[0]
+    # Note: I'm going to "cheat" to so that I can visually follow the example
+    # and set up this first tile so I know it matches the example
+    first_tile = np.fliplr(tiles[first_tile_id])
+    first_tile_neighbor_id_1, first_tile_neighbor_id_2 = potential_neighbors[first_tile_id]
+    while not (
+        (
+            _has_border(tile=tiles[first_tile_neighbor_id_1], border=first_tile[-1])
+            and _has_border(tile=tiles[first_tile_neighbor_id_2], border=first_tile[:, -1])
+        ) or (
+            _has_border(tile=tiles[first_tile_neighbor_id_2], border=first_tile[-1])
+            and _has_border(tile=tiles[first_tile_neighbor_id_1], border=first_tile[:, -1])
+        )
+    ):
+        # Rotate until these tiles can fit
+        first_tile = np.rot90(first_tile)
+
+    placed_tile_ids = {first_tile_id}
+    image = {
+        (0, 0): (first_tile_id, first_tile),
+    }
+
+    # The image is a square so we can determine the width & height
+    image_width_and_height = int(math.sqrt(len(tiles)))
+
+    for y in range(image_width_and_height):
+        for x in range(image_width_and_height):
+            if (x, y) == (0, 0):
+                # We already placed this manually
+                continue
+
+            potential_ids_for_here = _get_potential_next_tiles(
+                left_tile_info=image.get((x - 1, y)),
+                top_tile_info=image.get((x, y - 1)),
+                potential_neighbors=potential_neighbors,
+                placed_tile_ids=placed_tile_ids,
+            )
+            for potential_tile_id in potential_ids_for_here:
+                fitting_configuration = _find_fit(
+                    tile=tiles[potential_tile_id],
+                    left_tile_info=image.get((x - 1, y)),
+                    top_tile_info=image.get((x, y - 1))
+                )
+                if fitting_configuration is not None:
+                    break
+
+            if fitting_configuration is None:
+                raise ValueError('Something went wrong.')
+            image[(x, y)] = (potential_tile_id, fitting_configuration)
+            placed_tile_ids.add(potential_tile_id)
+
+    # Wow I think I actually made it this far!
     return None
 
 
@@ -70,4 +182,4 @@ if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_corner_ids_product(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_water_roughness(puzzle_input)}")
