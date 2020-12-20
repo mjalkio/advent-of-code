@@ -69,10 +69,7 @@ def get_valid_messages(rule_definitions, max_valid_message_length=100):
         if num_rules_handled == len(rules_to_valid_messages):
             # No new rules were defined in this iteration.
             # This means we have infinite loops.
-            # We should generate valid messages up to the max length of the valid messages in our input.
-            # We happen to know that only rules 8 and 11 contain infinite loops.
-            rule_8 = rules[8]
-            rule_11 = rules[11]
+            # We'll handle this in the other methods...
             break
     return rules_to_valid_messages
 
@@ -81,7 +78,96 @@ def does_message_match_rules(rules, rule_num, message, valid_messages=None):
     if valid_messages is None:
         # It takes time to get valid messages, allow us to calculate once
         valid_messages = get_valid_messages(rules)
-    return message in valid_messages[rule_num]
+
+    if rule_num in valid_messages:
+        return message in valid_messages[rule_num]
+
+    # This situation occurs when we have infinite loops in the definition.
+    # We happen to know this only affects three rules in our inputs.
+    # 0: 8 11
+    # 8: 42 | 42 8
+    # 11: 42 31 | 42 11 31
+    # So really the question is if we can make the message with these rules.
+
+    # These rules say that we have to start with rule 42 repeated as much as needed.
+    possible_starts = set([
+        valid_message
+        for valid_message
+        in valid_messages[42]
+        if message.startswith(valid_message)
+    ])
+
+    if len(possible_starts) == 0:
+        return False
+
+    while True:
+        num_possible_starts_defined = len(possible_starts)
+        new_possible_starts = set([
+            ''.join(message_parts)
+            for message_parts
+            in itertools.product(
+                possible_starts,
+                valid_messages[42]
+            )
+            if message.startswith(''.join(message_parts))
+        ])
+        possible_starts = possible_starts.union(new_possible_starts)
+        if len(possible_starts) == num_possible_starts_defined:
+            # There aren't more possibilities to determine
+            break
+        num_possible_starts_defined = len(possible_starts)
+
+    # Now we need to see if we can end it with rule 11. It takes forms like this:
+    # 42 31
+    # 42 42 31 31
+    # 42 42 42 31 31 31
+    # Here we start backwards and find possible endings.
+    possible_endings = set()
+    i = 1
+    while True:
+        new_possible_endings = {''}
+        for _ in range(i):
+            new_possible_endings = set([
+                ''.join(message_parts)
+                for message_parts
+                in itertools.product(
+                    valid_messages[31],
+                    new_possible_endings
+                )
+                if message.endswith(''.join(message_parts))
+            ])
+
+        if len(new_possible_endings) == 0:
+            break
+        for new_possible_ending in new_possible_endings:
+            possible_endings.add((new_possible_ending, i))
+        i += 1
+
+    if len(possible_endings) == 0:
+        return False
+
+    # For each of these possible endings we need to see if we can add 42s
+    possible_endings_with_middles = set()
+    for possible_ending, num_42s_to_add in possible_endings:
+        new_possible_endings = {possible_ending}
+        for _ in range(num_42s_to_add):
+            new_possible_endings = set([
+                ''.join(message_parts)
+                for message_parts
+                in itertools.product(
+                    valid_messages[42],
+                    new_possible_endings
+                )
+                if message.endswith(''.join(message_parts))
+            ])
+
+        possible_endings_with_middles = possible_endings_with_middles.union(new_possible_endings)
+    for possible_start in possible_starts:
+        for possible_ending in possible_endings_with_middles:
+            if f"{possible_start}{possible_ending}" == message:
+                return True
+
+    return False
 
 
 def num_messages_match_rule(puzzle_input, add_infinite_loops=False, rule_num=0):
