@@ -1,5 +1,7 @@
 from util import read_puzzle_input
 
+from collections import Counter
+
 
 def _parse_foods(puzzle_input):
     food_list = [line for line in puzzle_input.split('\n') if line != '']
@@ -40,7 +42,15 @@ def get_ingredients_with_no_allergens(puzzle_input):
 
 
 def get_num_occurences_of_ingredients(puzzle_input, ingredients):
-    return None
+    ingredients_and_allergens = _parse_foods(puzzle_input)
+    ingredient_counts = Counter(
+        ingredient
+        for ingredients, _
+        in ingredients_and_allergens
+        for ingredient
+        in ingredients
+    )
+    return sum(ingredient_counts[ingredient] for ingredient in ingredients)
 
 
 if __name__ == '__main__':
