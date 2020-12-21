@@ -53,6 +53,14 @@ def get_num_occurences_of_ingredients(puzzle_input, ingredients):
     return sum(ingredient_counts[ingredient] for ingredient in ingredients)
 
 
+def get_allergens_to_ingredients_map(puzzle_input):
+    return None
+
+
+def get_canonical_dangerous_ingredient_list(puzzle_input):
+    return None
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
@@ -63,4 +71,4 @@ if __name__ == '__main__':
     )
 
     print(f"Part 1: {ingredients_with_no_allergens_count}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_canonical_dangerous_ingredient_list(puzzle_input)}")
