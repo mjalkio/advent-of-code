@@ -1,6 +1,10 @@
 import inspect
 from pathlib import Path
 
+import numpy as np
+
+np.set_printoptions(linewidth=200)
+
 
 def read_puzzle_input(file_name='puzzle_input.txt'):
     caller_frame = inspect.stack()[1]

@@ -117,7 +117,7 @@ def _get_potential_next_tiles(left_tile_info, top_tile_info, potential_neighbors
     return [p for p in potentials if p not in placed_tile_ids]
 
 
-def get_water_roughness(puzzle_input):
+def _get_image_with_borders(puzzle_input):
     tiles = _parse_tiles(puzzle_input)
     potential_neighbors = _get_potential_neighbors(tiles)
     corner_tile_ids = _get_corner_tile_ids(potential_neighbors)
@@ -174,7 +174,28 @@ def get_water_roughness(puzzle_input):
             image[(x, y)] = (potential_tile_id, fitting_configuration)
             placed_tile_ids.add(potential_tile_id)
 
-    # Wow I think I actually made it this far!
+    return {key: tile for key, (tile_id, tile) in image.items()}
+
+
+def _remove_border(image_with_borders):
+    image_dimension = max(x for x, y in image_with_borders.keys())
+    image_rows = []
+    for y in range(image_dimension + 1):
+        image_row = image_with_borders[(0, y)][1:-1, 1:-1]
+        for x in range(1, image_dimension + 1):
+            image_row = np.concatenate((image_row, image_with_borders[(x, y)][1:-1, 1:-1]), axis=1)
+        image_rows.append(image_row)
+
+    image = image_rows[0]
+    for y in range(1, image_dimension + 1):
+        image = np.concatenate((image, image_rows[y]), axis=0)
+    return image
+
+
+def get_water_roughness(puzzle_input):
+    image_with_borders = _get_image_with_borders(puzzle_input)
+    image = _remove_border(image_with_borders)
+
     return None
 
 
