@@ -195,44 +195,65 @@ def _remove_border(image_with_borders):
     return image
 
 
-def get_water_roughness(puzzle_input):
-    image_with_borders = _get_image_with_borders(puzzle_input)
-    image = _remove_border(image_with_borders)
+def _remove_sea_monsters(image):
+    # The image might be rotated incorrectly.
+    # We assume that only one position contains ~sea monsters~
+    image_possibilities = [
+        image,
+        np.rot90(image),
+        np.rot90(np.rot90(image)),
+        np.rot90(np.rot90(np.rot90(image))),
+        np.fliplr(image),
+        np.rot90(np.fliplr(image)),
+        np.rot90(np.rot90(np.fliplr(image))),
+        np.rot90(np.rot90(np.rot90(np.fliplr(image)))),
+    ]
+    side_length, _ = image.shape
 
-    # Let's brute force search for sea monsters!
+    # Let's  search for sea monsters!
     # Sea monsters look like this
     """
                   #
 #    ##    ##    ###
  #  #  #  #  #  #
     """
-    side_length, _ = image.shape
-    sea_monster_coordinates = set()
-    for x in range(side_length - SEA_MONSTER_LENGTH + 1):
-        for y in range(SEA_MONSTER_HEIGHT - 1, side_length):
-            sea_monster_shape = (
-                (x, y - 1),
-                (x + 1, y - 2),
-                (x + 4, y - 2),
-                (x + 5, y - 1),
-                (x + 6, y - 1),
-                (x + 7, y - 2),
-                (x + 10, y - 2),
-                (x + 11, y - 1),
-                (x + 12, y - 1),
-                (x + 13, y - 2),
-                (x + 16, y - 2),
-                (x + 17, y - 1),
-                (x + 18, y - 1),
-                (x + 18, y),
-                (x + 19, y - 1),
-            )
 
-            if all(image[sm_y][sm_x] == '#' for sm_x, sm_y in sea_monster_shape):
-                # There be sea monster!!
-                sea_monster_coordinates |= set(seat_monster_shape)
+    for image_position in image_possibilities:
+        found_sea_monster = False
+        for x in range(side_length - SEA_MONSTER_LENGTH + 1):
+            for y in range(SEA_MONSTER_HEIGHT - 1, side_length):
+                sea_monster_shape = (
+                    (x, y - 1),
+                    (x + 1, y),
+                    (x + 4, y),
+                    (x + 5, y - 1),
+                    (x + 6, y - 1),
+                    (x + 7, y),
+                    (x + 10, y),
+                    (x + 11, y - 1),
+                    (x + 12, y - 1),
+                    (x + 13, y),
+                    (x + 16, y),
+                    (x + 17, y - 1),
+                    (x + 18, y - 1),
+                    (x + 18, y - 2),
+                    (x + 19, y - 1),
+                )
 
-    return None
+                if all(image_position[sm_y][sm_x] == '#' for sm_x, sm_y in sea_monster_shape):
+                    # There be sea monster!!
+                    found_sea_monster = True
+                    for sm_x, sm_y in sea_monster_shape:
+                        image_position[sm_y][sm_x] = '.'
+        if found_sea_monster:
+            return image_position
+
+
+def get_water_roughness(puzzle_input):
+    image_with_borders = _get_image_with_borders(puzzle_input)
+    image = _remove_border(image_with_borders)
+    image_without_sea_monsters = _remove_sea_monsters(image)
+    return np.sum(np.vectorize(lambda val: val == '#')(image_without_sea_monsters))
 
 
 if __name__ == '__main__':
