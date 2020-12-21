@@ -80,7 +80,10 @@ def get_allergens_to_ingredients_map(puzzle_input):
 
 
 def get_canonical_dangerous_ingredient_list(puzzle_input):
-    return None
+    allergens_to_ingredients = get_allergens_to_ingredients_map(puzzle_input)
+    allergens = list(allergens_to_ingredients.keys())
+    allergens.sort()
+    return ','.join([allergens_to_ingredients[a] for a in allergens])
 
 
 if __name__ == '__main__':
