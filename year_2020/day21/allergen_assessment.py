@@ -15,9 +15,7 @@ def _parse_foods(puzzle_input):
     return ingredients_and_allergens
 
 
-def get_ingredients_with_no_allergens(puzzle_input):
-    ingredients_and_allergens = _parse_foods(puzzle_input)
-
+def _get_ingredients_possibly_containing(ingredients_and_allergens):
     ingredients_possibly_containing = {}
     for ingredients, allergens in ingredients_and_allergens:
         for allergen in allergens:
@@ -29,6 +27,14 @@ def get_ingredients_with_no_allergens(puzzle_input):
                     set(ingredients)
                 )
             )
+    return ingredients_possibly_containing
+
+
+def get_ingredients_with_no_allergens(puzzle_input):
+    ingredients_and_allergens = _parse_foods(puzzle_input)
+    ingredients_possibly_containing = _get_ingredients_possibly_containing(
+        ingredients_and_allergens
+    )
 
     all_ingredients = set([
         ingredient
@@ -54,7 +60,23 @@ def get_num_occurences_of_ingredients(puzzle_input, ingredients):
 
 
 def get_allergens_to_ingredients_map(puzzle_input):
-    return None
+    ingredients_and_allergens = _parse_foods(puzzle_input)
+    ingredients_possibly_containing = _get_ingredients_possibly_containing(
+        ingredients_and_allergens
+    )
+
+    allergens_to_ingredients = {}
+    while len(allergens_to_ingredients) < len(ingredients_possibly_containing):
+        for allergen, possible_ingredients in ingredients_possibly_containing.items():
+            if len(possible_ingredients) == 1:
+                break
+
+        determined_ingredient = possible_ingredients.pop()
+        allergens_to_ingredients[allergen] = determined_ingredient
+        for possible_ingredients_to_update in ingredients_possibly_containing.values():
+            possible_ingredients_to_update.discard(determined_ingredient)
+
+    return allergens_to_ingredients
 
 
 def get_canonical_dangerous_ingredient_list(puzzle_input):
