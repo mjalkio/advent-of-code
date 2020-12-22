@@ -43,7 +43,7 @@ def _get_winner_and_deck_recursive(p1_deck, p2_deck):
     while len(p1_deck) > 0 and len(p2_deck) > 0:
         current_state = (tuple(p1_deck), tuple(p2_deck))
         if current_state in previous_states:
-            return p1_deck
+            return PLAYER_1, p1_deck
         else:
             previous_states.add(current_state)
 
