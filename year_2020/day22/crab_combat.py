@@ -19,7 +19,7 @@ def _get_decks(puzzle_input):
     return p1_deck, deck
 
 
-def get_winning_combat_score(puzzle_input):
+def get_winning_combat_score(puzzle_input, recursive=True):
     p1_deck, p2_deck = _get_decks(puzzle_input)
 
     while len(p1_deck) > 0 and len(p2_deck) > 0:
@@ -44,4 +44,4 @@ if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_winning_combat_score(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_winning_combat_score(puzzle_input, recursive=True)}")

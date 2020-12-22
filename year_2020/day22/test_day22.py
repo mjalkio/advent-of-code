@@ -19,3 +19,7 @@ Player 2:
 
 def test_get_winning_combat_score():
     assert get_winning_combat_score(TEST_INPUT) == 306
+
+
+def test_get_winning_combat_score_recursive():
+    assert get_winning_combat_score(TEST_INPUT, recursive=True) == 291
