@@ -51,7 +51,9 @@ def _get_winner_and_deck_recursive(p1_deck, p2_deck):
         p2_card = p2_deck.popleft()
 
         if len(p1_deck) >= p1_card and len(p2_deck) >= p2_card:
-            winner, _ = _get_winner_and_deck_recursive(p1_deck.copy(), p2_deck.copy())
+            p1_recursion_deck = deque(list(p1_deck)[:p1_card])
+            p2_recursion_deck = deque(list(p2_deck)[:p2_card])
+            winner, _ = _get_winner_and_deck_recursive(p1_recursion_deck, p2_recursion_deck)
         elif p1_card > p2_card:
             winner = PLAYER_1
         else:
