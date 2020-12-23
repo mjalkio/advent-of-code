@@ -1,5 +1,9 @@
-def get_crab_cups(puzzle_input, num_moves=100):
+def get_crab_cups(puzzle_input, num_moves=100, is_part_two=False):
     cups = [int(label) for label in puzzle_input]
+
+    if is_part_two:
+        cups += list(range(10, 1000001))
+
     highest_label = max(cups)
     lowest_label = min(cups)
     for _ in range(num_moves):
@@ -24,6 +28,9 @@ def get_crab_cups(puzzle_input, num_moves=100):
         )
 
     one_idx = cups.index(1)
+    if is_part_two:
+        return cups[(one_idx + 1) % len(cups)] * cups[(one_idx + 2) % len(cups)]
+
     return ''.join(str(label) for label in cups[one_idx + 1:] + cups[:one_idx])
 
 
@@ -31,4 +38,4 @@ if __name__ == '__main__':
     puzzle_input = '792845136'
 
     print(f"Part 1: {get_crab_cups(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_crab_cups(puzzle_input, num_moves=10000000, is_part_two=True)}")
