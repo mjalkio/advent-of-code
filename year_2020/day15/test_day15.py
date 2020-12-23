@@ -3,7 +3,6 @@ import pytest
 from year_2020.day15.rambunctious_recitation import get_number_spoken
 
 
-@pytest.mark.skip(reason="These tests pass, but the 30,000,000 test cases run very slowly.")
 @pytest.mark.parametrize(
     'starting_numbers,num_turns,expected',
     [
@@ -34,4 +33,7 @@ from year_2020.day15.rambunctious_recitation import get_number_spoken
     ]
 )
 def test_get_number_spoken(starting_numbers, num_turns, expected):
+    if num_turns == 30_000_000:
+        pytest.skip("These tests pass, but the 30,000,000 test cases run very slowly.")
+
     assert get_number_spoken(starting_numbers, num_turns) == expected
