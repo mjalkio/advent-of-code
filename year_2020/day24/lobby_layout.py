@@ -28,7 +28,7 @@ def _get_tile_coordinates(directions, reference_tile=(0, 0, 0)):
         tile_coordinates = tuple(
             curr + move
             for curr, move
-            in zip(reference_tile, next_direction_vector)
+            in zip(tile_coordinates, next_direction_vector)
         )
     return tile_coordinates
 
