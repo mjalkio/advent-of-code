@@ -32,6 +32,7 @@ def _get_tile_coordinates(directions, reference_tile=(0, 0, 0)):
         )
     return tile_coordinates
 
+
 def get_num_black_tiles(puzzle_input):
     tile_directions = [line for line in puzzle_input.split('\n') if line != '']
     black_tiles = set()
@@ -44,8 +45,12 @@ def get_num_black_tiles(puzzle_input):
     return len(black_tiles)
 
 
+def get_num_black_tiles_after_days(puzzle_input, num_days):
+    return None
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_black_tiles(puzzle_input)}")
-    print(f"Part 2: {None}")
+    print(f"Part 2: {get_num_black_tiles(puzzle_input=puzzle_input, num_days=100)}")
