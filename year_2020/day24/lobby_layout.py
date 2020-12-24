@@ -33,7 +33,7 @@ def _get_tile_coordinates(directions, reference_tile=(0, 0, 0)):
     return tile_coordinates
 
 
-def get_num_black_tiles(puzzle_input):
+def _get_black_tiles(puzzle_input):
     tile_directions = [line for line in puzzle_input.split('\n') if line != '']
     black_tiles = set()
     for directions in tile_directions:
@@ -42,6 +42,11 @@ def get_num_black_tiles(puzzle_input):
             black_tiles.remove(tile_coordinates)
         else:
             black_tiles.add(tile_coordinates)
+    return black_tiles
+
+
+def get_num_black_tiles(puzzle_input):
+    black_tiles = _get_black_tiles(puzzle_input)
     return len(black_tiles)
 
 
