@@ -25,8 +25,8 @@ def count_sliding_window_depth_increases(puzzle_input):
     ]
 
     num_increases = 0
-    for i in range(1, len(depths)):
-        if depths[i] > depths[i - 1]:
+    for i in range(1, len(depths) - 1):
+        if sum(depths[i:i + 3]) > sum(depths[i - 1:i + 2]):
             num_increases += 1
     return num_increases
 
