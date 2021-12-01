@@ -1,4 +1,7 @@
-from year_2021.day01.sonar_sweep import count_depth_increases
+from year_2021.day01.sonar_sweep import (
+    count_depth_increases,
+    count_sliding_window_depth_increases,
+)
 
 PUZZLE_INPUT = """
 199
@@ -14,5 +17,9 @@ PUZZLE_INPUT = """
 """
 
 
-def test_sum_to_2020_product():
+def test_count_depth_increases():
     assert count_depth_increases(PUZZLE_INPUT) == 7
+
+
+def test_count_sliding_window_depth_increases():
+    assert count_sliding_window_depth_increases(PUZZLE_INPUT) == 5
