@@ -30,6 +30,7 @@ def count_sliding_window_depth_increases(puzzle_input):
             num_increases += 1
     return num_increases
 
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
