@@ -35,13 +35,15 @@ def get_position_product_with_aim(puzzle_input):
 
     position = 0
     depth = 0
+    aim = 0
     for command, distance in cmd_lines:
         if command == 'forward':
             position += distance
+            depth += aim * distance
         if command == 'down':
-            depth += distance
+            aim += distance
         if command == 'up':
-            depth -= distance
+            aim -= distance
     return position * depth
 
 
