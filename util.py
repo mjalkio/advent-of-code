@@ -22,6 +22,7 @@ def setup_day():
     problem_name = input("Enter the name of today's problem: ")
     problem_slug = problem_name.lower().replace(' ', '_')
     method_name = input("Enter the method name you plan to implement: ")
+    test_result = input("Enter the part 1 test result: ")
 
     repo_dir = Path(__file__).parent
     year_dirs = [
@@ -46,6 +47,7 @@ def setup_day():
 
     Path(today_dir, '__init__.py').touch()
     Path(today_dir, 'puzzle_input.txt').touch()
+    Path(today_dir, 'test_input.txt').touch()
 
     problem_contents = f"""from util import read_puzzle_input
 
@@ -61,6 +63,17 @@ if __name__ == '__main__':
     print(f"Part 2: {{{method_name}(puzzle_input)}}")
 """
     Path(today_dir, f"{problem_slug}.py").write_text(problem_contents)
+
+    test_contents = f"""from util import read_puzzle_input
+from {current_year_dir.name}.day{today_day_string}.{problem_slug} import (
+    {method_name},
+)
+
+
+def test_{method_name}():
+    assert {method_name}(read_puzzle_input('test_input.txt')) == {test_result}
+"""
+    Path(today_dir, f"test_{problem_slug}.py").write_text(test_contents)
 
 
 if __name__ == '__main__':
