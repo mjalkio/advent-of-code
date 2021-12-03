@@ -23,8 +23,12 @@ def get_power_consumption(puzzle_input):
     return int(gamma_rate, 2) * int(epsilon_rate, 2)
 
 
+def get_life_support_rating(puzzle_input):
+    return 0
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_power_consumption(puzzle_input)}")
-    print(f"Part 2: {get_power_consumption(puzzle_input)}")
+    print(f"Part 2: {get_life_support_rating(puzzle_input)}")
