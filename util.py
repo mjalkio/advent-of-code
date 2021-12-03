@@ -26,7 +26,22 @@ def setup_day():
         if file.is_dir() and 'year' in file.name
     ]
     current_year_dir = sorted(year_dirs)[-1]
-    print(current_year_dir)
+
+    day_dirs = [
+        file
+        for file in current_year_dir.iterdir()
+        if file.is_dir() and 'day' in file.name
+    ]
+
+    yesterday_dir = sorted(day_dirs)[-1]
+    yesterday_day = yesterday_dir.name[3:]
+    today_day = int(yesterday_day) + 1
+    today_day_string = str(today_day).zfill(2)
+    today_dir = Path(current_year_dir, f"day{today_day_string}")
+    today_dir.mkdir()
+
+    Path(today_dir, '__init__.py').touch()
+    Path(today_dir, 'puzzle_input.txt').touch()
 
 
 if __name__ == '__main__':
