@@ -37,8 +37,20 @@ def get_winning_board_score(puzzle_input):
                 return sum(set(b.all_nums) - drawn_numbers) * numbers[move_num]
 
 
+def get_losing_board_score(puzzle_input):
+    inputs = puzzle_input.split('\n\n')
+    numbers = [int(num) for num in inputs[0].split(',')]
+    boards = _get_boards(inputs[1:])
+
+    for move_num in range(len(numbers)):
+        drawn_numbers = set(numbers[:move_num + 1])
+        for b in boards:
+            if _has_win(b.rows, drawn_numbers) or _has_win(b.cols, drawn_numbers):
+                return sum(set(b.all_nums) - drawn_numbers) * numbers[move_num]
+
+
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_winning_board_score(puzzle_input)}")
-    print(f"Part 2: {get_winning_board_score(puzzle_input)}")
+    print(f"Part 2: {get_losing_board_score(puzzle_input)}")
