@@ -40,13 +40,21 @@ def get_winning_board_score(puzzle_input):
 def get_losing_board_score(puzzle_input):
     inputs = puzzle_input.split('\n\n')
     numbers = [int(num) for num in inputs[0].split(',')]
-    boards = _get_boards(inputs[1:])
+    non_winning_boards = _get_boards(inputs[1:])
 
     for move_num in range(len(numbers)):
         drawn_numbers = set(numbers[:move_num + 1])
-        for b in boards:
+
+        if len(non_winning_boards) == 1:
+            loser = non_winning_boards[0]
+            return sum(set(loser.all_nums) - drawn_numbers) * numbers[move_num]
+
+        winners = []
+        for b in non_winning_boards:
             if _has_win(b.rows, drawn_numbers) or _has_win(b.cols, drawn_numbers):
-                return sum(set(b.all_nums) - drawn_numbers) * numbers[move_num]
+                winners.append(b)
+        for w in winners:
+            non_winning_boards.remove(w)
 
 
 if __name__ == '__main__':
