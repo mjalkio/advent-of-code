@@ -1,8 +1,14 @@
+from collections import Counter
+
 from util import read_puzzle_input
 
 
 def get_num_lanternfish(puzzle_input, num_days=0):
-    return 0
+    timers = [int(t) for t in puzzle_input.split(',')]
+    num_fish = Counter(timers)
+    for i in range(num_days):
+        pass
+    return sum(num_fish.values())
 
 
 if __name__ == '__main__':
