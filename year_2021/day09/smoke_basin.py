@@ -19,8 +19,12 @@ def get_low_point_risk_level_sum(puzzle_input):
     return risk_level
 
 
+def get_three_largest_basin_size_product(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_low_point_risk_level_sum(puzzle_input)}")
-    print(f"Part 2: {get_low_point_risk_level_sum(puzzle_input)}")
+    print(f"Part 2: {get_three_largest_basin_size_product(puzzle_input)}")
