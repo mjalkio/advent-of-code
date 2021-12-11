@@ -38,14 +38,18 @@ def get_three_largest_basin_size_product(puzzle_input):
         to_visit = [(x, y)]
         while len(to_visit) > 0:
             xx, yy = to_visit.pop()
+            if (xx, yy) in mapped_locations:
+                continue
+
             mapped_locations.add((xx, yy))
             basin_sizes[-1] += 1
             to_visit += [
                 coord
                 for coord in [(xx - 1, yy), (xx, yy + 1), (xx + 1, yy), (xx, yy - 1)]
-                if coord in heightmap and coord not in mapped_locations
+                if coord in heightmap
+                and coord not in mapped_locations
+                and heightmap[coord] != 9
             ]
-
     return prod(sorted(basin_sizes)[-3:])
 
 
