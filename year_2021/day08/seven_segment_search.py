@@ -74,9 +74,9 @@ def get_outputs_sum(puzzle_input):
                 continue
 
             if len(identified_segments['e'] - pattern) == 1:
-                identified_numbers[0] = pattern
-            else:
                 identified_numbers[9] = pattern
+            else:
+                identified_numbers[0] = pattern
 
         output_digits = [identified_numbers.index(pattern) for pattern in output_patterns]
         output_value = ''.join([str(digit) for digit in output_digits])
