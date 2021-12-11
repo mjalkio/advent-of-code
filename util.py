@@ -54,7 +54,7 @@ def {method_name}(puzzle_input):
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {{{method_name}(puzzle_input)}}")
@@ -69,7 +69,7 @@ from {current_year_dir.name}.day{today_day_string}.{problem_slug} import (
 
 
 def test_{method_name}():
-    assert {method_name}(read_puzzle_input('test_input.txt')) == {test_result}
+    assert {method_name}(read_puzzle_input("test_input.txt")) == {test_result}
 """
     Path(today_dir, f"test_{problem_slug}.py").write_text(test_contents)
 
