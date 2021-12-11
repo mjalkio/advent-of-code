@@ -55,7 +55,12 @@ def get_outputs_sum(puzzle_input):
                 identified_segments['c'] = identified_numbers[1] - identified_numbers[6]
                 identified_segments['f'] = identified_numbers[1] - identified_segments['c']
         for pattern in five_segment_numbers:
-            if len(pattern - identified_segments['a'] - identified_segments['c'] - identified_segments['f']) == 2:
+            if len(
+                pattern
+                - identified_segments['a']
+                - identified_segments['c']
+                - identified_segments['f']
+            ) == 2:
                 identified_numbers[3] = pattern
         for pattern in five_segment_numbers:
             if pattern == identified_numbers[3]:
