@@ -24,19 +24,30 @@ mem[26] = 1
 
 
 @pytest.mark.parametrize(
-    'value,mask,expected',
+    "value,mask,expected",
     [
-        (42, '000000000000000000000000000000X1001X', '000000000000000000000000000000X1101X'),
-        (26, '00000000000000000000000000000000X0XX', '00000000000000000000000000000001X0XX'),
-    ]
+        (
+            42,
+            "000000000000000000000000000000X1001X",
+            "000000000000000000000000000000X1101X",
+        ),
+        (
+            26,
+            "00000000000000000000000000000000X0XX",
+            "00000000000000000000000000000001X0XX",
+        ),
+    ],
 )
 def test_get_masked_address(value, mask, expected):
     assert get_masked_address(value=value, mask=mask) == expected
 
 
-@pytest.mark.parametrize('value,expected', [(11, 73), (101, 101), (0, 64)])
+@pytest.mark.parametrize("value,expected", [(11, 73), (101, 101), (0, 64)])
 def test_get_masked_value(value, expected):
-    assert get_masked_value(value=value, mask='XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X') == expected
+    assert (
+        get_masked_value(value=value, mask="XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X")
+        == expected
+    )
 
 
 def test_get_memory_sum():

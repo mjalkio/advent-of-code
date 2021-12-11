@@ -11,9 +11,9 @@ SEA_MONSTER_HEIGHT = 3
 def _parse_tiles(puzzle_input):
     """Take the input, return a map of ID to tile."""
     tiles = {}
-    tile_definitions = puzzle_input.split('\n\n')
+    tile_definitions = puzzle_input.split("\n\n")
     for tile_def in tile_definitions:
-        tile_lines = tile_def.split('\n')
+        tile_lines = tile_def.split("\n")
         tile_id = int(tile_lines[0][5:-1])
         tiles[tile_id] = np.array([list(tile_line) for tile_line in tile_lines[1:]])
     return tiles
@@ -24,8 +24,8 @@ def _get_tile_potential_borders(tile):
     # With the magic of rotation and such, we can make any border reversed as well
     potential_borders = set()
     for side in tile_sides:
-        potential_borders.add(''.join(side))
-        potential_borders.add(''.join(reversed(side)))
+        potential_borders.add("".join(side))
+        potential_borders.add("".join(reversed(side)))
     return potential_borders
 
 
@@ -41,9 +41,9 @@ def _get_potential_neighbors(tiles):
     for tile_id in tiles:
         potential_neighbors[tile_id] = set(
             neighbor_id
-            for neighbor_id
-            in tiles
-            if neighbor_id != tile_id and _shares_border(tiles[tile_id], tiles[neighbor_id])
+            for neighbor_id in tiles
+            if neighbor_id != tile_id
+            and _shares_border(tiles[tile_id], tiles[neighbor_id])
         )
     return potential_neighbors
 
@@ -51,8 +51,7 @@ def _get_potential_neighbors(tiles):
 def _get_corner_tile_ids(potential_neighbors):
     return [
         tile_id
-        for tile_id
-        in potential_neighbors
+        for tile_id in potential_neighbors
         if len(potential_neighbors[tile_id]) == 2
     ]
 
@@ -65,14 +64,17 @@ def get_corner_ids_product(puzzle_input):
     # The "potential" neighbors are definitely its neighbors.
     corner_tile_ids = _get_corner_tile_ids(potential_neighbors)
     if len(corner_tile_ids) > 4:
-        raise ValueError('Have not implemented for this situation...')
+        raise ValueError("Have not implemented for this situation...")
     return math.prod(corner_tile_ids)
 
 
 def _has_border(tile, border):
     reversed_border = border[::-1]
     tile_sides = [tile[0], tile[-1], tile[:, 0], tile[:, -1]]
-    return any(np.array_equal(border, s) or np.array_equal(reversed_border, s) for s in tile_sides)
+    return any(
+        np.array_equal(border, s) or np.array_equal(reversed_border, s)
+        for s in tile_sides
+    )
 
 
 def _match_left_right(left_tile, right_tile):
@@ -107,7 +109,9 @@ def _find_fit(tile, left_tile_info, top_tile_info):
     return None
 
 
-def _get_potential_next_tiles(left_tile_info, top_tile_info, potential_neighbors, placed_tile_ids):
+def _get_potential_next_tiles(
+    left_tile_info, top_tile_info, potential_neighbors, placed_tile_ids
+):
     if left_tile_info is not None and top_tile_info is not None:
         potentials = potential_neighbors[left_tile_info[0]].intersection(
             potential_neighbors[top_tile_info[0]]
@@ -130,14 +134,21 @@ def _get_image_with_borders(puzzle_input):
     # Note: I'm going to "cheat" to so that I can visually follow the example
     # and set up this first tile so I know it matches the example
     first_tile = np.fliplr(tiles[first_tile_id])
-    first_tile_neighbor_id_1, first_tile_neighbor_id_2 = potential_neighbors[first_tile_id]
+    first_tile_neighbor_id_1, first_tile_neighbor_id_2 = potential_neighbors[
+        first_tile_id
+    ]
     while not (
         (
             _has_border(tile=tiles[first_tile_neighbor_id_1], border=first_tile[-1])
-            and _has_border(tile=tiles[first_tile_neighbor_id_2], border=first_tile[:, -1])
-        ) or (
+            and _has_border(
+                tile=tiles[first_tile_neighbor_id_2], border=first_tile[:, -1]
+            )
+        )
+        or (
             _has_border(tile=tiles[first_tile_neighbor_id_2], border=first_tile[-1])
-            and _has_border(tile=tiles[first_tile_neighbor_id_1], border=first_tile[:, -1])
+            and _has_border(
+                tile=tiles[first_tile_neighbor_id_1], border=first_tile[:, -1]
+            )
         )
     ):
         # Rotate until these tiles can fit
@@ -167,13 +178,13 @@ def _get_image_with_borders(puzzle_input):
                 fitting_configuration = _find_fit(
                     tile=tiles[potential_tile_id],
                     left_tile_info=image.get((x - 1, y)),
-                    top_tile_info=image.get((x, y - 1))
+                    top_tile_info=image.get((x, y - 1)),
                 )
                 if fitting_configuration is not None:
                     break
 
             if fitting_configuration is None:
-                raise ValueError('Something went wrong.')
+                raise ValueError("Something went wrong.")
             image[(x, y)] = (potential_tile_id, fitting_configuration)
             placed_tile_ids.add(potential_tile_id)
 
@@ -186,7 +197,9 @@ def _remove_border(image_with_borders):
     for y in range(image_dimension + 1):
         image_row = image_with_borders[(0, y)][1:-1, 1:-1]
         for x in range(1, image_dimension + 1):
-            image_row = np.concatenate((image_row, image_with_borders[(x, y)][1:-1, 1:-1]), axis=1)
+            image_row = np.concatenate(
+                (image_row, image_with_borders[(x, y)][1:-1, 1:-1]), axis=1
+            )
         image_rows.append(image_row)
 
     image = image_rows[0]
@@ -240,11 +253,14 @@ def _remove_sea_monsters(image):
                     (x + 19, y - 1),
                 )
 
-                if all(image_position[sm_y][sm_x] == '#' for sm_x, sm_y in sea_monster_shape):
+                if all(
+                    image_position[sm_y][sm_x] == "#"
+                    for sm_x, sm_y in sea_monster_shape
+                ):
                     # There be sea monster!!
                     found_sea_monster = True
                     for sm_x, sm_y in sea_monster_shape:
-                        image_position[sm_y][sm_x] = '.'
+                        image_position[sm_y][sm_x] = "."
         if found_sea_monster:
             return image_position
 
@@ -253,10 +269,10 @@ def get_water_roughness(puzzle_input):
     image_with_borders = _get_image_with_borders(puzzle_input)
     image = _remove_border(image_with_borders)
     image_without_sea_monsters = _remove_sea_monsters(image)
-    return np.sum(np.vectorize(lambda val: val == '#')(image_without_sea_monsters))
+    return np.sum(np.vectorize(lambda val: val == "#")(image_without_sea_monsters))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_corner_ids_product(puzzle_input)}")

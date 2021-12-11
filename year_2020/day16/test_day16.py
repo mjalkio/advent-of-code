@@ -38,4 +38,4 @@ def test_get_ticket_scanning_error_rate():
 
 
 def test_get_field_order():
-    assert get_field_order(TEST_INPUT_2) == ['row', 'class', 'seat']
+    assert get_field_order(TEST_INPUT_2) == ["row", "class", "seat"]

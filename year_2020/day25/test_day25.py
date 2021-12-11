@@ -10,6 +10,6 @@ def test_get_encryption_key():
     assert get_encryption_key(5764801, 17807724) == 14897079
 
 
-@pytest.mark.parametrize('public_key, expected', [(17807724, 11), (5764801, 8)])
+@pytest.mark.parametrize("public_key, expected", [(17807724, 11), (5764801, 8)])
 def test_get_loop_size(public_key, expected):
     assert get_loop_size(public_key) == expected

@@ -1,6 +1,9 @@
 import pytest
 
-from year_2020.day24.lobby_layout import get_num_black_tiles, get_num_black_tiles_after_days
+from year_2020.day24.lobby_layout import (
+    get_num_black_tiles,
+    get_num_black_tiles_after_days,
+)
 
 TEST_INPUT = """
 sesenwnenenewseeswwswswwnenewsewsw
@@ -31,7 +34,7 @@ def test_get_num_black_tiles():
 
 
 @pytest.mark.parametrize(
-    'num_days, expected',
+    "num_days, expected",
     [
         (1, 15),
         (2, 12),
@@ -52,9 +55,12 @@ def test_get_num_black_tiles():
         (80, 1373),
         (90, 1844),
         (100, 2208),
-    ]
+    ],
 )
 def test_get_num_black_tiles_after_days(num_days, expected):
     if num_days > 10:
         pytest.skip("These tests pass, but they're slower than I want to wait for.")
-    assert get_num_black_tiles_after_days(puzzle_input=TEST_INPUT, num_days=num_days) == expected
+    assert (
+        get_num_black_tiles_after_days(puzzle_input=TEST_INPUT, num_days=num_days)
+        == expected
+    )

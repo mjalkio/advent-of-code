@@ -1,6 +1,6 @@
 def calculate_checksum(puzzle_input):
     checksum = 0
-    puzzle_input = puzzle_input.split('\n')
+    puzzle_input = puzzle_input.split("\n")
     for line in puzzle_input:
         line = line.split()
         if len(line) == 0:
@@ -12,7 +12,7 @@ def calculate_checksum(puzzle_input):
     return checksum
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = """
         278 1689    250 1512    1792    1974    175 1639    235 1635    1690    1947    810 224 928 859
         160 50  55  81  68  130 145 21  211 136 119 78  174 155 149 72
@@ -30,5 +30,5 @@ if __name__ == '__main__':
         1308    797 498 791 1312    99  1402    1332    521 1354    1339    101 367 1333    111 92
         149 4140    112 3748    148 815 4261    138 1422    2670    32  334 2029    4750    4472    2010
         114 605 94  136 96  167 553 395 164 159 284 104 530 551 544 18
-    """ # noqa
+    """  # noqa
     print(calculate_checksum(puzzle_input))

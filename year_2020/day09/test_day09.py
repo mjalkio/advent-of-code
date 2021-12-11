@@ -35,7 +35,7 @@ TEST_INPUT = """
 
 
 @pytest.mark.parametrize(
-    'number,preamble,expected',
+    "number,preamble,expected",
     [
         (26, EXAMPLE_1_PREAMBLE, True),
         (49, EXAMPLE_1_PREAMBLE, True),
@@ -45,7 +45,7 @@ TEST_INPUT = """
         (65, EXAMPLE_2_PREAMBLE, False),
         (64, EXAMPLE_2_PREAMBLE, True),
         (66, EXAMPLE_2_PREAMBLE, True),
-    ]
+    ],
 )
 def test_has_pair_that_sums(number, preamble, expected):
     assert has_pair_that_sums(number, preamble) == expected

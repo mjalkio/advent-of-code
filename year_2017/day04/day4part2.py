@@ -13,5 +13,5 @@ def is_valid_anagram_passphrase(phrase):
     return len(words) == len(set(char_count_tuples))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(num_valid_passphrases(PUZZLE_INPUT, is_valid_anagram_passphrase))

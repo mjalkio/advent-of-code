@@ -22,7 +22,10 @@ def get_crab_cups(puzzle_input, num_moves=100, is_part_two=False):
         )
 
         destination_cup_label = current_cup_label - 1
-        while destination_cup_label in cup_labels_to_move or destination_cup_label < lowest_label:
+        while (
+            destination_cup_label in cup_labels_to_move
+            or destination_cup_label < lowest_label
+        ):
             destination_cup_label -= 1
 
             if destination_cup_label < lowest_label:
@@ -37,7 +40,7 @@ def get_crab_cups(puzzle_input, num_moves=100, is_part_two=False):
     if is_part_two:
         return cup_circle[1] * cup_circle[cup_circle[1]]
 
-    cups_after_1 = ''
+    cups_after_1 = ""
     next_cup = cup_circle[1]
     while next_cup != 1:
         cups_after_1 += str(next_cup)
@@ -45,8 +48,10 @@ def get_crab_cups(puzzle_input, num_moves=100, is_part_two=False):
     return cups_after_1
 
 
-if __name__ == '__main__':
-    puzzle_input = '792845136'
+if __name__ == "__main__":
+    puzzle_input = "792845136"
 
     print(f"Part 1: {get_crab_cups(puzzle_input)}")
-    print(f"Part 2: {get_crab_cups(puzzle_input, num_moves=10000000, is_part_two=True)}")
+    print(
+        f"Part 2: {get_crab_cups(puzzle_input, num_moves=10000000, is_part_two=True)}"
+    )

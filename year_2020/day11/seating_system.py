@@ -2,13 +2,13 @@ from collections import defaultdict
 
 from util import read_puzzle_input
 
-EMPTY_SEAT = 'L'
-FLOOR = '.'
-OCCUPIED_SEAT = '#'
+EMPTY_SEAT = "L"
+FLOOR = "."
+OCCUPIED_SEAT = "#"
 
 
 def _get_seat_layout(puzzle_input):
-    lines = [line for line in puzzle_input.split('\n') if line != '']
+    lines = [line for line in puzzle_input.split("\n") if line != ""]
     seat_layout = {}
     for j in range(len(lines)):
         for i in range(len(lines[j])):
@@ -45,18 +45,26 @@ def get_surrounding_chairs_part_2(seat_layout):
         for dx, dy in directions:
             possible_surrounding_x = x + dx
             possible_surrounding_y = y + dy
-            while seat_layout.get((possible_surrounding_x, possible_surrounding_y)) == FLOOR:
+            while (
+                seat_layout.get((possible_surrounding_x, possible_surrounding_y))
+                == FLOOR
+            ):
                 possible_surrounding_x += dx
                 possible_surrounding_y += dy
             if seat_layout.get((possible_surrounding_x, possible_surrounding_y)) in (
-                EMPTY_SEAT, OCCUPIED_SEAT
+                EMPTY_SEAT,
+                OCCUPIED_SEAT,
             ):
-                surrounding_chairs[(x, y)].append((possible_surrounding_x, possible_surrounding_y))
+                surrounding_chairs[(x, y)].append(
+                    (possible_surrounding_x, possible_surrounding_y)
+                )
     return surrounding_chairs
 
 
 def _get_num_occupied_seats_around(i, j, seat_layout, surrounding_chairs):
-    return sum(seat_layout[(ii, jj)] == OCCUPIED_SEAT for ii, jj in surrounding_chairs[(i, j)])
+    return sum(
+        seat_layout[(ii, jj)] == OCCUPIED_SEAT for ii, jj in surrounding_chairs[(i, j)]
+    )
 
 
 def _get_next_seat_layout(seat_layout, surrounding_chairs, max_surrounding_occupied=4):
@@ -64,15 +72,13 @@ def _get_next_seat_layout(seat_layout, surrounding_chairs, max_surrounding_occup
     for (i, j), current_state in seat_layout.items():
         if (
             current_state == EMPTY_SEAT
-            and _get_num_occupied_seats_around(i, j, seat_layout, surrounding_chairs) == 0
+            and _get_num_occupied_seats_around(i, j, seat_layout, surrounding_chairs)
+            == 0
         ):
             next_seat_layout[(i, j)] = OCCUPIED_SEAT
-        elif (
-            current_state == OCCUPIED_SEAT
-            and (
-                _get_num_occupied_seats_around(i, j, seat_layout, surrounding_chairs)
-                >= max_surrounding_occupied
-            )
+        elif current_state == OCCUPIED_SEAT and (
+            _get_num_occupied_seats_around(i, j, seat_layout, surrounding_chairs)
+            >= max_surrounding_occupied
         ):
             next_seat_layout[(i, j)] = EMPTY_SEAT
         else:
@@ -83,7 +89,7 @@ def _get_next_seat_layout(seat_layout, surrounding_chairs, max_surrounding_occup
 
 def _are_layouts_the_same(seat_layout_1, seat_layout_2):
     if len(seat_layout_1) != len(seat_layout_2):
-        raise ValueError('Seat layouts being compared have different numbers of seats!')
+        raise ValueError("Seat layouts being compared have different numbers of seats!")
     for i, j in seat_layout_1:
         if seat_layout_1[(i, j)] != seat_layout_2[(i, j)]:
             return False
@@ -97,7 +103,7 @@ def print_layout(seat_layout):
         line = []
         for i in range(width):
             line.append(seat_layout[(i, j)])
-        print(''.join(line))
+        print("".join(line))
 
 
 def get_num_occupied_seats_at_convergence(
@@ -122,7 +128,7 @@ def get_num_occupied_seats_at_convergence(
     return _get_num_occupied_seats(seat_layout)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_occupied_seats_at_convergence(puzzle_input)}")

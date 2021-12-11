@@ -2,30 +2,30 @@ import operator
 import os.path as op
 
 
-def get_input(filename='puzzle_input.txt'):
-    with open(op.join(op.dirname(__file__), filename), 'r') as f:
+def get_input(filename="puzzle_input.txt"):
+    with open(op.join(op.dirname(__file__), filename), "r") as f:
         puzzle_input = f.read()
     return puzzle_input
 
 
 def parse_input(puzzle_input):
     reg_op_mapping = {
-        'inc': operator.add,
-        'dec': operator.sub,
+        "inc": operator.add,
+        "dec": operator.sub,
     }
     bool_op_mapping = {
-        '>': operator.gt,
-        '<': operator.lt,
-        '>=': operator.ge,
-        '<=': operator.le,
-        '!=': operator.ne,
-        '==': operator.eq,
+        ">": operator.gt,
+        "<": operator.lt,
+        ">=": operator.ge,
+        "<=": operator.le,
+        "!=": operator.ne,
+        "==": operator.eq,
     }
 
     instructions = []
     registers = set()
 
-    for line in puzzle_input.split('\n'):
+    for line in puzzle_input.split("\n"):
         line = line.strip()  # trim any whitespace
         register, reg_op, amount, _, bool_reg, bool_op, bool_val = line.split()
 
@@ -59,7 +59,7 @@ def execute_instructions(puzzle_input):
     return max(registers.values()), max_value_seen
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = get_input()
     max_val, max_ever = execute_instructions(puzzle_input)
     print("Max at end: {val}".format(val=max_val))

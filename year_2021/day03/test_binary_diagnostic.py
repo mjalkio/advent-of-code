@@ -6,8 +6,8 @@ from year_2021.day03.binary_diagnostic import (
 
 
 def test_get_power_consumption():
-    assert get_power_consumption(read_puzzle_input('test_input.txt')) == 198
+    assert get_power_consumption(read_puzzle_input("test_input.txt")) == 198
 
 
 def test_get_life_support_rating():
-    assert get_life_support_rating(read_puzzle_input('test_input.txt')) == 230
+    assert get_life_support_rating(read_puzzle_input("test_input.txt")) == 230

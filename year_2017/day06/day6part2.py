@@ -5,9 +5,11 @@ from day6part1 import get_initial_config
 
 def redistribute(config):
     config = list(config)
-    max_index, max_blocks = max(enumerate(config),
-                                # Was originally lambda (idx, blocks): blocks
-                                key=lambda config: config[1])
+    max_index, max_blocks = max(
+        enumerate(config),
+        # Was originally lambda (idx, blocks): blocks
+        key=lambda config: config[1],
+    )
     config[max_index] = 0
     config = [blocks + int(max_blocks / len(config)) for blocks in config]
     remaining_blocks = max_blocks % len(config)
@@ -36,6 +38,6 @@ def loop_size(config):
     return loop_size
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     initial_config = get_initial_config()
     print(loop_size(initial_config))

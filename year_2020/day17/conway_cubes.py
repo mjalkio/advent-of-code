@@ -2,8 +2,8 @@ from collections import UserDict
 
 from util import read_puzzle_input
 
-ACTIVE = '#'
-INACTIVE = '.'
+ACTIVE = "#"
+INACTIVE = "."
 
 
 class EnergySource(UserDict):
@@ -20,14 +20,14 @@ class EnergySource(UserDict):
                 line = []
                 for x in range(width):
                     line.append(layer[(x, y)])
-                output.append(''.join(line))
-            output.append('\n')
+                output.append("".join(line))
+            output.append("\n")
 
-        return '\n'.join(output)
+        return "\n".join(output)
 
 
 def _get_energy_source(puzzle_input):
-    lines = [line for line in puzzle_input.split('\n') if line != '']
+    lines = [line for line in puzzle_input.split("\n") if line != ""]
     initial_slice = {}
     for y in range(len(lines)):
         for x in range(len(lines[y])):
@@ -66,7 +66,9 @@ def get_num_active_cubes(puzzle_input, num_cycles=6):
             for x in range(curr_min_x - 1, curr_max_x + 2):
                 for y in range(curr_min_y - 1, curr_max_y + 2):
                     curr_cube_state = energy_source.get(z, {}).get((x, y), INACTIVE)
-                    num_active_neighbors = _get_num_active_neighbors(x, y, z, energy_source)
+                    num_active_neighbors = _get_num_active_neighbors(
+                        x, y, z, energy_source
+                    )
                     if curr_cube_state == ACTIVE:
                         if num_active_neighbors in (2, 3):
                             layer[(x, y)] = ACTIVE
@@ -94,7 +96,12 @@ def _get_num_active_neighbors_4d(x, y, z, w, energy_source):
 
             for neighbor_x in range(x - 1, x + 2):
                 for neighbor_y in range(y - 1, y + 2):
-                    if neighbor_x == x and neighbor_y == y and neighbor_z == z and neighbor_w == w:
+                    if (
+                        neighbor_x == x
+                        and neighbor_y == y
+                        and neighbor_z == z
+                        and neighbor_w == w
+                    ):
                         continue
 
                     if layer.get((neighbor_x, neighbor_y), INACTIVE) == ACTIVE:
@@ -103,7 +110,7 @@ def _get_num_active_neighbors_4d(x, y, z, w, energy_source):
 
 
 def get_num_active_cubes_4d(puzzle_input, num_cycles=6):  # noqa
-    lines = [line for line in puzzle_input.split('\n') if line != '']
+    lines = [line for line in puzzle_input.split("\n") if line != ""]
     initial_layer = {}
     for y in range(len(lines)):
         for x in range(len(lines[y])):
@@ -127,13 +134,11 @@ def get_num_active_cubes_4d(puzzle_input, num_cycles=6):  # noqa
                 layer = {}
                 for x in range(curr_min_x - 1, curr_max_x + 2):
                     for y in range(curr_min_y - 1, curr_max_y + 2):
-                        curr_cube_state = energy_source.get(w, {}).get(z, {}).get((x, y), INACTIVE)
+                        curr_cube_state = (
+                            energy_source.get(w, {}).get(z, {}).get((x, y), INACTIVE)
+                        )
                         num_active_neighbors = _get_num_active_neighbors_4d(
-                            x,
-                            y,
-                            z,
-                            w,
-                            energy_source
+                            x, y, z, w, energy_source
                         )
                         if curr_cube_state == ACTIVE:
                             if num_active_neighbors in (2, 3):
@@ -156,7 +161,7 @@ def get_num_active_cubes_4d(puzzle_input, num_cycles=6):  # noqa
     return num_active_cubes
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_active_cubes(puzzle_input)}")

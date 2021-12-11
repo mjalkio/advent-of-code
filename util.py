@@ -6,7 +6,7 @@ import numpy as np
 np.set_printoptions(linewidth=200)
 
 
-def read_puzzle_input(file_name='puzzle_input.txt'):
+def read_puzzle_input(file_name="puzzle_input.txt"):
     caller_frame = inspect.stack()[1]
     caller_path = Path(caller_frame.filename)
     puzzle_input_path = Path(caller_path.parent, file_name)
@@ -20,22 +20,20 @@ def read_puzzle_input(file_name='puzzle_input.txt'):
 
 def setup_day():
     problem_name = input("Enter the name of today's problem: ")
-    problem_slug = problem_name.lower().replace(' ', '_')
+    problem_slug = problem_name.lower().replace(" ", "_")
     method_name = input("Enter the method name you plan to implement: ")
     test_result = input("Enter the part 1 test result: ")
 
     repo_dir = Path(__file__).parent
     year_dirs = [
-        file
-        for file in repo_dir.iterdir()
-        if file.is_dir() and 'year' in file.name
+        file for file in repo_dir.iterdir() if file.is_dir() and "year" in file.name
     ]
     current_year_dir = sorted(year_dirs)[-1]
 
     day_dirs = [
         file
         for file in current_year_dir.iterdir()
-        if file.is_dir() and 'day' in file.name
+        if file.is_dir() and "day" in file.name
     ]
 
     yesterday_dir = sorted(day_dirs)[-1]
@@ -45,9 +43,9 @@ def setup_day():
     today_dir = Path(current_year_dir, f"day{today_day_string}")
     today_dir.mkdir()
 
-    Path(today_dir, '__init__.py').touch()
-    Path(today_dir, 'puzzle_input.txt').touch()
-    Path(today_dir, 'test_input.txt').touch()
+    Path(today_dir, "__init__.py").touch()
+    Path(today_dir, "puzzle_input.txt").touch()
+    Path(today_dir, "test_input.txt").touch()
 
     problem_contents = f"""from util import read_puzzle_input
 
@@ -76,5 +74,5 @@ def test_{method_name}():
     Path(today_dir, f"test_{problem_slug}.py").write_text(test_contents)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     setup_day()

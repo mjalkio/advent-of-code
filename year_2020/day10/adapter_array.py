@@ -4,7 +4,7 @@ from util import read_puzzle_input
 
 
 def _parse_input(puzzle_input):
-    return [int(line) for line in puzzle_input.split('\n') if line != '']
+    return [int(line) for line in puzzle_input.split("\n") if line != ""]
 
 
 def get_joltage_difference_counts(
@@ -22,7 +22,7 @@ def get_joltage_difference_counts(
     for adapter_joltage in adapters:
         joltage_diff = adapter_joltage - curr_joltage
         if joltage_diff not in allowed_differences:
-            raise ValueError('What are you doing step joltage?')
+            raise ValueError("What are you doing step joltage?")
         joltage_differences[joltage_diff] += 1
         curr_joltage = adapter_joltage
 
@@ -44,8 +44,7 @@ def get_num_ways_to_arrange_adapters(
     for i, joltage in enumerate(adapters):
         next_adapter_options[joltage] = [
             adapters[j]
-            for j
-            in range(i + 1, min(i + 4, len(adapters)))
+            for j in range(i + 1, min(i + 4, len(adapters)))
             if adapters[j] - joltage <= max_joltage_diff
         ]
 
@@ -58,13 +57,12 @@ def get_num_ways_to_arrange_adapters(
 
         num_options_from_here[joltage] = sum(
             num_options_from_here[next_joltage]
-            for next_joltage
-            in next_adapter_options[joltage]
+            for next_joltage in next_adapter_options[joltage]
         )
     return num_options_from_here[0]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     part_1_differences = get_joltage_difference_counts(puzzle_input)

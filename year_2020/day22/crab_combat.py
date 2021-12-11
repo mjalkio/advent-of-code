@@ -3,17 +3,17 @@ from collections import deque
 from util import read_puzzle_input
 
 
-PLAYER_1 = 'P1'
-PLAYER_2 = 'P2'
+PLAYER_1 = "P1"
+PLAYER_2 = "P2"
 
 
 def _get_decks(puzzle_input):
-    lines = [line for line in puzzle_input.split('\n') if line != '']
+    lines = [line for line in puzzle_input.split("\n") if line != ""]
     deck = deque()
     for line in lines:
-        if line == 'Player 1:':
+        if line == "Player 1:":
             continue
-        if line == 'Player 2:':
+        if line == "Player 2:":
             p1_deck = deck
             deck = deque()
             continue
@@ -53,7 +53,9 @@ def _get_winner_and_deck_recursive(p1_deck, p2_deck):
         if len(p1_deck) >= p1_card and len(p2_deck) >= p2_card:
             p1_recursion_deck = deque(list(p1_deck)[:p1_card])
             p2_recursion_deck = deque(list(p2_deck)[:p2_card])
-            winner, _ = _get_winner_and_deck_recursive(p1_recursion_deck, p2_recursion_deck)
+            winner, _ = _get_winner_and_deck_recursive(
+                p1_recursion_deck, p2_recursion_deck
+            )
         elif p1_card > p2_card:
             winner = PLAYER_1
         else:
@@ -86,7 +88,7 @@ def get_winning_combat_score(puzzle_input, recursive=False):
     return score
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_winning_combat_score(puzzle_input)}")

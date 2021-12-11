@@ -21,16 +21,18 @@ def sum_three_to_2020_product(expense_report_entries):
                 entries = (
                     expense_report_entries[i],
                     expense_report_entries[j],
-                    expense_report_entries[k]
+                    expense_report_entries[k],
                 )
                 if sum(entries) == 2020:
                     return prod(entries)
     return None
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
-    expense_report_entries = [int(entry) for entry in puzzle_input.split('\n') if entry != '']
+    expense_report_entries = [
+        int(entry) for entry in puzzle_input.split("\n") if entry != ""
+    ]
     print(f"Part 1: {sum_two_to_2020_product(expense_report_entries)}")
     print(f"Part 2: {sum_three_to_2020_product(expense_report_entries)}")

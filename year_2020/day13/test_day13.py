@@ -42,13 +42,16 @@ def test_part_1():
     assert get_earliest_bus_and_wait_time_for_airport(TEST_INPUT) == (59, 5)
 
 
-@pytest.mark.parametrize('test_input,expected', [
-    (TEST_INPUT, 1068781),
-    (TEST_INPUT_2, 3417),
-    (TEST_INPUT_3, 754018),
-    (TEST_INPUT_4, 779210),
-    (TEST_INPUT_5, 1261476),
-    (TEST_INPUT_6, 1202161486),
-])
+@pytest.mark.parametrize(
+    "test_input,expected",
+    [
+        (TEST_INPUT, 1068781),
+        (TEST_INPUT_2, 3417),
+        (TEST_INPUT_3, 754018),
+        (TEST_INPUT_4, 779210),
+        (TEST_INPUT_5, 1261476),
+        (TEST_INPUT_6, 1202161486),
+    ],
+)
 def test_part_2(test_input, expected):
     assert get_shuttle_company_solution(test_input) == expected

@@ -13,6 +13,6 @@ def test_get_num_active_cubes():
     assert get_num_active_cubes(TEST_INPUT) == 112
 
 
-@pytest.mark.skip(reason='This test passes but runs a little slow.')
+@pytest.mark.skip(reason="This test passes but runs a little slow.")
 def test_get_num_active_cubes_4d():
     assert get_num_active_cubes_4d(TEST_INPUT) == 848

@@ -5,9 +5,11 @@ from util import read_puzzle_input
 
 
 def get_earliest_bus_and_wait_time_for_airport(puzzle_input):
-    earliest_departure_note, bus_notes = [line for line in puzzle_input.split('\n') if line != '']
+    earliest_departure_note, bus_notes = [
+        line for line in puzzle_input.split("\n") if line != ""
+    ]
     earliest_departure = int(earliest_departure_note)
-    buses = [int(bus_id) for bus_id in bus_notes.split(',') if bus_id != 'x']
+    buses = [int(bus_id) for bus_id in bus_notes.split(",") if bus_id != "x"]
     possible_departure = earliest_departure
     while True:
         for bus_id in buses:
@@ -57,11 +59,11 @@ def get_shuttle_company_solution(puzzle_input):
 
     Solving this requires math, which I took from Rosetta Code. Math is hard.
     """
-    _, bus_notes = [line for line in puzzle_input.split('\n') if line != '']
+    _, bus_notes = [line for line in puzzle_input.split("\n") if line != ""]
     mod_values = []
     congruent_values = []
-    for i, bus_id in enumerate(bus_notes.split(',')):
-        if bus_id == 'x':
+    for i, bus_id in enumerate(bus_notes.split(",")):
+        if bus_id == "x":
             continue
         n = int(bus_id)
         mod_values.append(n)
@@ -69,7 +71,7 @@ def get_shuttle_company_solution(puzzle_input):
     return _chinese_remainder(n=mod_values, a=congruent_values)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_bus_id_times_wait_time(puzzle_input)}")

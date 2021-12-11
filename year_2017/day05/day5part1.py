@@ -2,9 +2,9 @@ import os.path as op
 
 
 def get_instructions():
-    with open(op.join(op.dirname(__file__), 'puzzle_input.txt'), 'r') as f:
+    with open(op.join(op.dirname(__file__), "puzzle_input.txt"), "r") as f:
         puzzle_input = f.read()
-    return [int(instruction) for instruction in puzzle_input.split('\n')]
+    return [int(instruction) for instruction in puzzle_input.split("\n")]
 
 
 def num_jumps(instructions):
@@ -18,6 +18,6 @@ def num_jumps(instructions):
     return num_jumps
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     instructions = get_instructions()
     print(num_jumps(instructions))

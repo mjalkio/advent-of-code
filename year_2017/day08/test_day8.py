@@ -1,7 +1,7 @@
 from day8 import execute_instructions, get_input
 
 
-EXAMPLE_FILE_NAME = 'example.txt'
+EXAMPLE_FILE_NAME = "example.txt"
 
 
 def test_execute_instructions():

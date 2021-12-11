@@ -5,12 +5,9 @@ from util import read_puzzle_input
 
 def passport_batch_to_tuple(passport_batch):
     # Two newlines in a row mean there was a blank line
-    passports = passport_batch.split('\n\n')
+    passports = passport_batch.split("\n\n")
     return tuple(
-        passport.replace('\n', ' ').strip()
-        for passport
-        in passports
-        if passport != ''
+        passport.replace("\n", " ").strip() for passport in passports if passport != ""
     )
 
 
@@ -23,10 +20,10 @@ def _required_fields_are_present(passport_data, required_fields):
 
 def _numeric_fields_are_valid(passport_data):
     numeric_field_ranges = {
-        'byr': (1920, 2002),
-        'iyr': (2010, 2020),
-        'eyr': (2020, 2030),
-        'pid': (0, 999999999),
+        "byr": (1920, 2002),
+        "iyr": (2010, 2020),
+        "eyr": (2020, 2030),
+        "pid": (0, 999999999),
     }
     for field, (min_value, max_value) in numeric_field_ranges.items():
         if not passport_data[field].isdigit():
@@ -36,21 +33,21 @@ def _numeric_fields_are_valid(passport_data):
         if numeric_value < min_value or numeric_value > max_value:
             return False
 
-    if len(passport_data['pid']) != 9:
+    if len(passport_data["pid"]) != 9:
         return False
 
     return True
 
 
 def _hgt_is_valid(hgt):
-    if 'in' in hgt:
+    if "in" in hgt:
         min_hgt = 59
         max_hgt = 76
-        hgt_value, _ = hgt.split('in')
-    elif 'cm' in hgt:
+        hgt_value, _ = hgt.split("in")
+    elif "cm" in hgt:
         min_hgt = 150
         max_hgt = 193
-        hgt_value, _ = hgt.split('cm')
+        hgt_value, _ = hgt.split("cm")
     else:
         return False
 
@@ -62,25 +59,31 @@ def _hgt_is_valid(hgt):
 
 
 def _hcl_is_valid(hcl):
-    hcl_pattern = re.compile(r'^#[0-9a-f]{6}$')
+    hcl_pattern = re.compile(r"^#[0-9a-f]{6}$")
     if not hcl_pattern.match(hcl):
         return False
     return True
 
 
 def _ecl_is_valid(ecl):
-    return ecl in ('amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth')
+    return ecl in ("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
 
 
 def passport_is_valid(
     passport,
-    required_fields=('byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid',),
+    required_fields=(
+        "byr",
+        "iyr",
+        "eyr",
+        "hgt",
+        "hcl",
+        "ecl",
+        "pid",
+    ),
     check_values=False,
 ):
     passport_data = {
-        pair.split(':')[0]: pair.split(':')[1]
-        for pair
-        in passport.split(' ')
+        pair.split(":")[0]: pair.split(":")[1] for pair in passport.split(" ")
     }
 
     if not _required_fields_are_present(
@@ -95,13 +98,13 @@ def passport_is_valid(
     if not _numeric_fields_are_valid(passport_data):
         return False
 
-    if not _hgt_is_valid(passport_data['hgt']):
+    if not _hgt_is_valid(passport_data["hgt"]):
         return False
 
-    if not _hcl_is_valid(passport_data['hcl']):
+    if not _hcl_is_valid(passport_data["hcl"]):
         return False
 
-    if not _ecl_is_valid(passport_data['ecl']):
+    if not _ecl_is_valid(passport_data["ecl"]):
         return False
 
     return True
@@ -111,14 +114,15 @@ def num_valid_passports(passport_batch, check_values=False):
     passports = passport_batch_to_tuple(passport_batch)
     return sum(
         passport_is_valid(passport=passport, check_values=check_values)
-        for passport
-        in passports
+        for passport in passports
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_valid_passports(passport_batch=puzzle_input)}")
     # 113 -> too high
-    print(f"Part 2: {num_valid_passports(passport_batch=puzzle_input, check_values=True)}")
+    print(
+        f"Part 2: {num_valid_passports(passport_batch=puzzle_input, check_values=True)}"
+    )

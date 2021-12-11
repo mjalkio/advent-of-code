@@ -5,21 +5,17 @@ from util import read_puzzle_input
 
 
 def _parse_rules(rule_definitions):
-    lines = [line for line in rule_definitions.split('\n') if line != '']
+    lines = [line for line in rule_definitions.split("\n") if line != ""]
     rules = defaultdict(list)
     for line in lines:
-        rule_num_definition, definition = line.split(': ')
+        rule_num_definition, definition = line.split(": ")
         rule_num = int(rule_num_definition)
 
-        subrule_definitions = definition.split(' | ')
+        subrule_definitions = definition.split(" | ")
         for subrule_def in subrule_definitions:
-            subrules = subrule_def.split(' ')
+            subrules = subrule_def.split(" ")
             rules[int(rule_num)].append(
-                [
-                    int(subrule) if subrule.isdigit() else subrule
-                    for subrule
-                    in subrules
-                ]
+                [int(subrule) if subrule.isdigit() else subrule for subrule in subrules]
             )
     return rules
 
@@ -42,8 +38,12 @@ def get_valid_messages(rule_definitions, max_valid_message_length=100):
                 continue
 
             # This rule depends on other rules
-            all_required_subrules = [rule for subrule in subrule_lists for rule in subrule]
-            if not all(rule in rules_to_valid_messages.keys() for rule in all_required_subrules):
+            all_required_subrules = [
+                rule for subrule in subrule_lists for rule in subrule
+            ]
+            if not all(
+                rule in rules_to_valid_messages.keys() for rule in all_required_subrules
+            ):
                 # We can't define this rule yet
                 continue
             valid_messages_for_rule = set()
@@ -55,15 +55,17 @@ def get_valid_messages(rule_definitions, max_valid_message_length=100):
                     if valid_messages_for_list is None:
                         valid_messages_for_list = valid_messages_for_subrule
                     else:
-                        valid_messages_for_list = set([
-                            ''.join(message_parts)
-                            for message_parts
-                            in itertools.product(
-                                valid_messages_for_list,
-                                valid_messages_for_subrule
-                            )
-                        ])
-                valid_messages_for_rule = valid_messages_for_rule.union(valid_messages_for_list)
+                        valid_messages_for_list = set(
+                            [
+                                "".join(message_parts)
+                                for message_parts in itertools.product(
+                                    valid_messages_for_list, valid_messages_for_subrule
+                                )
+                            ]
+                        )
+                valid_messages_for_rule = valid_messages_for_rule.union(
+                    valid_messages_for_list
+                )
             rules_to_valid_messages[rule_num] = valid_messages_for_rule
 
         if num_rules_handled == len(rules_to_valid_messages):
@@ -76,24 +78,25 @@ def get_valid_messages(rule_definitions, max_valid_message_length=100):
 
 def _get_possible_starts(message, rule_42_valid_messages):
     # These rules say that we have to start with rule 42 repeated as much as needed.
-    possible_starts = set([
-        valid_message
-        for valid_message
-        in rule_42_valid_messages
-        if message.startswith(valid_message)
-    ])
+    possible_starts = set(
+        [
+            valid_message
+            for valid_message in rule_42_valid_messages
+            if message.startswith(valid_message)
+        ]
+    )
 
     while True:
         num_possible_starts_defined = len(possible_starts)
-        new_possible_starts = set([
-            ''.join(message_parts)
-            for message_parts
-            in itertools.product(
-                possible_starts,
-                rule_42_valid_messages
-            )
-            if message.startswith(''.join(message_parts))
-        ])
+        new_possible_starts = set(
+            [
+                "".join(message_parts)
+                for message_parts in itertools.product(
+                    possible_starts, rule_42_valid_messages
+                )
+                if message.startswith("".join(message_parts))
+            ]
+        )
         possible_starts = possible_starts.union(new_possible_starts)
         if len(possible_starts) == num_possible_starts_defined:
             # There aren't more possibilities to determine
@@ -106,17 +109,17 @@ def _get_possible_endings(message, rule_31_valid_messages):
     possible_endings = set()
     i = 1
     while True:
-        new_possible_endings = {''}
+        new_possible_endings = {""}
         for _ in range(i):
-            new_possible_endings = set([
-                ''.join(message_parts)
-                for message_parts
-                in itertools.product(
-                    rule_31_valid_messages,
-                    new_possible_endings
-                )
-                if message.endswith(''.join(message_parts))
-            ])
+            new_possible_endings = set(
+                [
+                    "".join(message_parts)
+                    for message_parts in itertools.product(
+                        rule_31_valid_messages, new_possible_endings
+                    )
+                    if message.endswith("".join(message_parts))
+                ]
+            )
 
         if len(new_possible_endings) == 0:
             break
@@ -126,22 +129,26 @@ def _get_possible_endings(message, rule_31_valid_messages):
     return possible_endings
 
 
-def _get_possible_endings_with_middles(message, possible_endings, rule_42_valid_messages):
+def _get_possible_endings_with_middles(
+    message, possible_endings, rule_42_valid_messages
+):
     possible_endings_with_middles = set()
     for possible_ending, num_42s_to_add in possible_endings:
         new_possible_endings = {possible_ending}
         for _ in range(num_42s_to_add):
-            new_possible_endings = set([
-                ''.join(message_parts)
-                for message_parts
-                in itertools.product(
-                    rule_42_valid_messages,
-                    new_possible_endings
-                )
-                if message.endswith(''.join(message_parts))
-            ])
+            new_possible_endings = set(
+                [
+                    "".join(message_parts)
+                    for message_parts in itertools.product(
+                        rule_42_valid_messages, new_possible_endings
+                    )
+                    if message.endswith("".join(message_parts))
+                ]
+            )
 
-        possible_endings_with_middles = possible_endings_with_middles.union(new_possible_endings)
+        possible_endings_with_middles = possible_endings_with_middles.union(
+            new_possible_endings
+        )
     return possible_endings_with_middles
 
 
@@ -197,15 +204,15 @@ def does_message_match_rules(rules, rule_num, message, valid_messages=None):
 
 
 def num_messages_match_rule(puzzle_input, add_infinite_loops=False, rule_num=0):
-    rule_definitions, messages = puzzle_input.split('\n\n')
+    rule_definitions, messages = puzzle_input.split("\n\n")
     if add_infinite_loops:
-        rule_lines = rule_definitions.split('\n')
+        rule_lines = rule_definitions.split("\n")
         for i in range(len(rule_lines)):
-            if rule_lines[i].startswith('8:'):
-                rule_lines[i] = '8: 42 | 42 8'
-            elif rule_lines[i].startswith('11:'):
-                rule_lines[i] = '11: 42 31 | 42 11 31'
-        rule_definitions = '\n'.join(rule_lines)
+            if rule_lines[i].startswith("8:"):
+                rule_lines[i] = "8: 42 | 42 8"
+            elif rule_lines[i].startswith("11:"):
+                rule_lines[i] = "11: 42 31 | 42 11 31"
+        rule_definitions = "\n".join(rule_lines)
 
     valid_messages = get_valid_messages(rule_definitions)
 
@@ -214,14 +221,13 @@ def num_messages_match_rule(puzzle_input, add_infinite_loops=False, rule_num=0):
             rules=rule_definitions,
             rule_num=rule_num,
             message=m,
-            valid_messages=valid_messages
+            valid_messages=valid_messages,
         )
-        for m
-        in messages.split('\n')
+        for m in messages.split("\n")
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_messages_match_rule(puzzle_input)}")

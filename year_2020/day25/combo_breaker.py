@@ -25,6 +25,6 @@ def get_encryption_key(public_key_a, public_key_b):
     return encryption_key
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(f"Part 1: {get_encryption_key(10441485, 1004920)}")
     print(f"Part 2: {None}")

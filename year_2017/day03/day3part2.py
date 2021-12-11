@@ -43,6 +43,6 @@ def first_spiral_value_larger(num):
                 return val
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = 361527
     print(first_spiral_value_larger(puzzle_input))

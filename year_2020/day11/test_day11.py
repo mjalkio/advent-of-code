@@ -22,8 +22,11 @@ def test_get_num_occupied_seats_at_convergence():
 
 
 def test_get_num_occupied_seats_at_convergence_part_2():
-    assert get_num_occupied_seats_at_convergence(
-        puzzle_input=TEST_INPUT,
-        surrounding_chair_fn=get_surrounding_chairs_part_2,
-        max_surrounding_occupied=5,
-    ) == 26
+    assert (
+        get_num_occupied_seats_at_convergence(
+            puzzle_input=TEST_INPUT,
+            surrounding_chair_fn=get_surrounding_chairs_part_2,
+            max_surrounding_occupied=5,
+        )
+        == 26
+    )

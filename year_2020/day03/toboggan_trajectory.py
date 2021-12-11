@@ -1,10 +1,10 @@
 from util import read_puzzle_input
 
-TREE = '#'
+TREE = "#"
 
 
 def num_trees_hit(tree_map, horizontal_change=1, vertical_change=1):
-    tree_map_list = [line for line in tree_map.split() if line != '']
+    tree_map_list = [line for line in tree_map.split() if line != ""]
     tree_map_width = len(tree_map_list[0])
     vertical_location = 0
     horizontal_location = 0
@@ -39,8 +39,10 @@ def part_2(tree_map):
     return product
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
-    print(f"Part 1: {num_trees_hit(tree_map=puzzle_input, horizontal_change=3, vertical_change=1)}")
+    print(
+        f"Part 1: {num_trees_hit(tree_map=puzzle_input, horizontal_change=3, vertical_change=1)}"
+    )
     print(f"Part 2: {part_2(tree_map=puzzle_input)}")

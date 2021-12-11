@@ -4,7 +4,7 @@ def is_valid_passphrase(passphrase):
 
 
 def num_valid_passphrases(passphrases, passphrase_checking_fn):
-    passphrases = passphrases.split('\n')
+    passphrases = passphrases.split("\n")
     num_valid = 0
     for phrase in passphrases:
         if passphrase_checking_fn(phrase):
@@ -526,5 +526,5 @@ zax xza admbc lvpzfeh auxn rwasj
 kebx eild nrskdr meja jxczomh gcne"""
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(num_valid_passphrases(PUZZLE_INPUT, is_valid_passphrase))

@@ -5,6 +5,6 @@ from year_2021.day05.hydrothermal_venture import (
 
 
 def test_get_num_dangerous_points():
-    puzzle_input = read_puzzle_input('test_input.txt')
+    puzzle_input = read_puzzle_input("test_input.txt")
     assert get_num_dangerous_points(puzzle_input) == 5
     assert get_num_dangerous_points(puzzle_input, use_diagonal_lines=True) == 12
