@@ -38,8 +38,12 @@ def get_num_flashes(puzzle_input, num_days=100):
     return num_flashes
 
 
+def get_first_step_all_flash(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_flashes(puzzle_input)}")
-    print(f"Part 2: {get_num_flashes(puzzle_input)}")
+    print(f"Part 2: {get_first_step_all_flash(puzzle_input)}")
