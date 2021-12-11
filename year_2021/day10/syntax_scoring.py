@@ -21,12 +21,12 @@ def get_syntax_error_score(puzzle_input):
     lines = puzzle_input.split('\n')
     score = 0
     for line in lines:
-        open_chunk_counts = defaultdict(int)
+        unmatched_open_chunks = []
         for ch in line:
             if ch in OPEN_CHUNKS:
-                open_chunk_counts[ch] += 1
-            elif open_chunk_counts[CHUNK_MAP[ch]] > 0:
-                open_chunk_counts[CHUNK_MAP[ch]] -= 1
+                unmatched_open_chunks.append(ch)
+            elif unmatched_open_chunks[-1] == CHUNK_MAP[ch]:
+                unmatched_open_chunks.pop()
             else:
                 score += CHUNK_SCORES[ch]
                 break
