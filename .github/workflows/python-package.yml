@@ -27,9 +27,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Lint with flake8
+    - name: Check errors, style, and complexity with flake8
       run: |
         flake8 .
+    - name: Check formatting with Black
+      run: |
+        black --check .
     - name: Test with pytest
       run: |
         pytest year_*
