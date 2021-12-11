@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from util import read_puzzle_input
 
 
@@ -17,8 +15,9 @@ CHUNK_SCORES = {
 }
 OPEN_CHUNKS = CHUNK_MAP.values()
 
+
 def get_syntax_error_score(puzzle_input):
-    lines = puzzle_input.split('\n')
+    lines = puzzle_input.split("\n")
     score = 0
     for line in lines:
         unmatched_open_chunks = []
@@ -34,8 +33,12 @@ def get_syntax_error_score(puzzle_input):
     return score
 
 
+def get_median_completion_score(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_syntax_error_score(puzzle_input)}")
-    print(f"Part 2: {get_syntax_error_score(puzzle_input)}")
+    print(f"Part 2: {get_median_completion_score(puzzle_input)}")
