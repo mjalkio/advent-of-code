@@ -12,7 +12,7 @@ def _is_big_cave(cave):
     return cave.isupper()
 
 
-def get_num_paths(puzzle_input, max_small_cave_visits=1):
+def get_num_paths(puzzle_input, can_revisit_single_small_cave=False):
     edges = [line.split("-") for line in puzzle_input.split("\n")]
     outbound_edges = defaultdict(list)
     for x, y in edges:
@@ -41,4 +41,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_paths(puzzle_input)}")
-    print(f"Part 2: {get_num_paths(puzzle_input, max_small_cave_visits=2)}")
+    print(f"Part 2: {get_num_paths(puzzle_input, can_revisit_single_small_cave=True)}")
