@@ -7,7 +7,7 @@ from util import read_puzzle_input
 START = "start"
 END = "end"
 
-Path = namedtuple("Path", ["current_path", "has_revisited_small_cave"])
+Path = namedtuple("Path", ["current_path", "visited_caves", "has_revisited_small_cave"])
 
 
 def _is_big_cave(cave):
@@ -21,22 +21,31 @@ def get_num_paths(puzzle_input, can_revisit_single_small_cave=False):
         outbound_edges[x].append(y)
         outbound_edges[y].append(x)
 
-    potential_paths = [Path(current_path=[START], has_revisited_small_cave=False)]
+    potential_paths = [
+        Path(
+            current_path=[START],
+            visited_caves=set([START]),
+            has_revisited_small_cave=False,
+        )
+    ]
     num_paths = 0
     while len(potential_paths) > 0:
-        current_path, has_revisited_small_cave = potential_paths.pop()
+        current_path, visited_caves, has_revisited_small_cave = potential_paths.pop()
         current_cave = current_path[-1]
         if current_cave == END:
             num_paths += 1
             continue
 
         for next_cave in outbound_edges[current_cave]:
-            if _is_big_cave(next_cave) or next_cave not in current_path:
+            if _is_big_cave(next_cave) or next_cave not in visited_caves:
                 new_path = copy(current_path)
+                new_visited_caves = copy(visited_caves)
                 new_path.append(next_cave)
+                new_visited_caves.add(next_cave)
                 potential_paths.append(
                     Path(
                         current_path=new_path,
+                        visited_caves=new_visited_caves,
                         has_revisited_small_cave=has_revisited_small_cave,
                     )
                 )
@@ -47,10 +56,13 @@ def get_num_paths(puzzle_input, can_revisit_single_small_cave=False):
                 and not has_revisited_small_cave
             ):
                 new_path = copy(current_path)
+                new_visited_caves = copy(visited_caves)
                 new_path.append(next_cave)
+                new_visited_caves.add(next_cave)
                 potential_paths.append(
                     Path(
                         current_path=new_path,
+                        visited_caves=new_visited_caves,
                         has_revisited_small_cave=True,
                     )
                 )
