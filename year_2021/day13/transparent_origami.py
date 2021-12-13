@@ -34,8 +34,19 @@ def get_num_dots(puzzle_input, num_folds=1):
     return len(get_dot_map(puzzle_input=puzzle_input, num_folds=num_folds))
 
 
+def print_map(dot_map):
+    width = max(x for x, _ in dot_map) + 1
+    height = max(y for _, y in dot_map) + 1
+    for y in range(height):
+        line = []
+        for x in range(width):
+            line.append("#" if (x, y) in dot_map else ".")
+        print("".join(line))
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_dots(puzzle_input)}")
-    print(f"Part 2: {get_dot_map(puzzle_input)}")
+    print("Part 2:")
+    print_map(get_dot_map(puzzle_input))
