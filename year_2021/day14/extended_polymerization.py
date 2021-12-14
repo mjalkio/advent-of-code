@@ -1,43 +1,32 @@
 from collections import Counter
+from copy import copy
 
 from util import read_puzzle_input
 
 
-def _apply_rules(rules, polymer):
-    if polymer in rules:
-        return rules[polymer]
-
-    if len(polymer) <= 1:
-        return polymer
-
-    split_idx = len(polymer) // 2
-    middle_element = polymer[split_idx]
-    left_side = _apply_rules(rules, polymer[:split_idx])
-    right_side = _apply_rules(rules, polymer[split_idx + 1 :])
-
-    if left_side[-1] + middle_element in rules:
-        new_left_side = left_side + rules[left_side[-1] + middle_element][1]
-
-    if middle_element + right_side[0] in rules:
-        new_right_side = rules[middle_element + right_side[0]][1] + right_side
-
-    new_polymer = new_left_side + middle_element + new_right_side
-    rules[polymer] = new_polymer
-    return new_polymer
-
-
 def get_difference_most_least_common_element_counts(puzzle_input, num_steps=10):
     polymer, rule_input = puzzle_input.split("\n\n")
-
-    rules = {}
-    for rule in rule_input.split("\n"):
-        pair, insertion = rule.split(" -> ")
-        rules[pair] = pair[0] + insertion + pair[1]
+    pair_counts = Counter(polymer[i : i + 2] for i in range(len(polymer) - 1))
+    rules = dict([rule.split(" -> ") for rule in rule_input.split("\n")])
 
     for _ in range(num_steps):
-        polymer = _apply_rules(rules, polymer)
+        new_counts = copy(pair_counts)
+        for pair, count in pair_counts.items():
+            insertion_element = rules[pair]
+            new_counts[pair[0] + insertion_element] += count
+            new_counts[insertion_element + pair[1]] += count
+            new_counts[pair] -= count
+        pair_counts = new_counts
 
-    element_counts = Counter(polymer)
+    element_counts = Counter()
+    for pair, count in pair_counts.items():
+        element_counts[pair[0]] += count
+        element_counts[pair[1]] += count
+
+    element_counts[polymer[0]] += 1
+    element_counts[polymer[-1]] += 1
+    for element in element_counts:
+        element_counts[element] //= 2
     return max(element_counts.values()) - min(element_counts.values())
 
 
