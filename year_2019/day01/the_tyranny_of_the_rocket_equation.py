@@ -2,7 +2,8 @@ from util import read_puzzle_input
 
 
 def get_total_fuel_required(puzzle_input):
-    return 0
+    masses = [int(mass) for mass in puzzle_input.split('\n')]
+    return sum(mass // 3 - 2 for mass in masses)
 
 
 if __name__ == "__main__":
