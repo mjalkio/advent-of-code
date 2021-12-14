@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 PUZZLE_INPUT = "15,12,0,14,3,1"
 
 
@@ -9,7 +7,9 @@ def get_number_spoken(puzzle_input, num_turns=2020):
         return starting_numbers[num_turns - 1]
 
     last_number_spoken = starting_numbers[-1]
-    times_spoken = {starting_numbers[i]: (i + 1, i + 1) for i in range(len(starting_numbers) - 1)}
+    times_spoken = {
+        starting_numbers[i]: (i + 1, i + 1) for i in range(len(starting_numbers) - 1)
+    }
     for turn in range(len(starting_numbers), num_turns):
         if last_number_spoken not in times_spoken:
             times_spoken[last_number_spoken] = (turn, turn)
