@@ -4,6 +4,9 @@ from util import read_puzzle_input
 
 Path = namedtuple("Path", ["positions", "risk"])
 
+# Arbitrary large number
+MAX_RISK = 1_000_000_000
+
 
 def dfs(visited, graph, node):
     if node not in visited:
@@ -20,30 +23,21 @@ def get_lowest_risk_path_risk(puzzle_input):
         for x in range(len(lines[y])):
             risk_map[(x, y)] = int(lines[y][x])
 
-    destination_position = (x, y)
-    lowest_risk = 1_000_000_000  # Assuming the actual result will be lower than this
-    potential_paths = [Path(positions=[(0, 0)], risk=0)]
+    risk_to_destination = {}
+    for x in reversed(range(len(lines[0]))):
+        for y in reversed(range(len(lines))):
+            if len(risk_to_destination) == 0:
+                risk_to_destination[(x, y)] = risk_map[(x, y)]
+                continue
 
-    while len(potential_paths) > 0:
-        path_to_consider = potential_paths.pop()
-        if path_to_consider.risk >= lowest_risk:
-            continue
-
-        x, y = path_to_consider.positions[-1]
-        if (x, y) == destination_position:
-            if path_to_consider.risk < lowest_risk:
-                lowest_risk = path_to_consider.risk
-            continue
-
-        for i, j in [(x + 1, y), (x, y + 1)]:
-            if (i, j) in risk_map:
-                potential_paths.append(
-                    Path(
-                        positions=path_to_consider.positions.copy() + [(i, j)],
-                        risk=path_to_consider.risk + risk_map[(i, j)],
-                    )
+            risk_to_destination[(x, y)] = (
+                min(
+                    risk_to_destination.get((x + 1, y), MAX_RISK),
+                    risk_to_destination.get((x, y + 1), MAX_RISK),
                 )
-    return lowest_risk
+                + risk_map[(x, y)]
+            )
+    return risk_to_destination[(0, 0)] - risk_map[(0, 0)]
 
 
 if __name__ == "__main__":
