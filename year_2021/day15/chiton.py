@@ -38,11 +38,12 @@ def get_lowest_risk_path_risk(puzzle_input, use_full_map=False):
                             continue
 
                         position = (x + dx * width, y + dy * height)
-                        added_risk = dx + 1 if dx == dy else max(dx, dy)
-                        risk = (risk_map[x, y] + added_risk) % (MAX_POSITION_RISK + 1)
+                        added_risk = dx + dy
+                        risk = risk_map[x, y] + added_risk
+                        if risk > MAX_POSITION_RISK:
+                            risk -= MAX_POSITION_RISK
                         risk_map[position] = risk
 
-    _print_map(risk_map)
     width = max(x for x, y in risk_map.keys()) + 1
     height = max(y for x, y in risk_map.keys()) + 1
     risk_to_destination = {}
