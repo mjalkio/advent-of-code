@@ -1,8 +1,9 @@
+import heapq
 from collections import namedtuple
 
 from util import read_puzzle_input
 
-Path = namedtuple("Path", ["positions", "risk"])
+Node = namedtuple("Node", ["estimated_risk", "lowest_risk_to", "x", "y"])
 
 MAX_POSITION_RISK = 9
 # Arbitrary large number
@@ -40,27 +41,42 @@ def get_lowest_risk_path_risk(puzzle_input, use_full_map=False):
                         position = (x + dx * width, y + dy * height)
                         added_risk = dx + dy
                         risk = risk_map[x, y] + added_risk
-                        if risk > MAX_POSITION_RISK:
+                        while risk > MAX_POSITION_RISK:
                             risk -= MAX_POSITION_RISK
                         risk_map[position] = risk
 
-    width = max(x for x, y in risk_map.keys()) + 1
-    height = max(y for x, y in risk_map.keys()) + 1
-    risk_to_destination = {}
-    for x in reversed(range(width)):
-        for y in reversed(range(height)):
-            if len(risk_to_destination) == 0:
-                risk_to_destination[(x, y)] = risk_map[(x, y)]
-                continue
+    max_x = max(x for x, y in risk_map.keys())
+    max_y = max(y for x, y in risk_map.keys())
+    # A*, A-star, A star, Dijkstra's (tagging this for searching in later years)
+    to_visit = [Node(estimated_risk=max_x + max_y, lowest_risk_to=0, x=0, y=0)]
+    lowest_risk_to = {coord: MAX_TOTAL_RISK for coord in risk_map.keys()}
+    lowest_risk_to[(0, 0)] = 0
 
-            risk_to_destination[(x, y)] = (
-                min(
-                    risk_to_destination.get((x + 1, y), MAX_TOTAL_RISK),
-                    risk_to_destination.get((x, y + 1), MAX_TOTAL_RISK),
+    while len(to_visit) > 0:
+        current_node = heapq.heappop(to_visit)
+        if current_node.x == max_x and current_node.y == max_y:
+            # This is the goal node
+            return current_node.lowest_risk_to
+
+        x = current_node.x
+        y = current_node.y
+        neighbors = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+        for (x, y) in neighbors:
+            if (x, y) not in risk_map:
+                continue
+            risk_to = current_node.lowest_risk_to + risk_map[(x, y)]
+            if risk_to < lowest_risk_to[(x, y)]:
+                lowest_risk_to[(x, y)] = risk_to
+                heuristic_distance = max_x - x + max_y - y
+                heapq.heappush(
+                    to_visit,
+                    Node(
+                        estimated_risk=risk_to + heuristic_distance,
+                        lowest_risk_to=risk_to,
+                        x=x,
+                        y=y,
+                    ),
                 )
-                + risk_map[(x, y)]
-            )
-    return risk_to_destination[(0, 0)] - risk_map[(0, 0)]
 
 
 if __name__ == "__main__":
