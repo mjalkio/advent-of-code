@@ -8,15 +8,7 @@ Path = namedtuple("Path", ["positions", "risk"])
 MAX_RISK = 1_000_000_000
 
 
-def dfs(visited, graph, node):
-    if node not in visited:
-        print(node)
-        visited.add(node)
-        for neighbour in graph[node]:
-            dfs(visited, graph, neighbour)
-
-
-def get_lowest_risk_path_risk(puzzle_input):
+def get_lowest_risk_path_risk(puzzle_input, use_full_map=False):
     lines = puzzle_input.split("\n")
     risk_map = {}
     for y in range(len(lines)):
@@ -44,4 +36,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_lowest_risk_path_risk(puzzle_input)}")
-    print(f"Part 2: {get_lowest_risk_path_risk(puzzle_input)}")
+    print(f"Part 2: {get_lowest_risk_path_risk(puzzle_input, use_full_map=True)}")
