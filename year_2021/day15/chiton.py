@@ -35,8 +35,8 @@ def get_lowest_risk_path_risk(puzzle_input):
                 lowest_risk = path_to_consider.risk
             continue
 
-        for i, j in [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]:
-            if (i, j) in risk_map and (i, j) not in path_to_consider.positions:
+        for i, j in [(x + 1, y), (x, y + 1)]:
+            if (i, j) in risk_map:
                 potential_paths.append(
                     Path(
                         positions=path_to_consider.positions.copy() + [(i, j)],
