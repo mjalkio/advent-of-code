@@ -10,9 +10,9 @@ from year_2021.day16.packet_decoder import (
     "test_input,expected",
     [
         ("test_input1.txt", 16),
-        ("test_input1.txt", 12),
-        ("test_input1.txt", 23),
-        ("test_input1.txt", 31),
+        ("test_input2.txt", 12),
+        ("test_input3.txt", 23),
+        ("test_input4.txt", 31),
     ],
 )
 def test_get_version_sum(test_input, expected):
