@@ -1,13 +1,38 @@
 from util import read_puzzle_input
 
 
+HEX_TO_BIN = {
+    "0": "0000",
+    "1": "0001",
+    "2": "0010",
+    "3": "0011",
+    "4": "0100",
+    "5": "0101",
+    "6": "0110",
+    "7": "0111",
+    "8": "1000",
+    "9": "1001",
+    "A": "1010",
+    "B": "1011",
+    "C": "1100",
+    "D": "1101",
+    "E": "1110",
+    "F": "1111",
+}
+
+
 def get_version_sum(puzzle_input):
-    # Source: https://www.geeksforgeeks.org/python-ways-to-convert-hex-into-binary/
-    transmission = "{0:08b}".format(int(puzzle_input, 16))
+    transmission = ""
+    for char in puzzle_input:
+        transmission += HEX_TO_BIN[char]
 
     version_sum = 0
     i = 0
     while i < len(transmission):
+        if len(transmission[i:]) < 6:
+            # Not enough bits for a header, these are probably trailing 0s
+            break
+
         packet_version = transmission[i : i + 3]
         version_sum += int(packet_version, 2)
         i += 3
@@ -19,22 +44,22 @@ def get_version_sum(puzzle_input):
             # It's a literal
             have_hit_end_prefix = False
             while not have_hit_end_prefix:
-                if transmission[i] == "1":
+                if transmission[i] == "0":
                     have_hit_end_prefix = True
                 i += 5
             continue
 
         # It's an operator
-        if transmission[i] == "0":
+        length_type_id = transmission[i]
+        i += 1
+        if length_type_id == "0":
             # the next 15 bits are a number that represents the total length
             # in bits of the sub-packets contained by this packet
-            i += 1
             length = int(transmission[i : i + 15], 2)
             i += 15
         else:
             # the next 11 bits are a number that represents the number
             # of sub-packets immediately contained by this packet
-            i += 1
             num_sub_packets = int(transmission[i : i + 11], 2)
             i += 11
 
