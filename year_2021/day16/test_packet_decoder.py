@@ -3,8 +3,8 @@ import pytest
 from util import read_puzzle_input
 from year_2021.day16.packet_decoder import (
     evaluate_transmission,
-    get_version_sum_from_input,
-    get_version_sum_from_packet,
+    get_version_sum,
+    handle_subpackets,
     hex_to_bin,
 )
 
@@ -29,7 +29,7 @@ def test_hex_to_bin(hex_input, binary_output):
     ],
 )
 def test_subpackets(binary_input, expected):
-    assert get_version_sum_from_packet(binary_input)[0] == expected
+    assert handle_subpackets(binary_input)[0] == expected
 
 
 @pytest.mark.parametrize(
@@ -41,8 +41,8 @@ def test_subpackets(binary_input, expected):
         ("test_input4.txt", 31),
     ],
 )
-def test_get_version_sum_from_input(test_input, expected):
-    assert get_version_sum_from_input(read_puzzle_input(test_input)) == expected
+def test_get_version_sum(test_input, expected):
+    assert get_version_sum(read_puzzle_input(test_input)) == expected
 
 
 @pytest.mark.parametrize(
