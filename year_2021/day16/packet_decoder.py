@@ -21,17 +21,18 @@ HEX_TO_BIN = {
 }
 
 
-def get_version_sum(puzzle_input):
-    transmission = ""
-    for char in puzzle_input:
-        transmission += HEX_TO_BIN[char]
-
+def _get_version_sum(transmission, num_packets=None):
     version_sum = 0
     i = 0
+    num_packets_parsed = 0
     while i < len(transmission):
         if len(transmission[i:]) < 6:
             # Not enough bits for a header, these are probably trailing 0s
-            break
+            i = len(transmission)
+            continue
+
+        if num_packets is not None and num_packets_parsed >= num_packets:
+            return version_sum, i
 
         packet_version = transmission[i : i + 3]
         version_sum += int(packet_version, 2)
@@ -57,13 +58,26 @@ def get_version_sum(puzzle_input):
             # in bits of the sub-packets contained by this packet
             length = int(transmission[i : i + 15], 2)
             i += 15
+            version_sum += _get_version_sum(transmission[i : i + length])[0]
+            i += length
         else:
             # the next 11 bits are a number that represents the number
             # of sub-packets immediately contained by this packet
             num_sub_packets = int(transmission[i : i + 11], 2)
             i += 11
+            subpackets_version_sum, subpackets_i = _get_version_sum(transmission[i:], num_packets=num_sub_packets)
+            i += subpackets_i
+            version_sum += subpackets_version_sum
 
-    return version_sum
+        num_packets_parsed += 1
+    return version_sum, i
+
+
+def get_version_sum(puzzle_input):
+    transmission = ""
+    for char in puzzle_input:
+        transmission += HEX_TO_BIN[char]
+    return _get_version_sum(transmission)[0]
 
 
 if __name__ == "__main__":
