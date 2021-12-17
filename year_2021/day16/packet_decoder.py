@@ -1,3 +1,5 @@
+from math import prod
+
 from util import read_puzzle_input
 
 
@@ -88,8 +90,95 @@ def get_version_sum_from_input(puzzle_input):
     return get_version_sum_from_packet(packet)[0]
 
 
+def _evaluate_operator(packet_type_id, subpackets):
+    if packet_type_id == 0:
+        return sum(subpackets)
+    if packet_type_id == 1:
+        return prod(subpackets)
+    if packet_type_id == 2:
+        return min(subpackets)
+    if packet_type_id == 3:
+        return max(subpackets)
+
+    assert len(subpackets) == 2
+    if packet_type_id == 5:
+        return subpackets[0] > subpackets[1]
+    if packet_type_id == 6:
+        return subpackets[0] < subpackets[1]
+    if packet_type_id == 7:
+        return subpackets[0] == subpackets[1]
+
+    raise ValueError("Invalid packet type ID")
+
+
+def _evaluate_binary(packet, num_subpackets=None):
+    i = 0
+    num_packets_parsed = 0
+    subpackets = []
+    while i < len(packet):
+        if all(char == "0" for char in packet[i:]):
+            i = len(packet)
+            continue
+
+        if num_subpackets is not None and num_packets_parsed >= num_subpackets:
+            return subpackets, i
+
+        # Skip first three characters because we don't care about versions
+        i += 3
+        packet_type_id = int(packet[i : i + 3], 2)
+        i += 3
+
+        if packet_type_id == 4:
+            # It's a literal
+            literal_binary = ""
+            have_hit_end_prefix = False
+            while not have_hit_end_prefix:
+                if packet[i] == "0":
+                    have_hit_end_prefix = True
+                i += 1
+                literal_binary += packet[i : i + 4]
+                i += 4
+            subpackets.append(int(literal_binary, 2))
+
+        # It's an operator
+        length_type_id = packet[i]
+        i += 1
+        if length_type_id == "0":
+            # the next 15 bits are a number that represents the total length
+            # in bits of the sub-packets contained by this packet
+            length = int(packet[i : i + 15], 2)
+            i += 15
+            op_subpackets, returned_length = _evaluate_binary(packet[i : i + length])
+            assert length == returned_length
+            i += returned_length
+            # Now evaluate this and add it to subpackets
+            subpackets.append(
+                _evaluate_operator(
+                    packet_type_id=packet_type_id, subpackets=op_subpackets
+                )
+            )
+        else:
+            # the next 11 bits are a number that represents the number
+            # of sub-packets immediately contained by this packet
+            num_sub_packets = int(packet[i : i + 11], 2)
+            i += 11
+            op_subpackets, returned_length = _evaluate_binary(
+                packet[i:], num_subpackets=num_sub_packets
+            )
+            i += returned_length
+            # Now evaluate this and add it to subpackets
+            subpackets.append(
+                _evaluate_operator(
+                    packet_type_id=packet_type_id, subpackets=op_subpackets
+                )
+            )
+
+    return subpackets, i
+
+
 def evaluate_transmission(hex_input):
-    return 0
+    packet = hex_to_bin(hex_input)
+    return _evaluate_binary(packet)[0][0]
 
 
 if __name__ == "__main__":
