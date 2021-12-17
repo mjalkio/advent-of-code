@@ -123,6 +123,8 @@ def _evaluate_binary(packet, num_subpackets=None):
         if num_subpackets is not None and num_packets_parsed >= num_subpackets:
             return subpackets, i
 
+        num_packets_parsed += 1
+
         # Skip first three characters because we don't care about versions
         i += 3
         packet_type_id = int(packet[i : i + 3], 2)
