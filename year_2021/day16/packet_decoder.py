@@ -139,6 +139,7 @@ def _evaluate_binary(packet, num_subpackets=None):
                 literal_binary += packet[i : i + 4]
                 i += 4
             subpackets.append(int(literal_binary, 2))
+            continue
 
         # It's an operator
         length_type_id = packet[i]
