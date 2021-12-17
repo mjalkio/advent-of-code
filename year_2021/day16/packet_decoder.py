@@ -21,19 +21,19 @@ HEX_TO_BIN_MAP = {
 }
 
 
-def _get_version_sum(packet, num_packets=None):
+def get_version_sum_from_packet(packet, num_packets=None):
     version_sum = 0
     i = 0
     num_packets_parsed = 0
     while i < len(packet):
-        if len(packet[i:]) < 6:
-            # Not enough bits for a header, these are probably trailing 0s
-            assert all(char == "0" for char in packet[i:])
+        if all(char == "0" for char in packet[i:]):
             i = len(packet)
             continue
 
         if num_packets is not None and num_packets_parsed >= num_packets:
             return version_sum, i
+
+        num_packets_parsed += 1
 
         packet_version = packet[i : i + 3]
         version_sum += int(packet_version, 2)
@@ -59,20 +59,23 @@ def _get_version_sum(packet, num_packets=None):
             # in bits of the sub-packets contained by this packet
             length = int(packet[i : i + 15], 2)
             i += 15
-            version_sum += _get_version_sum(packet[i : i + length])[0]
+            subpackets_version_sum, returned_length = get_version_sum_from_packet(
+                packet[i : i + length]
+            )
+            assert length == returned_length
+            version_sum += subpackets_version_sum
             i += length
         else:
             # the next 11 bits are a number that represents the number
             # of sub-packets immediately contained by this packet
             num_sub_packets = int(packet[i : i + 11], 2)
             i += 11
-            subpackets_version_sum, subpackets_i = _get_version_sum(
+            subpackets_version_sum, subpackets_i = get_version_sum_from_packet(
                 packet[i:], num_packets=num_sub_packets
             )
             i += subpackets_i
             version_sum += subpackets_version_sum
 
-        num_packets_parsed += 1
     return version_sum, i
 
 
@@ -80,13 +83,13 @@ def hex_to_bin(binary_input):
     return "".join(HEX_TO_BIN_MAP[char] for char in binary_input)
 
 
-def get_version_sum(puzzle_input):
+def get_version_sum_from_input(puzzle_input):
     packet = hex_to_bin(puzzle_input)
-    return _get_version_sum(packet)[0]
+    return get_version_sum_from_packet(packet)[0]
 
 
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
-    print(f"Part 1: {get_version_sum(puzzle_input)}")
-    print(f"Part 2: {get_version_sum(puzzle_input)}")
+    print(f"Part 1: {get_version_sum_from_input(puzzle_input)}")
+    print(f"Part 2: {get_version_sum_from_input(puzzle_input)}")
