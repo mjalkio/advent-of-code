@@ -21,52 +21,53 @@ HEX_TO_BIN_MAP = {
 }
 
 
-def _get_version_sum(transmission, num_packets=None):
+def _get_version_sum(packet, num_packets=None):
     version_sum = 0
     i = 0
     num_packets_parsed = 0
-    while i < len(transmission):
-        if len(transmission[i:]) < 6:
+    while i < len(packet):
+        if len(packet[i:]) < 6:
             # Not enough bits for a header, these are probably trailing 0s
-            i = len(transmission)
+            assert all(char == "0" for char in packet[i:])
+            i = len(packet)
             continue
 
         if num_packets is not None and num_packets_parsed >= num_packets:
             return version_sum, i
 
-        packet_version = transmission[i : i + 3]
+        packet_version = packet[i : i + 3]
         version_sum += int(packet_version, 2)
         i += 3
 
-        packet_type_id = int(transmission[i : i + 3], 2)
+        packet_type_id = int(packet[i : i + 3], 2)
         i += 3
 
         if packet_type_id == 4:
             # It's a literal
             have_hit_end_prefix = False
             while not have_hit_end_prefix:
-                if transmission[i] == "0":
+                if packet[i] == "0":
                     have_hit_end_prefix = True
                 i += 5
             continue
 
         # It's an operator
-        length_type_id = transmission[i]
+        length_type_id = packet[i]
         i += 1
         if length_type_id == "0":
             # the next 15 bits are a number that represents the total length
             # in bits of the sub-packets contained by this packet
-            length = int(transmission[i : i + 15], 2)
+            length = int(packet[i : i + 15], 2)
             i += 15
-            version_sum += _get_version_sum(transmission[i : i + length])[0]
+            version_sum += _get_version_sum(packet[i : i + length])[0]
             i += length
         else:
             # the next 11 bits are a number that represents the number
             # of sub-packets immediately contained by this packet
-            num_sub_packets = int(transmission[i : i + 11], 2)
+            num_sub_packets = int(packet[i : i + 11], 2)
             i += 11
             subpackets_version_sum, subpackets_i = _get_version_sum(
-                transmission[i:], num_packets=num_sub_packets
+                packet[i:], num_packets=num_sub_packets
             )
             i += subpackets_i
             version_sum += subpackets_version_sum
@@ -80,8 +81,8 @@ def hex_to_bin(binary_input):
 
 
 def get_version_sum(puzzle_input):
-    transmission = hex_to_bin(puzzle_input)
-    return _get_version_sum(transmission)[0]
+    packet = hex_to_bin(puzzle_input)
+    return _get_version_sum(packet)[0]
 
 
 if __name__ == "__main__":
