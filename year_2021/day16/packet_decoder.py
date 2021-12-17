@@ -1,7 +1,7 @@
 from util import read_puzzle_input
 
 
-HEX_TO_BIN = {
+HEX_TO_BIN_MAP = {
     "0": "0000",
     "1": "0001",
     "2": "0010",
@@ -65,7 +65,9 @@ def _get_version_sum(transmission, num_packets=None):
             # of sub-packets immediately contained by this packet
             num_sub_packets = int(transmission[i : i + 11], 2)
             i += 11
-            subpackets_version_sum, subpackets_i = _get_version_sum(transmission[i:], num_packets=num_sub_packets)
+            subpackets_version_sum, subpackets_i = _get_version_sum(
+                transmission[i:], num_packets=num_sub_packets
+            )
             i += subpackets_i
             version_sum += subpackets_version_sum
 
@@ -73,10 +75,12 @@ def _get_version_sum(transmission, num_packets=None):
     return version_sum, i
 
 
+def hex_to_bin(binary_input):
+    return "".join(HEX_TO_BIN_MAP[char] for char in binary_input)
+
+
 def get_version_sum(puzzle_input):
-    transmission = ""
-    for char in puzzle_input:
-        transmission += HEX_TO_BIN[char]
+    transmission = hex_to_bin(puzzle_input)
     return _get_version_sum(transmission)[0]
 
 
