@@ -2,6 +2,7 @@ import pytest
 
 from util import read_puzzle_input
 from year_2021.day16.packet_decoder import (
+    evaluate_transmission,
     get_version_sum_from_input,
     get_version_sum_from_packet,
     hex_to_bin,
@@ -28,12 +29,7 @@ def test_hex_to_bin(hex_input, binary_output):
     ],
 )
 def test_subpackets(binary_input, expected):
-    assert (
-        get_version_sum_from_packet(
-            binary_input
-        )[0]
-        == expected
-    )
+    assert get_version_sum_from_packet(binary_input)[0] == expected
 
 
 @pytest.mark.parametrize(
@@ -47,3 +43,20 @@ def test_subpackets(binary_input, expected):
 )
 def test_get_version_sum_from_input(test_input, expected):
     assert get_version_sum_from_input(read_puzzle_input(test_input)) == expected
+
+
+@pytest.mark.parametrize(
+    "hex_input,expected",
+    [
+        ("C200B40A82", 3),
+        ("04005AC33890", 54),
+        ("880086C3E88112", 7),
+        ("CE00C43D881120", 9),
+        ("D8005AC2A8F0", 1),
+        ("F600BC2D8F", 0),
+        ("9C005AC2F8F0", 0),
+        ("9C0141080250320F1802104A08", 1),
+    ],
+)
+def test_evaluate_transmission(hex_input, expected):
+    assert evaluate_transmission(hex_input) == expected

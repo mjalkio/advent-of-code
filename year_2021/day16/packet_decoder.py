@@ -88,6 +88,10 @@ def get_version_sum_from_input(puzzle_input):
     return get_version_sum_from_packet(packet)[0]
 
 
+def evaluate_transmission(hex_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
