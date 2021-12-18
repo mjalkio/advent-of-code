@@ -30,8 +30,21 @@ def restore_gravity_assist(puzzle_input):
     return run_intcode_program(program).split(",")[0]
 
 
+def complete_gravity_assist(puzzle_input):
+    initial_memory = [int(address) for address in puzzle_input.split(",")]
+    for noun in range(100):
+        for verb in range(100):
+            memory = initial_memory.copy()
+            memory[1] = noun
+            memory[2] = verb
+            program = ",".join(str(address) for address in memory)
+            program_output = run_intcode_program(program).split(",")[0]
+            if program_output == "19690720":
+                return 100 * noun + verb
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {restore_gravity_assist(puzzle_input)}")
-    print(f"Part 2: {restore_gravity_assist(puzzle_input)}")
+    print(f"Part 2: {complete_gravity_assist(puzzle_input)}")
