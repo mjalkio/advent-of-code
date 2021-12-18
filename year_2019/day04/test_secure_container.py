@@ -12,7 +12,6 @@ from year_2019.day04.secure_container import (
         ("223450", False),
         ("123789", False),
         ("111123", True),
-        ("135679", True),
         ("122345", True),
     ],
 )
