@@ -5,10 +5,6 @@ import math
 from util import read_puzzle_input
 
 
-def _snailfish_dump(number):
-    return json.dumps(number, separators=(",", ":"))
-
-
 def snailfish_magnitude(number):
     def _magnitude(number):
         if type(number) == int:
