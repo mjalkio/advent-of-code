@@ -4,29 +4,29 @@ from util import read_puzzle_input
 
 
 def run_intcode_program(program):
-    integers = [int(i) for i in program.split(",")]
-    i = 0
-    while integers[i] != 99:
-        if integers[i] not in (1, 2):
+    memory = [int(address) for address in program.split(",")]
+    ins_ptr = 0
+    while memory[ins_ptr] != 99:
+        if memory[ins_ptr] not in (1, 2):
             raise ValueError("Unexpected opcode.")
 
-        if integers[i] == 1:
+        if memory[ins_ptr] == 1:
             operation = sum
-        if integers[i] == 2:
+        if memory[ins_ptr] == 2:
             operation = prod
-        output_idx = integers[i + 3]
-        operand_indices = (integers[i + 1], integers[i + 2])
-        operands = (integers[idx] for idx in operand_indices)
-        integers[output_idx] = operation(operands)
-        i += 4
-    return ",".join(str(i) for i in integers)
+        output_address = memory[ins_ptr + 3]
+        operand_addresses = (memory[ins_ptr + 1], memory[ins_ptr + 2])
+        operands = (memory[add] for add in operand_addresses)
+        memory[output_address] = operation(operands)
+        ins_ptr += 4
+    return ",".join(str(address) for address in memory)
 
 
 def restore_gravity_assist(puzzle_input):
-    integers = [int(i) for i in puzzle_input.split(",")]
-    integers[1] = 12
-    integers[2] = 2
-    program = ",".join(str(i) for i in integers)
+    memory = [int(address) for address in puzzle_input.split(",")]
+    memory[1] = 12
+    memory[2] = 2
+    program = ",".join(str(address) for address in memory)
     return run_intcode_program(program).split(",")[0]
 
 
