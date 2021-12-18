@@ -25,12 +25,16 @@ def _get_wire_points(wire):
     return points
 
 
+def _manhattan_distance(point_a, point_b=(0, 0)):
+    return abs(point_a[0] - point_b[0]) + abs(point_a[1] - point_b[1])
+
+
 def get_distance_closest_intersection(puzzle_input):
     wire_1, wire_2 = puzzle_input.split("\n")
     wire_1_points = _get_wire_points(wire_1)
     wire_2_points = _get_wire_points(wire_2)
     intersections = wire_1_points.intersection(wire_2_points)
-    return min(sum(point) for point in intersections)
+    return min(_manhattan_distance(point) for point in intersections)
 
 
 if __name__ == "__main__":
