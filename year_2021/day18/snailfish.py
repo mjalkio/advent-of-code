@@ -1,4 +1,5 @@
 import json
+import math
 
 from util import read_puzzle_input
 
@@ -29,7 +30,29 @@ def snailfish_add(number_a, number_b, reduce_result=True):
 
 
 def snailfish_reduce(number):
-    return "[0,0]"
+    # Assumption: Number being passed in to reduction does not have
+    # anything with > 5 levels of nesting.
+    nesting_amount = 0
+    for i, char in enumerate(number):
+        if char == "[":
+            nesting_amount += 1
+            if nesting_amount == 5:
+                break
+        if char == "]":
+            nesting_amount -= 1
+
+    if nesting_amount == 5:
+        # Explode
+        return "[0,0]"
+
+    for i, char in enumerate(number):
+        if number[i : i + 2].isdigit():
+            # Two digit number needs it needs a split
+            split_num = int(number[i : i + 2])
+            left = math.floor(split_num / 2)
+            right = math.ceil(split_num / 2)
+            return number[:i] + f"[{left},{right}]" + number[i + 2 :]
+    return number
 
 
 def do_homework(puzzle_input):
