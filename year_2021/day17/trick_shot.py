@@ -31,8 +31,12 @@ def get_highest_possible_y_position(puzzle_input):
     return highest_possible_y_pos
 
 
+def get_num_valid_initial_velocities(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_highest_possible_y_position(puzzle_input)}")
-    print(f"Part 2: {get_highest_possible_y_position(puzzle_input)}")
+    print(f"Part 2: {get_num_valid_initial_velocities(puzzle_input)}")
