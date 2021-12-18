@@ -26,7 +26,15 @@ def snailfish_sum(puzzle_input):
 
 
 def snailfish_add(number_a, number_b, reduce_result=True):
-    return "[0,0]"
+    result = f"[{number_a},{number_b}]"
+    if not reduce_result:
+        return result
+
+    reduced_result = snailfish_reduce(result)
+    while reduced_result != result:
+        result = reduced_result
+        reduced_result = snailfish_reduce(result)
+    return result
 
 
 def snailfish_reduce(number):
@@ -62,7 +70,7 @@ def snailfish_reduce(number):
                     next_left_val_start_idx = j
                     break
             left = (
-                number[: next_left_val_start_idx]
+                number[:next_left_val_start_idx]
                 + f"{left_val + next_left_val}"
                 + number[j + 1 : i]
             )
