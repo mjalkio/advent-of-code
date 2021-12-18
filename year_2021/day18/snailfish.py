@@ -52,9 +52,20 @@ def snailfish_reduce(number):
         if next_left_comma_idx == -1:
             left = number[:i]
         else:
-            next_left_brace_idx = number[:next_left_comma_idx].rfind("[")
-            next_left_val = int(number[next_left_brace_idx + 1 : next_left_comma_idx])
-            left = number[: next_left_brace_idx + 1] + f"{left_val + next_left_val},"
+            for j in reversed(range(next_left_comma_idx)):
+                if number[j - 1 : j + 1].isdigit():
+                    next_left_val = int(number[j - 1 : j + 1])
+                    next_left_val_start_idx = j - 1
+                    break
+                elif number[j].isdigit():
+                    next_left_val = int(number[j])
+                    next_left_val_start_idx = j
+                    break
+            left = (
+                number[: next_left_val_start_idx]
+                + f"{left_val + next_left_val}"
+                + number[j + 1 : i]
+            )
 
         next_right_comma_idx = number.find(",", right_brace_idx + 1)
         if next_right_comma_idx == -1:
@@ -74,6 +85,7 @@ def snailfish_reduce(number):
                 + f"{right_val + next_right_val}"
                 + number[next_right_val_end_idx:]
             )
+
         return left + "0" + right
 
     for i, char in enumerate(number):
