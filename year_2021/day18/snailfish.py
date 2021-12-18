@@ -1,3 +1,4 @@
+import itertools
 import json
 import math
 
@@ -115,8 +116,18 @@ def do_homework(puzzle_input):
     return snailfish_magnitude(homework_sum)
 
 
+def largest_magnitude_sum(puzzle_input):
+    largest_magnitude = 0
+    numbers = puzzle_input.split("\n")
+    for num_a, num_b in itertools.product(numbers, repeat=2):
+        num_sum = snailfish_add(num_a, num_b)
+        magnitude = snailfish_magnitude(num_sum)
+        largest_magnitude = max(largest_magnitude, magnitude)
+    return largest_magnitude
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {do_homework(puzzle_input)}")
-    print(f"Part 2: {do_homework(puzzle_input)}")
+    print(f"Part 2: {largest_magnitude_sum(puzzle_input)}")

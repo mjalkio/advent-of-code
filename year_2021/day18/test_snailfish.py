@@ -3,6 +3,7 @@ import pytest
 from util import read_puzzle_input
 from year_2021.day18.snailfish import (
     do_homework,
+    largest_magnitude_sum,
     snailfish_add,
     snailfish_magnitude,
     snailfish_reduce,
@@ -12,6 +13,10 @@ from year_2021.day18.snailfish import (
 
 def test_do_homework():
     assert do_homework(read_puzzle_input("test_input.txt")) == 4140
+
+
+def test_largest_magnitude_sum():
+    assert largest_magnitude_sum(read_puzzle_input("test_input.txt")) == 3993
 
 
 @pytest.mark.parametrize(
