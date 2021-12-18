@@ -22,7 +22,11 @@ def snailfish_magnitude(number):
 
 
 def snailfish_sum(puzzle_input):
-    return "[0,0]"
+    numbers = puzzle_input.split("\n")
+    result = numbers[0]
+    for num in numbers[1:]:
+        result = snailfish_add(result, num)
+    return result
 
 
 def snailfish_add(number_a, number_b, reduce_result=True):
