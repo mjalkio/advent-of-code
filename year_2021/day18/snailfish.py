@@ -1,8 +1,23 @@
+import json
+
 from util import read_puzzle_input
 
 
+def _snailfish_dump(number):
+    return json.dumps(number, separators=(",", ":"))
+
+
 def snailfish_magnitude(number):
-    return 0
+    def _magnitude(number):
+        if type(number) == int:
+            return number
+
+        left = _magnitude(number[0])
+        right = _magnitude(number[1])
+        return 3 * left + 2 * right
+
+    number = json.loads(number)
+    return _magnitude(number)
 
 
 def snailfish_sum(puzzle_input):
