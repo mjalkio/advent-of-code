@@ -43,11 +43,42 @@ def snailfish_reduce(number):
 
     if nesting_amount == 5:
         # Explode
-        return "[0,0]"
+        comma_idx = number.find(",", i + 2)
+        right_brace_idx = number.find("]", i + 2)
+        left_val = int(number[i + 1 : comma_idx])
+        right_val = int(number[comma_idx + 1 : right_brace_idx])
+
+        next_left_comma_idx = number[:i].rfind(",")
+        if next_left_comma_idx == -1:
+            left = number[:i]
+        else:
+            next_left_brace_idx = number[:next_left_comma_idx].rfind("[")
+            next_left_val = int(number[next_left_brace_idx + 1 : next_left_comma_idx])
+            left = number[: next_left_brace_idx + 1] + f"{left_val + next_left_val},"
+
+        next_right_comma_idx = number.find(",", right_brace_idx + 1)
+        if next_right_comma_idx == -1:
+            right = number[right_brace_idx + 1 :]
+        else:
+            for j in range(right_brace_idx + 1, len(number)):
+                if number[j : j + 2].isdigit():
+                    next_right_val = int(number[j : j + 2])
+                    next_right_val_end_idx = j + 2
+                    break
+                elif number[j].isdigit():
+                    next_right_val = int(number[j])
+                    next_right_val_end_idx = j + 1
+                    break
+            right = (
+                number[right_brace_idx + 1 : j]
+                + f"{right_val + next_right_val}"
+                + number[next_right_val_end_idx:]
+            )
+        return left + "0" + right
 
     for i, char in enumerate(number):
         if number[i : i + 2].isdigit():
-            # Two digit number needs it needs a split
+            # Two digit number needs a split
             split_num = int(number[i : i + 2])
             left = math.floor(split_num / 2)
             right = math.ceil(split_num / 2)
