@@ -1,7 +1,7 @@
 from util import read_puzzle_input
 
 
-def is_valid(password):
+def is_valid(password, strict=False):
     # I assume all passwords provided are in the valid range
     has_double = False
     for i in range(len(password) - 1):

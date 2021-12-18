@@ -6,14 +6,17 @@ from year_2019.day04.secure_container import (
 
 
 @pytest.mark.parametrize(
-    "password,expected_output",
+    "password,strict,expected_output",
     [
-        ("111111", True),
-        ("223450", False),
-        ("123789", False),
-        ("111123", True),
-        ("122345", True),
+        ("111111", False, True),
+        ("223450", False, False),
+        ("123789", False, False),
+        ("111123", False, True),
+        ("122345", False, True),
+        ("112233", True, True),
+        ("123444", True, False),
+        ("111122", True, True),
     ],
 )
-def test_is_valid(password, expected_output):
-    assert is_valid(password) == expected_output
+def test_is_valid(password, expected_output, strict):
+    assert is_valid(password, strict=strict) == expected_output
