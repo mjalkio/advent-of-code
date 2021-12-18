@@ -22,12 +22,16 @@ def run_intcode_program(program):
     return ",".join(str(i) for i in integers)
 
 
-def get_position_after_run(puzzle_input, position):
-    return run_intcode_program(puzzle_input)[position]
+def restore_gravity_assist(puzzle_input):
+    integers = [int(i) for i in puzzle_input.split(",")]
+    integers[1] = 12
+    integers[2] = 2
+    program = ",".join(str(i) for i in integers)
+    return run_intcode_program(program).split(",")[0]
 
 
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
-    print(f"Part 1: {get_position_after_run(puzzle_input, 0)}")
-    print(f"Part 2: {get_position_after_run(puzzle_input, 0)}")
+    print(f"Part 1: {restore_gravity_assist(puzzle_input)}")
+    print(f"Part 2: {restore_gravity_assist(puzzle_input)}")
