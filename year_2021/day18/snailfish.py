@@ -111,7 +111,8 @@ def snailfish_reduce(number):
 
 
 def do_homework(puzzle_input):
-    return 0
+    homework_sum = snailfish_sum(puzzle_input)
+    return snailfish_magnitude(homework_sum)
 
 
 if __name__ == "__main__":
