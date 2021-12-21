@@ -39,8 +39,12 @@ def get_losing_score_times_num_rolls(puzzle_input):
     return min(p1_score, p2_score) * num_rolls
 
 
+def get_num_universes(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_losing_score_times_num_rolls(puzzle_input)}")
-    print(f"Part 2: {get_losing_score_times_num_rolls(puzzle_input)}")
+    print(f"Part 2: {get_num_universes(puzzle_input)}")
