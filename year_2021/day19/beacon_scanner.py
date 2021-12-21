@@ -1,8 +1,9 @@
-from collections import namedtuple
+from collections import deque, namedtuple
 
 from util import read_puzzle_input
 
 NUM_ORIENTATIONS = 24
+SHARED_BEACON_REQUIREMENT = 12
 Point = namedtuple("Point", ["x", "y", "z"])
 
 
@@ -43,15 +44,44 @@ def _get_all_orientations(beacons):
 
 def get_num_beacons(puzzle_input):
     lines = puzzle_input.split("\n")
-    scanner_beacons = []
+    scanners = deque()
     for line in lines:
         if line == "":
             continue
         if "scanner" in line:
-            scanner_beacons.append([])
+            scanners.append([])
         else:
             x, y, z = [int(val) for val in line.split(",")]
-            scanner_beacons[-1].append(Point(x=x, y=y, z=z))
+            scanners[-1].append(Point(x=x, y=y, z=z))
+
+    oriented_scanners = [scanners.popleft()]
+    return 0
+    while len(scanners) > 0:
+        unoriented_scanner = scanners.popleft()
+        for o_scanner in oriented_scanners:
+            oriented_distances = set()
+            oriented_ref_point = o_scanner[0]
+            for i in range(1, len(o_scanner)):
+                oriented_distances.add(
+                    Point(
+                        x=oriented_ref_point.x - o_scanner[i].x,
+                        y=oriented_ref_point.y - o_scanner[i].y,
+                        z=oriented_ref_point.z - o_scanner[i].z,
+                    )
+                )
+            for orientation in _get_all_orientations(unoriented_scanner):
+                for ref_point in orientation:
+                    distances = set()
+                    for point in orientation:
+                        distances.add(
+                            Point(
+                                x=ref_point.x - point.x,
+                                y=ref_point.y - point.y,
+                                z=ref_point.z - point.z,
+                            )
+                        )
+                    if len(distances.intersection(oriented_distances)) >= 12:
+                        print("Found a match!")
 
     return 0
 
