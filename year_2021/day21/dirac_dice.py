@@ -69,8 +69,8 @@ def get_num_universes(puzzle_input):
         # P1's move
         p1_move_state_counts = defaultdict(int)
         for state, num_universes in state_counts.items():
-            if state.p1_score >= 21:
-                p1_wins += num_universes
+            if state.p2_score >= 21:
+                p2_wins += num_universes
                 continue
 
             for steps_forward, num_new_universes in roll_sum_counts.items():
@@ -88,8 +88,8 @@ def get_num_universes(puzzle_input):
 
         p2_move_state_counts = defaultdict(int)
         for state, num_universes in p1_move_state_counts.items():
-            if state.p2_score >= 21:
-                p2_wins += num_universes
+            if state.p1_score >= 21:
+                p1_wins += num_universes
                 continue
 
             for steps_forward, num_new_universes in roll_sum_counts.items():
