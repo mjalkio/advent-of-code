@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from util import read_puzzle_input
 
 
@@ -10,11 +8,15 @@ PIXEL_MAP = {
 NUM_INPUT_PIXELS = 9
 
 
-def _get_binary_lookup(x, y, image):
+def _get_binary_lookup(x, y, image, infinite_pixel):
     binary_lookup = ""
     for dy in range(-1, 2):
         for dx in range(-1, 2):
-            binary_lookup += PIXEL_MAP[image[(x + dx, y + dy)]]
+            if (x + dx, y + dy) in image:
+                pixel = image[(x + dx, y + dy)]
+            else:
+                pixel = infinite_pixel
+            binary_lookup += PIXEL_MAP[pixel]
     return int(binary_lookup, 2)
 
 
@@ -30,15 +32,13 @@ def _print_image(image):
         print("".join(line))
 
 
-
 def get_num_lit_pixels(puzzle_input, num_enhancements=2):
     lines = puzzle_input.split("\n")
     algorithm = lines[0]
     image_lines = lines[2:]
 
     infinite_pixel = "."
-
-    image = defaultdict(lambda: infinite_pixel)
+    image = {}
     for y in range(len(image_lines)):
         for x in range(len(image_lines[y])):
             image[(x, y)] = image_lines[y][x]
@@ -49,19 +49,21 @@ def get_num_lit_pixels(puzzle_input, num_enhancements=2):
     max_y = y
 
     for _ in range(num_enhancements):
-        binary_lookup = "".join(
-            [PIXEL_MAP[infinite_pixel] for _ in range(NUM_INPUT_PIXELS)]
-        )
-        infinite_pixel = algorithm[int(binary_lookup, 2)]
-        enhanced_image = defaultdict(lambda: infinite_pixel)
+        enhanced_image = {}
         min_x -= 2
         max_x += 2
         min_y -= 2
         max_y += 2
         for x in range(min_x, max_x):
             for y in range(min_y, max_y):
-                enhanced_image[(x, y)] = algorithm[_get_binary_lookup(x, y, image)]
+                enhanced_image[(x, y)] = algorithm[
+                    _get_binary_lookup(x, y, image, infinite_pixel)
+                ]
         image = enhanced_image
+        binary_lookup = "".join(
+            [PIXEL_MAP[infinite_pixel] for _ in range(NUM_INPUT_PIXELS)]
+        )
+        infinite_pixel = algorithm[int(binary_lookup, 2)]
 
     return len([pixel for pixel in image.values() if pixel == "#"])
 
