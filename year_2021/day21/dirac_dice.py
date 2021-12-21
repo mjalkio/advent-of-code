@@ -4,7 +4,7 @@ from collections import defaultdict, namedtuple
 from util import read_puzzle_input
 
 
-State = namedtuple("State", ["p1_pos", "p2_pos", "p1_score", "p2_score", "is_p1_move"])
+State = namedtuple("State", ["p1_pos", "p2_pos", "p1_score", "p2_score"])
 
 
 def get_losing_score_times_num_rolls(puzzle_input):
@@ -54,11 +54,10 @@ def get_num_universes(puzzle_input):
         p2_pos=p2_pos,
         p1_score=0,
         p2_score=0,
-        is_p1_move=True,
     )
 
     state_counts = defaultdict(int)
-    state_counts[initial_state] += 1
+    state_counts[initial_state] = 1
     move_possibilities = itertools.product([1, 2, 3], repeat=3)
     roll_sum_counts = defaultdict(int)
     for combo in move_possibilities:
@@ -67,15 +66,13 @@ def get_num_universes(puzzle_input):
     p1_wins = 0
     p2_wins = 0
     while len(state_counts) > 0:
-        state, num_universes = state_counts.popitem()
-        if state.p1_score > 21:
-            p1_wins += num_universes
-            continue
-        if state.p2_score > 21:
-            p2_wins += num_universes
-            continue
+        # P1's move
+        p1_move_state_counts = defaultdict(int)
+        for state, num_universes in state_counts.items():
+            if state.p1_score >= 21:
+                p1_wins += num_universes
+                continue
 
-        if state.is_p1_move:
             for steps_forward, num_new_universes in roll_sum_counts.items():
                 new_p1_pos = state.p1_pos + steps_forward
                 if new_p1_pos > 10:
@@ -86,10 +83,15 @@ def get_num_universes(puzzle_input):
                     p2_pos=state.p2_pos,
                     p1_score=state.p1_score + new_p1_pos,
                     p2_score=state.p2_score,
-                    is_p1_move=False,
                 )
-                state_counts[new_state] += num_new_universes * num_universes
-        else:
+                p1_move_state_counts[new_state] += num_new_universes * num_universes
+
+        p2_move_state_counts = defaultdict(int)
+        for state, num_universes in p1_move_state_counts.items():
+            if state.p2_score >= 21:
+                p2_wins += num_universes
+                continue
+
             for steps_forward, num_new_universes in roll_sum_counts.items():
                 new_p2_pos = state.p2_pos + steps_forward
                 if new_p2_pos > 10:
@@ -100,9 +102,9 @@ def get_num_universes(puzzle_input):
                     p2_pos=new_p2_pos,
                     p1_score=state.p1_score,
                     p2_score=state.p2_score + new_p2_pos,
-                    is_p1_move=True,
                 )
-                state_counts[new_state] += num_new_universes * num_universes
+                p2_move_state_counts[new_state] += num_new_universes * num_universes
+        state_counts = p2_move_state_counts
     return max(p1_wins, p2_wins)
 
 
