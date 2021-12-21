@@ -50,12 +50,12 @@ def get_num_lit_pixels(puzzle_input, num_enhancements=2):
 
     for _ in range(num_enhancements):
         enhanced_image = {}
-        min_x -= 2
-        max_x += 2
-        min_y -= 2
-        max_y += 2
-        for x in range(min_x, max_x):
-            for y in range(min_y, max_y):
+        min_x -= 1
+        max_x += 1
+        min_y -= 1
+        max_y += 1
+        for x in range(min_x, max_x + 1):
+            for y in range(min_y, max_y + 1):
                 enhanced_image[(x, y)] = algorithm[
                     _get_binary_lookup(x, y, image, infinite_pixel)
                 ]
@@ -72,4 +72,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_lit_pixels(puzzle_input)}")
-    print(f"Part 2: {get_num_lit_pixels(puzzle_input)}")
+    print(f"Part 2: {get_num_lit_pixels(puzzle_input, num_enhancements=50)}")
