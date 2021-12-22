@@ -1,5 +1,3 @@
-import pytest
-
 from util import read_puzzle_input
 from year_2021.day19.beacon_scanner import (
     get_num_beacons,

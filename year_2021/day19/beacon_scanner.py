@@ -79,10 +79,16 @@ def _orient_scanner(unoriented_scanner, oriented_scanners):
                                 y=p.y + y_diff,
                                 z=p.z + z_diff,
                             )
-                            for p in unoriented_scanner
+                            for p in orientation
                         ]
+
                         return newly_oriented_scanner
     return None
+
+
+def _print_beacons(beacons):
+    for p in sorted(beacons):
+        print(f"{p.x},{p.y},{p.z}")
 
 
 def get_num_beacons(puzzle_input):
@@ -108,12 +114,12 @@ def get_num_beacons(puzzle_input):
             scanners.append(unoriented_scanner)
         else:
             oriented_scanners.append(newly_oriented_scanner)
-
-    return len(set().union(*oriented_scanners))
+    all_beacons = set().union(*oriented_scanners)
+    return len(all_beacons)
 
 
 if __name__ == "__main__":
-    puzzle_input = read_puzzle_input("test_input.txt")
+    puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_beacons(puzzle_input)}")
     print(f"Part 2: {get_num_beacons(puzzle_input)}")
