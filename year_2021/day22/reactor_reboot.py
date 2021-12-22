@@ -1,7 +1,7 @@
 from util import read_puzzle_input
 
 
-def get_num_cubes_on(puzzle_input):
+def get_num_cubes_on(puzzle_input, is_initialization_procedure=True):
     on_cubes = set()
     for step in puzzle_input.split("\n"):
         state, cuboid = step.split(" ")
@@ -10,7 +10,9 @@ def get_num_cubes_on(puzzle_input):
         min_y, max_y = [int(num) for num in y_range]
         min_z, max_z = [int(num) for num in z_range]
 
-        if any(abs(num) > 50 for num in [min_x, max_x, min_y, max_y, min_z, max_z]):
+        if is_initialization_procedure and any(
+            abs(num) > 50 for num in [min_x, max_x, min_y, max_y, min_z, max_z]
+        ):
             continue
 
         for x in range(min_x, max_x + 1):
@@ -29,4 +31,6 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_cubes_on(puzzle_input)}")
-    print(f"Part 2: {get_num_cubes_on(puzzle_input)}")
+    print(
+        f"Part 2: {get_num_cubes_on(puzzle_input, is_initialization_procedure=False)}"
+    )
