@@ -8,7 +8,10 @@ Point = namedtuple("Point", ["x", "y", "z"])
 
 
 def _get_all_orientations(beacons):
-    all_orientations = [[]] * NUM_ORIENTATIONS
+    all_orientations = []
+    for _ in range(NUM_ORIENTATIONS):
+        all_orientations.append([])
+
     for x, y, z in beacons:
         all_point_orientations = [
             Point(x=x, y=y, z=z),
@@ -55,39 +58,40 @@ def get_num_beacons(puzzle_input):
             scanners[-1].append(Point(x=x, y=y, z=z))
 
     oriented_scanners = [scanners.popleft()]
-    return 0
+
     while len(scanners) > 0:
         unoriented_scanner = scanners.popleft()
         for o_scanner in oriented_scanners:
-            oriented_distances = set()
-            oriented_ref_point = o_scanner[0]
-            for i in range(1, len(o_scanner)):
-                oriented_distances.add(
-                    Point(
-                        x=oriented_ref_point.x - o_scanner[i].x,
-                        y=oriented_ref_point.y - o_scanner[i].y,
-                        z=oriented_ref_point.z - o_scanner[i].z,
-                    )
-                )
-            for orientation in _get_all_orientations(unoriented_scanner):
-                for ref_point in orientation:
-                    distances = set()
-                    for point in orientation:
-                        distances.add(
-                            Point(
-                                x=ref_point.x - point.x,
-                                y=ref_point.y - point.y,
-                                z=ref_point.z - point.z,
-                            )
+            for o_ref_point in o_scanner:
+                oriented_distances = set()
+                for o_point in o_scanner:
+                    oriented_distances.add(
+                        Point(
+                            x=o_ref_point.x - o_point.x,
+                            y=o_ref_point.y - o_point.y,
+                            z=o_ref_point.z - o_point.z,
                         )
-                    if len(distances.intersection(oriented_distances)) >= 12:
-                        print("Found a match!")
+                    )
+                for orientation in _get_all_orientations(unoriented_scanner):
+                    for ref_point in orientation:
+                        distances = set()
+                        for point in orientation:
+                            distances.add(
+                                Point(
+                                    x=ref_point.x - point.x,
+                                    y=ref_point.y - point.y,
+                                    z=ref_point.z - point.z,
+                                )
+                            )
 
+                        if len(distances.intersection(oriented_distances)) >= 12:
+                            print("Found a match!")
+                            # Need to escape the loops
     return 0
 
 
 if __name__ == "__main__":
-    puzzle_input = read_puzzle_input()
+    puzzle_input = read_puzzle_input("test_input.txt")
 
     print(f"Part 1: {get_num_beacons(puzzle_input)}")
     print(f"Part 2: {get_num_beacons(puzzle_input)}")
