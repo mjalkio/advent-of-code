@@ -118,8 +118,12 @@ def get_num_beacons(puzzle_input):
     return len(all_beacons)
 
 
+def get_max_scanner_distance(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_beacons(puzzle_input)}")
-    print(f"Part 2: {get_num_beacons(puzzle_input)}")
+    print(f"Part 2: {get_max_scanner_distance(puzzle_input)}")
