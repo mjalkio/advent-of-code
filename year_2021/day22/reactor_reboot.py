@@ -6,8 +6,18 @@ from util import read_puzzle_input
 Cuboid = namedtuple("Cuboid", ["min_x", "max_x", "min_y", "max_y", "min_z", "max_z"])
 
 
-def _overlaps(cuboid_a, cuboid_b):
-    return False
+def _has_overlap(cuboid_a, cuboid_b):
+    if (
+        cuboid_a.min_x > cuboid_b.max_x
+        or cuboid_b.min_x > cuboid_a.max_x
+        or cuboid_a.min_y > cuboid_b.max_y
+        or cuboid_b.min_y > cuboid_a.max_y
+        or cuboid_a.min_z > cuboid_b.max_z
+        or cuboid_b.min_z > cuboid_a.max_z
+    ):
+        return False
+
+    return True
 
 
 def _handle_overlap(cuboid_a, cuboid_b):
@@ -54,7 +64,7 @@ def get_num_cubes_on(puzzle_input, is_initialization_procedure=True):
             next_cuboid = cuboids_to_handle.pop()
 
             for cuboid in on_cuboids:
-                if not _overlaps(next_cuboid, cuboid):
+                if not _has_overlap(next_cuboid, cuboid):
                     continue
 
                 on_cuboids.remove(cuboid)
