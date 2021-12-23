@@ -1,17 +1,19 @@
 from collections import namedtuple
 
-from util import read_puzzle_input
+from util import manhattan_distance, read_puzzle_input
 
-A = "A"
-B = "B"
-C = "C"
-D = "D"
+ENERGY_COST = {
+    "A": 1,
+    "B": 10,
+    "C": 100,
+    "D": 1000,
+}
 HALLWAY_LENGTH = 11
 ROOM_LOCATIONS = {
-    A: 2,
-    B: 4,
-    C: 6,
-    D: 8,
+    "A": 2,
+    "B": 4,
+    "C": 6,
+    "D": 8,
 }
 WALL_THICKNESS = 1
 State = namedtuple("State", ["locations", "total_energy"])
@@ -28,8 +30,54 @@ def _get_initial_state(puzzle_input):
     return (State(locations=locations, total_energy=0), room_depth)
 
 
-def _get_move_cost(start_x, start_y, dest_x, dest_y, locations):
-    return None
+def _get_move_cost(
+    start_x, start_y, dest_x, dest_y, locations, amphipod_type, room_depth
+):
+    if start_y == 0 and dest_y == 0:
+        raise ValueError("Can't move hallway to hallway.")
+    if start_y != 0 and dest_y != 0:
+        raise ValueError("Can't move room to room.")
+
+    if start_x == dest_x and start_y == dest_y:
+        # Can't move to your own location
+        return None
+
+    if dest_y == 0:
+        # Moving into the hallway
+        min_x = min(start_x, dest_x)
+        max_x = max(start_x, dest_x)
+        for x in range(min_x, max_x + 1):
+            if locations.get((x, 0)) is not None:
+                return None
+
+        for y in range(start_y):
+            if locations.get((start_x, y)) is not None:
+                return None
+        return (
+            manhattan_distance((start_x, start_y), (dest_x, dest_y))
+            * ENERGY_COST[amphipod_type]
+        )
+
+    # Moving into a room
+    min_x = min(start_x, dest_x)
+    max_x = max(start_x, dest_x)
+    for x in range(min_x + 1, max_x):
+        if locations.get((x, 0)) is not None:
+            return None
+
+    for y in range(dest_y + 1):
+        if locations.get((dest_x, y)) is not None:
+            return None
+
+    if dest_y < room_depth:
+        for y in range(dest_y + 1, room_depth):
+            if locations.get((dest_x, y)) != amphipod_type:
+                return None
+
+    return (
+        manhattan_distance((start_x, start_y), (dest_x, dest_y))
+        * ENERGY_COST[amphipod_type]
+    )
 
 
 def _get_next_states(state, room_depth):
@@ -47,6 +95,8 @@ def _get_next_states(state, room_depth):
                 dest_x=dest_x,
                 dest_y=dest_y,
                 locations=state.locations,
+                amphipod_type=amphipod,
+                room_depth=room_depth,
             )
             if move_cost is not None:
                 new_locations = state.locations.copy()
@@ -74,6 +124,8 @@ def _get_next_states(state, room_depth):
                 dest_x=dest_x,
                 dest_y=dest_y,
                 locations=state.locations,
+                amphipod_type=amphipod,
+                room_depth=room_depth,
             )
             if move_cost is not None:
                 new_locations = state.locations.copy()
@@ -90,7 +142,7 @@ def _get_next_states(state, room_depth):
 
 
 def _is_organized(state):
-    for (x, y), amphipod in state.locations:
+    for (x, y), amphipod in state.locations.items():
         if y == 0:
             return False
         if x != ROOM_LOCATIONS[amphipod]:
