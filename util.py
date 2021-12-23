@@ -6,6 +6,10 @@ import numpy as np
 np.set_printoptions(linewidth=200)
 
 
+def manhattan_distance(point_a, point_b):
+    return sum(abs(a - b) for a, b in zip(point_a, point_b))
+
+
 def read_puzzle_input(file_name="puzzle_input.txt"):
     caller_frame = inspect.stack()[1]
     caller_path = Path(caller_frame.filename)

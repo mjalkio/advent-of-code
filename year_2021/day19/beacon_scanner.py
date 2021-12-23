@@ -1,6 +1,7 @@
+import itertools
 from collections import deque, namedtuple
 
-from util import read_puzzle_input
+from util import manhattan_distance, read_puzzle_input
 
 NUM_ORIENTATIONS = 24
 SHARED_BEACON_REQUIREMENT = 12
@@ -81,9 +82,10 @@ def _orient_scanner(unoriented_scanner, oriented_scanners):
                             )
                             for p in orientation
                         ]
+                        scanner_location = Point(x=x_diff, y=y_diff, z=z_diff)
 
-                        return newly_oriented_scanner
-    return None
+                        return (newly_oriented_scanner, scanner_location)
+    return (None, None)
 
 
 def _print_beacons(beacons):
@@ -91,7 +93,7 @@ def _print_beacons(beacons):
         print(f"{p.x},{p.y},{p.z}")
 
 
-def get_num_beacons(puzzle_input):
+def _parse_scanners(puzzle_input):
     lines = puzzle_input.split("\n")
     scanners = deque()
     for line in lines:
@@ -102,12 +104,16 @@ def get_num_beacons(puzzle_input):
         else:
             x, y, z = [int(val) for val in line.split(",")]
             scanners[-1].append(Point(x=x, y=y, z=z))
+    return scanners
 
+
+def get_num_beacons(puzzle_input):
+    scanners = _parse_scanners(puzzle_input)
     oriented_scanners = [scanners.popleft()]
 
     while len(scanners) > 0:
         unoriented_scanner = scanners.popleft()
-        newly_oriented_scanner = _orient_scanner(
+        newly_oriented_scanner, _ = _orient_scanner(
             unoriented_scanner=unoriented_scanner, oriented_scanners=oriented_scanners
         )
         if newly_oriented_scanner is None:
@@ -119,7 +125,25 @@ def get_num_beacons(puzzle_input):
 
 
 def get_max_scanner_distance(puzzle_input):
-    return 0
+    scanners = _parse_scanners(puzzle_input)
+    oriented_scanners = [scanners.popleft()]
+    scanner_locations = [Point(x=0, y=0, z=0)]
+
+    while len(scanners) > 0:
+        unoriented_scanner = scanners.popleft()
+        newly_oriented_scanner, scanner_location = _orient_scanner(
+            unoriented_scanner=unoriented_scanner, oriented_scanners=oriented_scanners
+        )
+        if newly_oriented_scanner is None:
+            scanners.append(unoriented_scanner)
+        else:
+            oriented_scanners.append(newly_oriented_scanner)
+            scanner_locations.append(scanner_location)
+
+    return max(
+        manhattan_distance(a, b)
+        for a, b in itertools.product(scanner_locations, repeat=2)
+    )
 
 
 if __name__ == "__main__":
