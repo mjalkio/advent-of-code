@@ -22,7 +22,166 @@ def _has_overlap(cuboid_a, cuboid_b):
 
 def _handle_overlap(cuboid_a, cuboid_b):
     # Return overlap, unique to a, unique to b
-    return None, [cuboid_a], [cuboid_b]
+    overlap_min_x = max(cuboid_a.min_x, cuboid_b.min_x)
+    overlap_max_x = min(cuboid_a.max_x, cuboid_b.max_x)
+
+    overlap_min_y = max(cuboid_a.min_y, cuboid_b.min_y)
+    overlap_max_y = min(cuboid_a.max_y, cuboid_b.max_y)
+
+    overlap_min_z = max(cuboid_a.min_z, cuboid_b.min_z)
+    overlap_max_z = min(cuboid_a.max_z, cuboid_b.max_z)
+
+    overlap_cuboid = Cuboid(
+        min_x=overlap_min_x,
+        max_x=overlap_max_x,
+        min_y=overlap_min_y,
+        max_y=overlap_max_y,
+        min_z=overlap_min_z,
+        max_z=overlap_max_z,
+    )
+
+    a_subcuboids = []
+    b_subcuboids = []
+
+    if cuboid_a.min_x < overlap_min_x:
+        a_subcuboids.append(
+            Cuboid(
+                min_x=cuboid_a.min_x,
+                max_x=overlap_min_x - 1,
+                min_y=cuboid_a.min_y,
+                max_y=cuboid_a.max_y,
+                min_z=cuboid_a.min_z,
+                max_z=cuboid_a.max_z,
+            )
+        )
+    if cuboid_b.min_x < overlap_min_x:
+        b_subcuboids.append(
+            Cuboid(
+                min_x=cuboid_b.min_x,
+                max_x=overlap_min_x - 1,
+                min_y=cuboid_b.min_y,
+                max_y=cuboid_b.max_y,
+                min_z=cuboid_b.min_z,
+                max_z=cuboid_b.max_z,
+            )
+        )
+
+    if cuboid_a.min_y < overlap_min_y:
+        a_subcuboids.append(
+            Cuboid(
+                min_x=overlap_min_x,
+                max_x=overlap_max_x,
+                min_y=cuboid_a.min_y,
+                max_y=overlap_min_y - 1,
+                min_z=cuboid_a.min_z,
+                max_z=cuboid_a.max_z,
+            )
+        )
+    if cuboid_b.min_y < overlap_min_y:
+        b_subcuboids.append(
+            Cuboid(
+                min_x=overlap_min_x,
+                max_x=overlap_max_x,
+                min_y=cuboid_b.min_y,
+                max_y=overlap_min_y - 1,
+                min_z=cuboid_b.min_z,
+                max_z=cuboid_b.max_z,
+            )
+        )
+
+    if cuboid_a.min_z < overlap_min_z:
+        a_subcuboids.append(
+            Cuboid(
+                min_x=overlap_min_x,
+                max_x=overlap_max_x,
+                min_y=overlap_min_y,
+                max_y=overlap_max_y,
+                min_z=cuboid_a.min_z,
+                max_z=overlap_min_z - 1,
+            )
+        )
+    if cuboid_b.min_z < overlap_min_z:
+        b_subcuboids.append(
+            Cuboid(
+                min_x=overlap_min_x,
+                max_x=overlap_max_x,
+                min_y=overlap_min_y,
+                max_y=overlap_max_y,
+                min_z=cuboid_b.min_z,
+                max_z=overlap_min_z - 1,
+            )
+        )
+
+    if cuboid_a.max_x > overlap_max_x:
+        a_subcuboids.append(
+            Cuboid(
+                min_x=overlap_max_x + 1,
+                max_x=cuboid_a.max_x,
+                min_y=cuboid_a.min_y,
+                max_y=cuboid_a.max_y,
+                min_z=cuboid_a.min_z,
+                max_z=cuboid_a.max_z,
+            )
+        )
+    if cuboid_b.max_x > overlap_max_x:
+        b_subcuboids.append(
+            Cuboid(
+                min_x=overlap_max_x + 1,
+                max_x=cuboid_b.max_x,
+                min_y=cuboid_b.min_y,
+                max_y=cuboid_b.max_y,
+                min_z=cuboid_b.min_z,
+                max_z=cuboid_b.max_z,
+            )
+        )
+
+    if cuboid_a.max_y > overlap_max_y:
+        a_subcuboids.append(
+            Cuboid(
+                min_x=overlap_min_x,
+                max_x=overlap_max_x,
+                min_y=overlap_max_y + 1,
+                max_y=cuboid_a.max_y,
+                min_z=cuboid_a.min_z,
+                max_z=cuboid_a.max_z,
+            )
+        )
+    if cuboid_b.max_y > overlap_max_y:
+        b_subcuboids.append(
+            Cuboid(
+                min_x=overlap_min_x,
+                max_x=overlap_max_x,
+                min_y=overlap_max_y + 1,
+                max_y=cuboid_b.max_y,
+                min_z=cuboid_b.min_z,
+                max_z=cuboid_b.max_z,
+            )
+        )
+
+    if cuboid_a.max_z > overlap_max_z:
+        a_subcuboids.append(
+            Cuboid(
+                min_x=overlap_min_x,
+                max_x=overlap_max_x,
+                min_y=overlap_min_y,
+                max_y=overlap_max_y,
+                min_z=overlap_max_z + 1,
+                max_z=cuboid_b.max_z,
+            )
+        )
+    if cuboid_b.max_z > overlap_max_z:
+        b_subcuboids.append(
+            Cuboid(
+                min_x=overlap_min_x,
+                max_x=overlap_max_x,
+                min_y=overlap_min_y,
+                max_y=overlap_max_y,
+                min_z=overlap_max_z + 1,
+                max_z=cuboid_b.max_z,
+            )
+        )
+
+    return overlap_cuboid, a_subcuboids, b_subcuboids
 
 
 def _get_area(cuboid):
