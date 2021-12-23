@@ -6,6 +6,7 @@ A = "A"
 B = "B"
 C = "C"
 D = "D"
+HALLWAY_LENGTH = 11
 ROOM_LOCATIONS = {
     A: 2,
     B: 4,
@@ -33,7 +34,7 @@ def _get_move_cost(start_x, start_y, dest_x, dest_y, locations):
 
 def _get_next_states(state, room_depth):
     # If any amphipod can move into its terminal state, make that move
-    for (start_x, start_y), amphipod in state.locations:
+    for (start_x, start_y), amphipod in state.locations.items():
         if start_y != 0:
             # We do not allow room -> room movement
             continue
@@ -49,7 +50,7 @@ def _get_next_states(state, room_depth):
             )
             if move_cost is not None:
                 new_locations = state.locations.copy()
-                del new_locations[loc]
+                del new_locations[(start_x, start_y)]
                 new_locations[(dest_x, dest_y)] = amphipod
                 return [
                     State(
@@ -59,7 +60,33 @@ def _get_next_states(state, room_depth):
                 ]
 
     # Otherwise make all moves that are valid
-    return []
+    next_states = []
+    dest_y = 0
+    for (start_x, start_y), amphipod in state.locations.items():
+        if start_y == 0:
+            # We do not allow hallway -> hallway movement
+            continue
+
+        for dest_x in range(HALLWAY_LENGTH):
+            move_cost = _get_move_cost(
+                start_x=start_x,
+                start_y=start_y,
+                dest_x=dest_x,
+                dest_y=dest_y,
+                locations=state.locations,
+            )
+            if move_cost is not None:
+                new_locations = state.locations.copy()
+                del new_locations[(start_x, start_y)]
+                new_locations[(dest_x, dest_y)] = amphipod
+                next_states.append(
+                    State(
+                        locations=new_locations,
+                        total_energy=state.total_energy + move_cost,
+                    )
+                )
+
+    return next_states
 
 
 def _is_organized(state):
