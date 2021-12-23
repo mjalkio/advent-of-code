@@ -9,10 +9,12 @@ from year_2021.day22.reactor_reboot import (
 @pytest.mark.parametrize(
     "input_file,is_initialization_procedure,expected_output",
     [
-        # ("test_input.txt", True, 39),
+        ("test_input.txt", True, 39),
         # ("test_input_2.txt", True, 590784),
         # ("test_input_3.txt", True, 474140),
-        ("test_approach_1.txt", True, 46),
+        ("test_approach_1.txt", True, 27 + 19),
+        ("test_approach_2.txt", True, 27 + 19),
+        ("test_approach_3.txt", True, 27 + 19 - 8),
         # ("test_input_3.txt", False, 2758514936282235),
     ],
 )

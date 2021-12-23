@@ -166,7 +166,7 @@ def _handle_overlap(cuboid_a, cuboid_b):
                 min_y=overlap_min_y,
                 max_y=overlap_max_y,
                 min_z=overlap_max_z + 1,
-                max_z=cuboid_b.max_z,
+                max_z=cuboid_a.max_z,
             )
         )
     if cuboid_b.max_z > overlap_max_z:
@@ -234,7 +234,7 @@ def get_num_cubes_on(puzzle_input, is_initialization_procedure=True):
                     on_cuboids.add(overlap)
                     on_cuboids.update(subcuboids)
                 else:
-                    cuboids_to_handle.update(subcuboids)
+                    on_cuboids.update(subcuboids)
 
                 cuboids_to_handle.update(next_subcuboids)
                 break
