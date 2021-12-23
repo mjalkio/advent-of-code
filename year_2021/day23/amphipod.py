@@ -158,10 +158,10 @@ def get_minimum_energy_required(puzzle_input):
     while len(states) > 0:
         curr_state = states.pop()
         for next_state in _get_next_states(curr_state, room_depth):
-            if curr_state.total_energy >= minimum_energy:
+            if next_state.total_energy >= minimum_energy:
                 continue
-            elif _is_organized(curr_state):
-                minimum_energy = curr_state.total_energy
+            elif _is_organized(next_state):
+                minimum_energy = next_state.total_energy
             else:
                 states.append(next_state)
     return minimum_energy
