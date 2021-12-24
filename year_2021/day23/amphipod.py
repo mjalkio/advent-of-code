@@ -44,6 +44,10 @@ def _get_move_cost(
 
     if dest_y == 0:
         # Moving into the hallway
+        if dest_x in ROOM_LOCATIONS.values():
+            # Can't move to hallway outside of room
+            return None
+
         min_x = min(start_x, dest_x)
         max_x = max(start_x, dest_x)
         for x in range(min_x, max_x + 1):
@@ -149,6 +153,21 @@ def _is_organized(state):
             return False
 
     return True
+
+
+def _print_diagram(locations, room_depth):
+    hallway = ""
+    for x in range(HALLWAY_LENGTH):
+        hallway += locations.get((x, 0), ".")
+    print(hallway)
+    for y in range(1, room_depth + 1):
+        room_line = ""
+        for x in range(HALLWAY_LENGTH):
+            if x in ROOM_LOCATIONS.values():
+                room_line += locations.get((x, y), ".")
+            else:
+                room_line += "#"
+        print(room_line)
 
 
 def get_minimum_energy_required(puzzle_input):
