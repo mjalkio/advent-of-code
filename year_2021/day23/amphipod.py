@@ -42,6 +42,15 @@ def _get_move_cost(
         # Can't move to your own location
         return None
 
+    # Don't move if you're already in the correct spot
+    if start_x == ROOM_LOCATIONS[amphipod_type]:
+        # Can't be blocking something else from moving
+        if all(
+            locations.get((start_x, y)) == amphipod_type
+            for y in range(start_y + 1, room_depth + 1)
+        ):
+            return None
+
     if dest_y == 0:
         # Moving into the hallway
         if dest_x in ROOM_LOCATIONS.values():
@@ -74,7 +83,7 @@ def _get_move_cost(
             return None
 
     if dest_y < room_depth:
-        for y in range(dest_y + 1, room_depth):
+        for y in range(dest_y + 1, room_depth + 1):
             if locations.get((dest_x, y)) != amphipod_type:
                 return None
 
@@ -141,7 +150,6 @@ def _get_next_states(state, room_depth):
                         total_energy=state.total_energy + move_cost,
                     )
                 )
-
     return next_states
 
 
@@ -176,7 +184,13 @@ def get_minimum_energy_required(puzzle_input):
     states = [initial_state]
     while len(states) > 0:
         curr_state = states.pop()
-        for next_state in _get_next_states(curr_state, room_depth):
+        print("=== INITIAL STATE ===")
+        _print_diagram(curr_state.locations, room_depth)
+        potential_next_states = _get_next_states(curr_state, room_depth)
+        for s in potential_next_states:
+            print("=====")
+            _print_diagram(s.locations, room_depth)
+        for next_state in potential_next_states:
             if next_state.total_energy >= minimum_energy:
                 continue
             elif _is_organized(next_state):
