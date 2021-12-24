@@ -184,12 +184,7 @@ def get_minimum_energy_required(puzzle_input):
     states = [initial_state]
     while len(states) > 0:
         curr_state = states.pop()
-        print("=== INITIAL STATE ===")
-        _print_diagram(curr_state.locations, room_depth)
         potential_next_states = _get_next_states(curr_state, room_depth)
-        for s in potential_next_states:
-            print("=====")
-            _print_diagram(s.locations, room_depth)
         for next_state in potential_next_states:
             if next_state.total_energy >= minimum_energy:
                 continue
