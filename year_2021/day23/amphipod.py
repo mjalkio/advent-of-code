@@ -1,3 +1,4 @@
+import heapq
 from collections import namedtuple
 
 from util import manhattan_distance, read_puzzle_input
@@ -16,7 +17,17 @@ ROOM_LOCATIONS = {
     "D": 8,
 }
 WALL_THICKNESS = 1
-State = namedtuple("State", ["locations", "total_energy"])
+State = namedtuple("State", ["total_energy", "heap_tiebreaker", "locations"])
+
+
+def _counter():
+    i = 0
+    while True:
+        yield i
+        i += 1
+
+
+tiebreaker = _counter()
 
 
 def _get_initial_state(puzzle_input):
@@ -27,7 +38,10 @@ def _get_initial_state(puzzle_input):
     for i in range(len(room_lines)):
         for j in ROOM_LOCATIONS.values():
             locations[(j, i + 1)] = room_lines[i][j + WALL_THICKNESS]
-    return (State(locations=locations, total_energy=0), room_depth)
+    return (
+        State(locations=locations, total_energy=0, heap_tiebreaker=next(tiebreaker)),
+        room_depth,
+    )
 
 
 def _get_move_cost(
@@ -119,6 +133,7 @@ def _get_next_states(state, room_depth):
                     State(
                         locations=new_locations,
                         total_energy=state.total_energy + move_cost,
+                        heap_tiebreaker=next(tiebreaker),
                     )
                 ]
 
@@ -148,6 +163,7 @@ def _get_next_states(state, room_depth):
                     State(
                         locations=new_locations,
                         total_energy=state.total_energy + move_cost,
+                        heap_tiebreaker=next(tiebreaker),
                     )
                 )
     return next_states
@@ -183,7 +199,7 @@ def get_minimum_energy_required(puzzle_input):
     initial_state, room_depth = _get_initial_state(puzzle_input)
     states = [initial_state]
     while len(states) > 0:
-        curr_state = states.pop()
+        curr_state = heapq.heappop(states)
         potential_next_states = _get_next_states(curr_state, room_depth)
         for next_state in potential_next_states:
             if next_state.total_energy >= minimum_energy:
@@ -191,7 +207,7 @@ def get_minimum_energy_required(puzzle_input):
             elif _is_organized(next_state):
                 minimum_energy = next_state.total_energy
             else:
-                states.append(next_state)
+                heapq.heappush(states, next_state)
     return minimum_energy
 
 
