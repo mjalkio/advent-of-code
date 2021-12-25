@@ -221,10 +221,13 @@ def get_num_cubes_on(puzzle_input, is_initialization_procedure=True):
 
         while len(cuboids_to_handle) > 0:
             next_cuboid = cuboids_to_handle.pop()
+            found_overlap = False
 
             for cuboid in on_cuboids:
                 if not _has_overlap(next_cuboid, cuboid):
                     continue
+
+                found_overlap = True
 
                 on_cuboids.remove(cuboid)
                 overlap, next_subcuboids, subcuboids = _handle_overlap(
@@ -240,7 +243,7 @@ def get_num_cubes_on(puzzle_input, is_initialization_procedure=True):
                 break
 
             # Did not find an overlap
-            if state == "on":
+            if not found_overlap and state == "on":
                 on_cuboids.add(next_cuboid)
 
     return sum(_get_area(cuboid) for cuboid in on_cuboids)
