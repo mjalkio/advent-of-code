@@ -1,6 +1,3 @@
-from util import read_puzzle_input
-
-
 w = "w"
 x = "x"
 y = "y"
@@ -46,12 +43,7 @@ def run_program(program, inputs):
     return state
 
 
-def get_largest_model_number(puzzle_input):
-    return 0
-
-
 if __name__ == "__main__":
-    puzzle_input = read_puzzle_input()
-
-    print(f"Part 1: {get_largest_model_number(puzzle_input)}")
-    print(f"Part 2: {get_largest_model_number(puzzle_input)}")
+    # Solved manually, see notepad_3.txt
+    print("Part 1: 91599994399395")
+    print("Part 2: 71111591176151")
