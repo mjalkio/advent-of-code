@@ -206,45 +206,29 @@ def get_num_cubes_on(puzzle_input, is_initialization_procedure=True):
         ):
             continue
 
-        cuboids_to_handle = set(
-            [
-                Cuboid(
-                    min_x=min_x,
-                    max_x=max_x,
-                    min_y=min_y,
-                    max_y=max_y,
-                    min_z=min_z,
-                    max_z=max_z,
-                )
-            ]
+        next_cuboid = Cuboid(
+            min_x=min_x,
+            max_x=max_x,
+            min_y=min_y,
+            max_y=max_y,
+            min_z=min_z,
+            max_z=max_z,
         )
 
-        while len(cuboids_to_handle) > 0:
-            next_cuboid = cuboids_to_handle.pop()
-            found_overlap = False
+        new_on_cuboids = set()
+        for cuboid in on_cuboids:
+            if not _has_overlap(next_cuboid, cuboid):
+                new_on_cuboids.add(cuboid)
+                continue
 
-            for cuboid in on_cuboids:
-                if not _has_overlap(next_cuboid, cuboid):
-                    continue
+            _, _, subcuboids = _handle_overlap(next_cuboid, cuboid)
 
-                found_overlap = True
+            new_on_cuboids.update(subcuboids)
 
-                on_cuboids.remove(cuboid)
-                overlap, next_subcuboids, subcuboids = _handle_overlap(
-                    next_cuboid, cuboid
-                )
-                if state == "on":
-                    on_cuboids.add(overlap)
-                    on_cuboids.update(subcuboids)
-                else:
-                    on_cuboids.update(subcuboids)
-
-                cuboids_to_handle.update(next_subcuboids)
-                break
-
-            # Did not find an overlap
-            if not found_overlap and state == "on":
-                on_cuboids.add(next_cuboid)
+        # Did not find an overlap
+        if state == "on":
+            new_on_cuboids.add(next_cuboid)
+        on_cuboids = new_on_cuboids
 
     return sum(_get_area(cuboid) for cuboid in on_cuboids)
 
