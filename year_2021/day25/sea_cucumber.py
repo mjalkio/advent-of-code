@@ -2,7 +2,13 @@ from util import read_puzzle_input
 
 
 def get_num_steps_no_movement(puzzle_input):
-    return 0
+    num_steps = 0
+    locations = {}
+    for y, line in enumerate(puzzle_input.split("\n")):
+        for x, char in enumerate(line):
+            if char != '.':
+                locations[(x, y)] = char
+    return num_steps
 
 
 if __name__ == "__main__":
