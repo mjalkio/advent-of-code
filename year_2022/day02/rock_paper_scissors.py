@@ -13,12 +13,12 @@ MY_CHOICE_MAP = {
     "Y": PAPER,
     "Z": SCISSORS,
 }
-LOSS_MAP = {
+WIN_MAP = {
     ROCK: PAPER,
     PAPER: SCISSORS,
     SCISSORS: ROCK,
 }
-WIN_MAP = {
+LOSS_MAP = {
     PAPER: ROCK,
     SCISSORS: PAPER,
     ROCK: SCISSORS,
