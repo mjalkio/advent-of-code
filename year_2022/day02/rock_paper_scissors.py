@@ -27,7 +27,11 @@ def get_score(puzzle_input):
         opp_choice = OPP_CHOICE_MAP[opp]
         my_choice = MY_CHOICE_MAP[me]
         score += my_choice
-        if (my_choice == ROCK and opp_choice == SCISSORS) or my_choice > opp_choice:
+        if (
+            (my_choice == ROCK and opp_choice == SCISSORS)
+            or (my_choice == PAPER and opp_choice == ROCK)
+            or (my_choice == SCISSORS and opp_choice == PAPER)
+        ):
             score += 6
         elif my_choice == opp_choice:
             score += 3
