@@ -39,8 +39,12 @@ def get_score(puzzle_input):
     return score
 
 
+def get_correct_score(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_score(puzzle_input)}")
-    print(f"Part 2: {get_score(puzzle_input)}")
+    print(f"Part 2: {get_correct_score(puzzle_input)}")
