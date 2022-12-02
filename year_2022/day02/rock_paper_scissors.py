@@ -13,6 +13,16 @@ MY_CHOICE_MAP = {
     "Y": PAPER,
     "Z": SCISSORS,
 }
+LOSS_MAP = {
+    ROCK: PAPER,
+    PAPER: SCISSORS,
+    SCISSORS: ROCK,
+}
+WIN_MAP = {
+    PAPER: ROCK,
+    SCISSORS: PAPER,
+    ROCK: SCISSORS,
+}
 
 
 def get_score(puzzle_input):
@@ -40,7 +50,26 @@ def get_score(puzzle_input):
 
 
 def get_correct_score(puzzle_input):
-    return 0
+    rounds = puzzle_input.split("\n")
+    score = 0
+    for rnd in rounds:
+        if rnd == "":
+            continue
+
+        opp, me = rnd.split()
+        opp_choice = OPP_CHOICE_MAP[opp]
+        if me == "Z":
+            # Win
+            score += 6
+            score += WIN_MAP[opp_choice]
+        elif me == "X":
+            # Lose
+            score += LOSS_MAP[opp_choice]
+        else:
+            # Draw
+            score += 3
+            score += opp_choice
+    return score
 
 
 if __name__ == "__main__":
