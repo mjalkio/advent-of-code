@@ -24,7 +24,24 @@ def sum_of_common_priorities(puzzle_input):
 
 
 def sum_of_badge_priorities(puzzle_input):
-    return 0
+    answer = 0
+    rucksacks = [line for line in puzzle_input.split("\n") if line != ""]
+    while len(rucksacks) > 0:
+        first = rucksacks.pop(0)
+        second = rucksacks.pop(0)
+        third = rucksacks.pop(0)
+
+        common = set(first).intersection(set(second)).intersection(set(third))
+        assert len(common) == 1
+        common_item = common.pop()
+
+        if common_item >= "a":
+            # Lowercase letter
+            answer += ord(common_item) - ord("a") + 1
+        else:
+            # Uppercase letter
+            answer += ord(common_item) - ord("A") + 1 + 26
+    return answer
 
 
 if __name__ == "__main__":
