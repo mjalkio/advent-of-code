@@ -18,8 +18,12 @@ def num_fully_contained_assignments(puzzle_input):
     return num
 
 
+def num_overlapping_pairs(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_fully_contained_assignments(puzzle_input)}")
-    print(f"Part 2: {num_fully_contained_assignments(puzzle_input)}")
+    print(f"Part 2: {num_overlapping_pairs(puzzle_input)}")
