@@ -19,7 +19,20 @@ def num_fully_contained_assignments(puzzle_input):
 
 
 def num_overlapping_pairs(puzzle_input):
-    return 0
+    num = 0
+    for pair in puzzle_input.split("\n"):
+        if pair == "":
+            continue
+
+        assignment_1, assignment_2 = pair.split(",")
+        ass_1_start, ass_1_end = [int(num) for num in assignment_1.split("-")]
+        ass_2_start, ass_2_end = [int(num) for num in assignment_2.split("-")]
+
+        ass_1_sections = set(range(ass_1_start, ass_1_end + 1))
+        ass_2_sections = set(range(ass_2_start, ass_2_end + 1))
+        if len(ass_1_sections.intersection(ass_2_sections)) > 0:
+            num += 1
+    return num
 
 
 if __name__ == "__main__":
