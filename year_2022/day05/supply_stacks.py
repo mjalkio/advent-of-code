@@ -1,7 +1,7 @@
 from util import read_puzzle_input
 
 
-def get_top_crates(puzzle_input):
+def get_top_crates(puzzle_input, cratemover_model="9000"):
     starting_stacks, procedure = puzzle_input.split("\n\n")
 
     starting_stack_lines = starting_stacks.split("\n")
