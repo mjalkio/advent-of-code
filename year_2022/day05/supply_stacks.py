@@ -10,15 +10,22 @@ def get_top_crates(puzzle_input):
     for _ in range(num_stacks):
         stacks.append([])
 
-    for line in starting_stack_lines:
+    for level in starting_stack_lines:
         i = 0
-        while len(line) > 0:
-            crate, line = line[1], line[4:]
+        while len(level) > 0:
+            crate, level = level[1], level[4:]
             if crate != " ":
                 stacks[i].append(crate)
             i += 1
     for stack in stacks:
         stack.reverse()
+
+    for step in procedure.split("\n"):
+        move_instr, stack_instr = step.split(" from ")
+        num_move = int(move_instr[5:])
+        from_stack, to_stack = [
+            int(stack_idx) for stack_idx in stack_instr.split(" to ")
+        ]
 
     return 0
 
