@@ -24,10 +24,15 @@ def get_top_crates(puzzle_input):
         move_instr, stack_instr = step.split(" from ")
         num_move = int(move_instr[5:])
         from_stack, to_stack = [
-            int(stack_idx) for stack_idx in stack_instr.split(" to ")
+            int(stack_idx) - 1 for stack_idx in stack_instr.split(" to ")
         ]
 
-    return 0
+        for _ in range(num_move):
+            moved_crate = stacks[from_stack].pop()
+            stacks[to_stack].append(moved_crate)
+
+    top_crates = [stack[-1] for stack in stacks]
+    return "".join(top_crates)
 
 
 if __name__ == "__main__":
