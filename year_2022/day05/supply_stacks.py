@@ -27,9 +27,16 @@ def get_top_crates(puzzle_input, cratemover_model="9000"):
             int(stack_idx) - 1 for stack_idx in stack_instr.split(" to ")
         ]
 
-        for _ in range(num_move):
-            moved_crate = stacks[from_stack].pop()
-            stacks[to_stack].append(moved_crate)
+        if cratemover_model == "9000":
+            for _ in range(num_move):
+                moved_crate = stacks[from_stack].pop()
+                stacks[to_stack].append(moved_crate)
+        elif cratemover_model == "9001":
+            moved_crates = stacks[from_stack][-num_move:]
+            stacks[from_stack] = stacks[from_stack][:-num_move]
+            stacks[to_stack] = stacks[to_stack] + moved_crates
+        else:
+            raise ValueError(f"Unsupported CrateMover model: {cratemover_model}")
 
     top_crates = [stack[-1] for stack in stacks]
     return "".join(top_crates)
@@ -39,4 +46,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_top_crates(puzzle_input)}")
-    print(f"Part 2: {get_top_crates(puzzle_input)}")
+    print(f"Part 2: {get_top_crates(puzzle_input, cratemover_model='9001')}")
