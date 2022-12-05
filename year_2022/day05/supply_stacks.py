@@ -2,6 +2,9 @@ from util import read_puzzle_input
 
 
 def get_top_crates(puzzle_input):
+    starting_stacks, procedure = puzzle_input.split("\n\n")
+    starting_stack_lines = starting_stacks.split("\n")
+    num_stacks = len(starting_stack_lines.pop().split("   "))
     return 0
 
 
