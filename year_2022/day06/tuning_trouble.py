@@ -2,7 +2,10 @@ from util import read_puzzle_input
 
 
 def get_first_market_idx(puzzle_input):
-    return 0
+    idx = 4
+    while len(set(puzzle_input[idx - 4 : idx])) != 4:
+        idx += 1
+    return idx
 
 
 if __name__ == "__main__":
