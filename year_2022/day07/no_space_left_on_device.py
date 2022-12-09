@@ -5,6 +5,8 @@ from util import read_puzzle_input
 
 
 SMALL_DIRECTORY_SIZE = 100_000
+TOTAL_DISK_SIZE = 70_000_000
+UPDATE_SIZE = 30_000_000
 
 
 def sum_total_size_small_directories(puzzle_input):
@@ -12,7 +14,7 @@ def sum_total_size_small_directories(puzzle_input):
     assert lines[0] == "$ cd /"
 
     current_dir = Path("/")
-    total_sizes = defaultdict(int)
+    dir_sizes = defaultdict(int)
 
     i = 1
     while i < len(lines):
@@ -24,10 +26,10 @@ def sum_total_size_small_directories(puzzle_input):
                     pass
                 else:
                     file_size, file_name = lines[i].split()
-                    total_sizes[current_dir] += int(file_size)
+                    dir_sizes[current_dir] += int(file_size)
 
                     for parent_dir in current_dir.parents:
-                        total_sizes[parent_dir] += int(file_size)
+                        dir_sizes[parent_dir] += int(file_size)
                 i += 1
         elif lines[i] == "$ cd ..":
             current_dir = current_dir.parent
@@ -36,11 +38,15 @@ def sum_total_size_small_directories(puzzle_input):
             assert lines[i].startswith("$ cd ")
             current_dir = Path(current_dir, lines[i][5:])
             i += 1
-    return sum(size for size in total_sizes.values() if size <= SMALL_DIRECTORY_SIZE)
+    return sum(size for size in dir_sizes.values() if size <= SMALL_DIRECTORY_SIZE)
+
+
+def get_directory_to_delete_size(puzzle_input):
+    return 0
 
 
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {sum_total_size_small_directories(puzzle_input)}")
-    print(f"Part 2: {sum_total_size_small_directories(puzzle_input)}")
+    print(f"Part 2: {get_directory_to_delete_size(puzzle_input)}")
