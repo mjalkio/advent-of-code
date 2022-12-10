@@ -12,7 +12,7 @@ def _is_touching(head_x, head_y, tail_x, tail_y):
     return abs(head_x - tail_x) <= 1 and abs(head_y - tail_y) <= 1
 
 
-def num_positions_tail_visits(puzzle_input):
+def num_positions_tail_visits(puzzle_input, num_knots=2):
     steps = []
     for line in puzzle_input.split("\n"):
         if line == "":
