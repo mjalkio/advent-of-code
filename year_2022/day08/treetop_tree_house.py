@@ -9,8 +9,25 @@ def num_visible_trees(puzzle_input):
     tree_height_map = {}
     for i in range(num_rows):
         for j in range(num_cols):
-            tree_height_map[(i, j)] = int(lines[i][j])
-    return 0
+            tree_height_map[i, j] = int(lines[i][j])
+
+    num_visible = 0
+    for i, j in tree_height_map:
+        if (
+            all(tree_height_map[ii, j] < tree_height_map[i, j] for ii in range(0, i))
+            or all(
+                tree_height_map[ii, j] < tree_height_map[i, j]
+                for ii in range(i + 1, num_rows)
+            )
+            or all(tree_height_map[i, jj] < tree_height_map[i, j] for jj in range(0, j))
+            or all(
+                tree_height_map[i, jj] < tree_height_map[i, j]
+                for jj in range(j + 1, num_cols)
+            )
+        ):
+            num_visible += 1
+
+    return num_visible
 
 
 if __name__ == "__main__":
