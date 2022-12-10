@@ -30,6 +30,10 @@ def num_visible_trees(puzzle_input):
     return num_visible
 
 
+def highest_scenic_score(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
