@@ -45,12 +45,18 @@ def highest_scenic_score(puzzle_input):
         scenic_score = 1
 
         for di, dj in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
-            num_visible_trees = 1
+            num_visible_trees = 0
             ii = i + di
             jj = j + dj
-            while (ii, jj) in tree_height_map and tree_height_map[
-                ii, jj
-            ] < tree_height_map[i, j]:
+            while True:
+                if (ii, jj) not in tree_height_map:
+                    # We've gone out of bounds
+                    break
+                if tree_height_map[ii, jj] >= tree_height_map[i, j]:
+                    # This tree blocks our view, but we can see it
+                    num_visible_trees += 1
+                    break
+
                 num_visible_trees += 1
                 ii += di
                 jj += dj
@@ -64,4 +70,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_visible_trees(puzzle_input)}")
-    print(f"Part 2: {num_visible_trees(puzzle_input)}")
+    print(f"Part 2: {highest_scenic_score(puzzle_input)}")
