@@ -21,7 +21,8 @@ def num_positions_tail_visits(puzzle_input, num_knots=2):
         steps += [DIRECTION_MAP[direction]] * int(num_steps)
 
     knot_positions = [(0, 0)] * num_knots
-    tail_positions = set(knot_positions[-1])
+    tail_positions = set()
+    tail_positions.add(knot_positions[-1])
     for dx, dy in steps:
         knot_positions[0] = (knot_positions[0][0] + dx, knot_positions[0][1] + dy)
 
@@ -54,4 +55,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_positions_tail_visits(puzzle_input)}")
-    print(f"Part 2: {num_positions_tail_visits(puzzle_input)}")
+    print(f"Part 2: {num_positions_tail_visits(puzzle_input, num_knots=10)}")
