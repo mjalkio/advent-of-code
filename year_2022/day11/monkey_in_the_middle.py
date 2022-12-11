@@ -57,7 +57,8 @@ def get_monkey_business(puzzle_input, num_rounds=20, num_focus=2):
                 else:
                     monkeys[monkey[IF_FALSE]][ITEMS].append(item)
 
-    return 0
+    inspection_nums = sorted([m[ITEMS_INSPECTED] for m in monkeys])
+    return prod(inspection_nums[-num_focus:])
 
 
 if __name__ == "__main__":
