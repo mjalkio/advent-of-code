@@ -19,19 +19,16 @@ def sum_interesting_signal_strengths(puzzle_input):
     signal_strengths = []
     image = ""
     for instr in instructions:
+        image = _render_image(image=image, pos=cycle_value - 1, X=X)
         signal_strengths.append(cycle_value * X)
         if instr == "noop":
-            image = _render_image(image=image, pos=cycle_value - 1, X=X)
             cycle_value += 1
         else:
             V = int(instr[5:])
-            image = _render_image(image=image, pos=cycle_value - 1, X=X)
             cycle_value += 1
-
+            image = _render_image(image=image, pos=cycle_value - 1, X=X)
             signal_strengths.append(cycle_value * X)
             X += V
-
-            image = _render_image(image=image, pos=cycle_value - 1, X=X)
             cycle_value += 1
     print(image)
     return sum(
