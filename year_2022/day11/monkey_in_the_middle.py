@@ -44,6 +44,7 @@ def get_monkey_business(puzzle_input, num_rounds=20, very_worried=False):
 
         monkeys.append(monkey)
 
+    modulo = prod([m[DIVISIBLE_BY] for m in monkeys])
     for _ in range(num_rounds):
         for monkey in monkeys:
             while len(monkey[ITEMS]) > 0:
@@ -54,6 +55,8 @@ def get_monkey_business(puzzle_input, num_rounds=20, very_worried=False):
                 item = monkey[OPERATOR]([left, right])
                 if not very_worried:
                     item //= 3
+
+                item %= modulo
 
                 if item % monkey[DIVISIBLE_BY] == 0:
                     monkeys[monkey[IF_TRUE]][ITEMS].append(item)
