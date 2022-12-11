@@ -15,8 +15,10 @@ IF_TRUE = "if_true"
 IF_FALSE = "if_false"
 ITEMS_INSPECTED = "items_inspected"
 
+NUM_FOCUS = 2
 
-def get_monkey_business(puzzle_input, num_rounds=20, num_focus=2):
+
+def get_monkey_business(puzzle_input, num_rounds=20, very_worried=False):
     monkey_inputs = puzzle_input.split("\n\n")
     monkeys = []
     for monkey_attributes in monkey_inputs:
@@ -50,7 +52,8 @@ def get_monkey_business(puzzle_input, num_rounds=20, num_focus=2):
                 left = item if monkey[OP_LEFT] == OLD else monkey[OP_LEFT]
                 right = item if monkey[OP_RIGHT] == OLD else monkey[OP_RIGHT]
                 item = monkey[OPERATOR]([left, right])
-                item //= 3
+                if not very_worried:
+                    item //= 3
 
                 if item % monkey[DIVISIBLE_BY] == 0:
                     monkeys[monkey[IF_TRUE]][ITEMS].append(item)
@@ -58,11 +61,13 @@ def get_monkey_business(puzzle_input, num_rounds=20, num_focus=2):
                     monkeys[monkey[IF_FALSE]][ITEMS].append(item)
 
     inspection_nums = sorted([m[ITEMS_INSPECTED] for m in monkeys])
-    return prod(inspection_nums[-num_focus:])
+    return prod(inspection_nums[-NUM_FOCUS:])
 
 
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_monkey_business(puzzle_input)}")
-    print(f"Part 2: {get_monkey_business(puzzle_input)}")
+    print(
+        f"Part 2: {get_monkey_business(puzzle_input, num_rounds=10_000, very_worried=True)}"
+    )
