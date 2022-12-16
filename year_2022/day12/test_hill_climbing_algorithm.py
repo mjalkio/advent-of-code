@@ -10,4 +10,4 @@ def test_fewest_steps():
 
 
 def test_fewest_steps_possible():
-    assert fewest_steps_possible(read_puzzle_input("test_input.txt")) == 28
+    assert fewest_steps_possible(read_puzzle_input("test_input.txt")) == 29

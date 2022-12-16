@@ -1,4 +1,5 @@
 import heapq
+import math
 from collections import namedtuple
 
 from util import read_puzzle_input
@@ -6,7 +7,7 @@ from util import read_puzzle_input
 Node = namedtuple("Node", ["num_steps", "coords"])
 
 
-def fewest_steps(puzzle_input):
+def _parse_input(puzzle_input):
     lines = puzzle_input.split("\n")
     heightmap = {}
     for y in range(len(lines)):
@@ -20,7 +21,10 @@ def fewest_steps(puzzle_input):
                 heightmap[(x, y)] = ord("z")
             else:
                 heightmap[(x, y)] = ord(lines[y][x])
+    return heightmap, starting_pos, best_signal_pos
 
+
+def _bfs(heightmap, starting_pos, best_signal_pos):
     # Breadth-first search (BFS)
     queue = [Node(num_steps=0, coords=starting_pos)]
     visited = set([starting_pos])
@@ -51,14 +55,27 @@ def fewest_steps(puzzle_input):
                     coords=(x, y),
                 ),
             )
+    return math.inf
+
+
+def fewest_steps(puzzle_input):
+    heightmap, starting_pos, best_signal_pos = _parse_input(puzzle_input)
+    return _bfs(heightmap, starting_pos, best_signal_pos)
 
 
 def fewest_steps_possible(puzzle_input):
-    return 0
+    heightmap, _, best_signal_pos = _parse_input(puzzle_input)
+    return min(
+        [
+            _bfs(heightmap, pos, best_signal_pos)
+            for pos, height in heightmap.items()
+            if height == ord("a")
+        ]
+    )
 
 
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {fewest_steps(puzzle_input)}")
-    print(f"Part 2: {fewest_steps(puzzle_input)}")
+    print(f"Part 2: {fewest_steps_possible(puzzle_input)}")
