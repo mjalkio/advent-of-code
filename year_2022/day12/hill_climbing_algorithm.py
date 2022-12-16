@@ -23,12 +23,11 @@ def fewest_steps(puzzle_input):
 
     # Breadth-first search (BFS)
     queue = [Node(num_steps=0, coords=starting_pos)]
-    visited = set()
+    visited = set([starting_pos])
     while len(queue) > 0:
         current_node = heapq.heappop(queue)
         if current_node.coords == best_signal_pos:
             return current_node.num_steps
-        visited.add(current_node.coords)
 
         curr_x, curr_y = current_node.coords
         neighbors = [
@@ -44,6 +43,7 @@ def fewest_steps(puzzle_input):
                 or heightmap[(x, y)] > heightmap[(curr_x, curr_y)] + 1
             ):
                 continue
+            visited.add((x, y))
             heapq.heappush(
                 queue,
                 Node(
