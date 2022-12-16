@@ -53,6 +53,10 @@ def fewest_steps(puzzle_input):
             )
 
 
+def fewest_steps_possible(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
