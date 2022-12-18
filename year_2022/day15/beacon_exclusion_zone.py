@@ -31,8 +31,28 @@ def num_positions_cannot_contain_beacon(puzzle_input, row_num=2_000_000):
     return len(positions_cannot_contain_beacon)
 
 
-def distress_beacon_tuning_frequency(puzzle_input, min_coord=0, max_coord=4_000_000):
-    return 0
+def distress_beacon_tuning_frequency(puzzle_input, max_coord=4_000_000):
+    sensors = []
+    for line in puzzle_input.split("\n"):
+        if line == "":
+            continue
+        sensor, beacon = line.split(": ")
+        sensor_x = int(sensor[sensor.find("=") + 1 : sensor.find(",")])
+        sensor_y = int(sensor[sensor.rfind("=") + 1 :])
+        beacon_x = int(beacon[beacon.find("=") + 1 : beacon.find(",")])
+        beacon_y = int(beacon[beacon.rfind("=") + 1 :])
+
+        distance = manhattan_distance((sensor_x, sensor_y), (beacon_x, beacon_y))
+
+        sensors.append((sensor_x, sensor_y, distance))
+
+    for x in range(max_coord):
+        for y in range(max_coord):
+            if all(
+                manhattan_distance((x, y), (sensor_x, sensor_y)) > distance
+                for sensor_x, sensor_y, distance in sensors
+            ):
+                return x * 4_000_000 + y
 
 
 if __name__ == "__main__":
