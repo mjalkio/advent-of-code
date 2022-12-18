@@ -18,13 +18,17 @@ def num_positions_cannot_contain_beacon(puzzle_input, row_num=2_000_000):
 
         distance = manhattan_distance((sensor_x, sensor_y), (beacon_x, beacon_y))
 
-        for x in range(sensor_x - distance, sensor_x + distance + 1):
-            for y in range(sensor_y - distance, sensor_y + distance + 1):
-                if (x, y) != (beacon_x, beacon_y) and distance >= manhattan_distance(
-                    (sensor_x, sensor_y), (x, y)
+        if row_num in range(sensor_y - distance, sensor_y + distance + 1):
+            for x in range(sensor_x - distance, sensor_x + distance + 1):
+                if (x, row_num) != (
+                    beacon_x,
+                    beacon_y,
+                ) and distance >= manhattan_distance(
+                    (sensor_x, sensor_y), (x, row_num)
                 ):
-                    positions_cannot_contain_beacon.add((x, y))
-    return sum(1 for x, y in positions_cannot_contain_beacon if y == row_num)
+                    positions_cannot_contain_beacon.add((x, row_num))
+
+    return len(positions_cannot_contain_beacon)
 
 
 if __name__ == "__main__":
