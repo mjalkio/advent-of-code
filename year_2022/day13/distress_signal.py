@@ -2,6 +2,15 @@ from util import read_puzzle_input
 
 
 def is_ordered(left, right):
+    left_lst = eval(left)
+    right_lst = eval(right)
+    min_len = min(len(left_lst), len(right_lst))
+    for i in range(min_len):
+        if isinstance(left_lst[i], int) and isinstance(right_lst[i], int):
+            if left_lst[i] < right_lst[i]:
+                return True
+            elif left_lst[i] > right_lst[i]:
+                return False
     return False
 
 
