@@ -24,7 +24,7 @@ def is_ordered(left, right):
 
     if len(left_lst) < len(right_lst):
         return True
-    elif len(right_lst) > len(left_lst):
+    elif len(left_lst) > len(right_lst):
         return False
 
     return None
