@@ -1,4 +1,8 @@
+from functools import cmp_to_key
+
 from util import read_puzzle_input
+
+DIVIDER_PACKETS = ["[[2]]", "[[6]]"]
 
 
 def is_ordered(left, right):
@@ -41,8 +45,20 @@ def sum_indices_ordered_pairs(puzzle_input):
     return result
 
 
+def _comparator(left, right):
+    if is_ordered(left, right):
+        return -1
+    return 1
+
+
 def decoder_key(puzzle_input):
-    return 0
+    packets = [
+        line for line in puzzle_input.split("\n") if line != ""
+    ] + DIVIDER_PACKETS
+    sorted_packets = sorted(packets, key=cmp_to_key(_comparator))
+    return (sorted_packets.index(DIVIDER_PACKETS[0]) + 1) * (
+        sorted_packets.index(DIVIDER_PACKETS[1]) + 1
+    )
 
 
 if __name__ == "__main__":
