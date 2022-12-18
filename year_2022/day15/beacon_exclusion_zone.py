@@ -31,8 +31,12 @@ def num_positions_cannot_contain_beacon(puzzle_input, row_num=2_000_000):
     return len(positions_cannot_contain_beacon)
 
 
+def distress_beacon_tuning_frequency(puzzle_input, min_coord=0, max_coord=4_000_000):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_positions_cannot_contain_beacon(puzzle_input)}")
-    print(f"Part 2: {num_positions_cannot_contain_beacon(puzzle_input)}")
+    print(f"Part 2: {distress_beacon_tuning_frequency(puzzle_input)}")
