@@ -50,6 +50,7 @@ def most_pressure_possible(puzzle_input):
         i = 0
         while i < len(order) and minute <= NUM_MINUTES:
             minute += distances[current_location, order[i]] + 1
+            current_location = order[i]
             if minute > NUM_MINUTES:
                 break
             pressure_released += flow_rates[order[i]] * (NUM_MINUTES - minute)
