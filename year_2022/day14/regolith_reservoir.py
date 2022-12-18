@@ -26,7 +26,7 @@ def _print_map(sand_map):
         print(line)
 
 
-def num_resting_units(puzzle_input):
+def num_resting_units(puzzle_input, fall_to_floor=False):
     sand_map = {SAND_SOURCE: "+"}
 
     lines = puzzle_input.split("\n")
@@ -74,4 +74,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_resting_units(puzzle_input)}")
-    print(f"Part 2: {num_resting_units(puzzle_input)}")
+    print(f"Part 2: {num_resting_units(puzzle_input, fall_to_floor=True)}")
