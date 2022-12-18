@@ -15,7 +15,16 @@ def num_positions_cannot_contain_beacon(puzzle_input, row_num=2_000_000):
         sensor_y = int(sensor[sensor.rfind("=") + 1 :])
         beacon_x = int(beacon[beacon.find("=") + 1 : beacon.find(",")])
         beacon_y = int(beacon[beacon.rfind("=") + 1 :])
-    return 0
+
+        distance = manhattan_distance((sensor_x, sensor_y), (beacon_x, beacon_y))
+
+        for x in range(sensor_x - distance, sensor_x + distance + 1):
+            for y in range(sensor_y - distance, sensor_y + distance + 1):
+                if (x, y) != (beacon_x, beacon_y) and distance >= manhattan_distance(
+                    (sensor_x, sensor_y), (x, y)
+                ):
+                    positions_cannot_contain_beacon.add((x, y))
+    return sum(1 for x, y in positions_cannot_contain_beacon if y == row_num)
 
 
 if __name__ == "__main__":
