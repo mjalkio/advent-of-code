@@ -49,7 +49,25 @@ def num_resting_units(puzzle_input):
                     sand_map[x, y1] = "#"
             else:
                 raise ValueError("Uh oh!")
-    return 0
+
+    lowest_rock_y = max(y for _, y in sand_map.keys())
+
+    sand_x, sand_y = SAND_SOURCE
+    while sand_y <= lowest_rock_y:
+        if (sand_x, sand_y + 1) not in sand_map:
+            sand_y += 1
+        elif (sand_x - 1, sand_y + 1) not in sand_map:
+            sand_x -= 1
+            sand_y += 1
+        elif (sand_x + 1, sand_y + 1) not in sand_map:
+            sand_x += 1
+            sand_y += 1
+        else:
+            sand_map[sand_x, sand_y] = "o"
+            sand_x, sand_y = SAND_SOURCE
+
+    # If the sand drops below the lowest rock, it will fall forever
+    return sum(obj == "o" for obj in sand_map.values())
 
 
 if __name__ == "__main__":
