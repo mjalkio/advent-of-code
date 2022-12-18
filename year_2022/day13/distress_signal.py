@@ -11,7 +11,23 @@ def is_ordered(left, right):
                 return True
             elif left_lst[i] > right_lst[i]:
                 return False
-    return False
+            continue
+
+        if isinstance(left_lst[i], int):
+            left_lst[i] = [left_lst[i]]
+        if isinstance(right_lst[i], int):
+            right_lst[i] = [right_lst[i]]
+
+        result = is_ordered(str(left_lst[i]), str(right_lst[i]))
+        if result is not None:
+            return result
+
+    if len(left_lst) < len(right_lst):
+        return True
+    elif len(right_lst) > len(left_lst):
+        return False
+
+    return None
 
 
 def sum_indices_ordered_pairs(puzzle_input):
