@@ -1,11 +1,13 @@
 import math
-from itertools import permutations
+from collections import namedtuple
 
 from util import read_puzzle_input
 
 
 STARTING_LOCATION = "AA"
 NUM_MINUTES = 30
+
+Node = namedtuple("Node", ["valve", "pressure_released", "minute", "visited"])
 
 
 def most_pressure_possible(puzzle_input):
@@ -37,30 +39,30 @@ def most_pressure_possible(puzzle_input):
                 if distances[i, j] > distances[i, k] + distances[k, j]:
                     distances[i, j] = distances[i, k] + distances[k, j]
 
-    # Now compute all possible orders to traverse
-    all_possible_orders = permutations(
-        valve for valve in valves if flow_rates[valve] != 0
-    )
-
+    # Depth-first search (DFS)
+    useful_valves = set(valve for valve in valves if flow_rates[valve] != 0)
+    stack = [
+        Node(valve=STARTING_LOCATION, pressure_released=0, minute=1, visited=tuple())
+    ]
     most_pressure_possible = 0
-    for order in all_possible_orders:
-        pressure_released = 0
-        current_location = STARTING_LOCATION
-        minute = 1
-        i = 0
-        while i < len(order) and minute <= NUM_MINUTES:
-            minute += distances[current_location, order[i]] + 1
-            current_location = order[i]
-            if minute > NUM_MINUTES:
-                break
-            pressure_released += flow_rates[current_location] * (
-                NUM_MINUTES - minute + 1
-            )
-            i += 1
-        if pressure_released > most_pressure_possible:
-            most_pressure_possible = pressure_released
-            print(most_pressure_possible)
-
+    while len(stack) > 0:
+        valve, pressure_released, minute, visited = stack.pop()
+        for neighbor in useful_valves:
+            if (
+                neighbor not in visited
+                and minute + distances[valve, neighbor] + 1 <= NUM_MINUTES
+            ):
+                new_time = minute + distances[valve, neighbor] + 1
+                stack.append(
+                    Node(
+                        valve=neighbor,
+                        pressure_released=pressure_released
+                        + (flow_rates[neighbor] * (NUM_MINUTES - new_time + 1)),
+                        minute=new_time,
+                        visited=visited + (neighbor,),
+                    )
+                )
+        most_pressure_possible = max(pressure_released, most_pressure_possible)
     return most_pressure_possible
 
 
