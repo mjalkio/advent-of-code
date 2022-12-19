@@ -22,8 +22,12 @@ def approximate_surface_area(puzzle_input):
     return approx_surface_area
 
 
+def exterior_surface_area(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {approximate_surface_area(puzzle_input)}")
-    print(f"Part 2: {approximate_surface_area(puzzle_input)}")
+    print(f"Part 2: {exterior_surface_area(puzzle_input)}")
