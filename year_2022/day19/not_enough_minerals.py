@@ -12,8 +12,23 @@ State = namedtuple("State", ["minute", "ore_counts", "robot_counts"])
 TIME_LIMIT = 24
 
 
-def _can_build(robot_idx, minute, robot_counts, robot_costs):
-    return False
+def _build_plan(robot_idx, minute, ore_counts, robot_counts, robot_costs):
+    # We need to be able to produce the materials
+    cost = robot_costs[robot_idx]
+    for i in range(len(cost)):
+        if cost[i] > 0 and robot_counts[i] == 0:
+            return False, None
+
+    # We need to have enough time
+    time_needed = 0
+    for i in range(len(cost)):
+        while cost[i] > ore_counts[i] + time_needed * robot_counts[i]:
+            time_needed += 1
+
+    if minute + time_needed > TIME_LIMIT:
+        return False, None
+
+    return True, time_needed
 
 
 def sum_quality_levels(puzzle_input):
@@ -39,12 +54,14 @@ def sum_quality_levels(puzzle_input):
             minute, ore_counts, robot_counts = stack.pop()
             can_build_more = False
             for robot_idx in range(len(robot_costs)):
-                if _can_build(
+                can_build, time_needed = _build_plan(
                     robot_idx=robot_idx,
                     minute=minute,
+                    ore_counts=ore_counts,
                     robot_counts=robot_counts,
                     robot_costs=robot_costs,
-                ):
+                )
+                if can_build:
                     can_build_more = True
 
             if not can_build_more:
