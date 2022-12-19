@@ -2,9 +2,9 @@ from util import read_puzzle_input
 
 ROOM_WIDTH = 7
 
-HORIZONTAL_LINE = ((0, 0), (1, 0), (2, 0), (3, 0))
+HORIZONTAL_LINE = ((0, 1), (1, 1), (2, 1), (3, 1))
 PLUS = ((1, 1), (0, 2), (1, 2), (2, 2), (1, 3))
-L = ((0, 0), (1, 0), (2, 0), (2, 1), (2, 2))
+L = ((0, 1), (1, 1), (2, 1), (2, 2), (2, 3))
 VERTICAL_LINE = ((0, 1), (0, 2), (0, 3), (0, 4))
 BOX = ((0, 1), (1, 1), (0, 2), (1, 2))
 
@@ -12,7 +12,7 @@ SHAPE_ORDER = (HORIZONTAL_LINE, PLUS, L, VERTICAL_LINE, BOX)
 
 RIGHT = ">"
 
-PRINT_BUFFER = 6
+PRINT_BUFFER = 7
 
 
 def _jet_stream_move_invalid(next_coords, room):
@@ -30,7 +30,7 @@ def _add(point_a, point_b):
 
 
 def _print_room(room, rock_coords):
-    str_room = ""
+    str_room = "\n\n"
     if len(room) == 0:
         max_y = PRINT_BUFFER
     else:
@@ -56,7 +56,7 @@ def rock_tower_height(puzzle_input, rock_limit=2022):
     jet_pushes = 0
     while num_rocks_fallen < rock_limit:
         next_rock = SHAPE_ORDER[num_rocks_fallen % len(SHAPE_ORDER)]
-        rock_height = max(y for _, y in room) + 3 if num_rocks_fallen > 0 else 3
+        rock_height = max(y for _, y in room) + 3 if num_rocks_fallen > 0 else 2
         rock_coords = [_add((2, rock_height), coord) for coord in next_rock]
 
         while True:
@@ -80,11 +80,11 @@ def rock_tower_height(puzzle_input, rock_limit=2022):
             rock_coords = next_coords
         room.update(rock_coords)
         num_rocks_fallen += 1
-    return max(y for _, y in room)
+    return max(y for _, y in room) + 1
 
 
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {rock_tower_height(puzzle_input)}")
-    print(f"Part 2: {rock_tower_height(puzzle_input)}")
+    print(f"Part 2: {rock_tower_height(puzzle_input, rock_limit=1_000_000_000_000)}")
