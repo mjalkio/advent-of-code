@@ -47,11 +47,19 @@ def distress_beacon_tuning_frequency(puzzle_input, max_coord=4_000_000):
         sensors.append((sensor_x, sensor_y, distance))
 
     for x in range(max_coord):
-        for y in range(max_coord):
-            if all(
-                manhattan_distance((x, y), (sensor_x, sensor_y)) > distance
-                for sensor_x, sensor_y, distance in sensors
-            ):
+        if x % (max_coord / 100) == 0:
+            print(f"Search {x / max_coord * 100}% complete...")
+        y = 0
+        while y <= max_coord:
+            found_distress_beacon = True
+            for sensor_x, sensor_y, distance in sensors:
+                if manhattan_distance((x, y), (sensor_x, sensor_y)) <= distance:
+                    found_distress_beacon = False
+                    x_dist = abs(x - sensor_x)
+                    y_dist = abs(y - sensor_y)
+                    y += distance - x_dist - y_dist + 1
+                    break
+            if found_distress_beacon:
                 return x * 4_000_000 + y
 
 
