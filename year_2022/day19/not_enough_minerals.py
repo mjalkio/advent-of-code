@@ -12,23 +12,55 @@ State = namedtuple("State", ["minute", "ore_counts", "robot_counts"])
 TIME_LIMIT = 24
 
 
-def _build_plan(robot_idx, minute, ore_counts, robot_counts, robot_costs):
-    # We need to be able to produce the materials
-    cost = robot_costs[robot_idx]
-    for i in range(len(cost)):
-        if cost[i] > 0 and robot_counts[i] == 0:
-            return False, None
+def _add(a, b):
+    return Minerals(a[0] + b[0], a[1] + b[1], a[2] + b[2], a[3] + b[3])
 
-    # We need to have enough time
-    time_needed = 0
-    for i in range(len(cost)):
-        while cost[i] > ore_counts[i] + time_needed * robot_counts[i]:
-            time_needed += 1
 
-    if minute + time_needed > TIME_LIMIT:
-        return False, None
+def _sub(a, b):
+    return Minerals(a[0] - b[0], a[1] - b[1], a[2] - b[2], a[3] - b[3])
 
-    return True, time_needed
+
+def _increment(minerals, idx):
+    minerals_list = list(minerals)
+    minerals_list[idx] += 1
+    return Minerals._make(minerals_list)
+
+
+def _greater_than(a, b):
+    return any(a[i] > b[i] for i in range(len(a)))
+
+
+def _next_states(state, robot_costs):
+    minute, ore_counts, robot_counts = state
+    next_states = []
+
+    for robot_idx in range(len(robot_costs)):
+        cost = robot_costs[robot_idx]
+        if any(cost[i] > 0 and robot_counts[i] == 0 for i in range(len(cost))):
+            # We aren't producing required materials for this robot
+            # TODO: We can avoid calculating this every time
+            continue
+
+        # We need to have enough time
+        new_minute = minute
+        new_ore_counts = ore_counts
+        while new_minute < TIME_LIMIT and _greater_than(cost, new_ore_counts):
+            new_minute += 1
+            new_ore_counts = _add(new_ore_counts, robot_counts)
+
+        if new_minute != TIME_LIMIT:
+            new_ore_counts = _sub(new_ore_counts, cost)
+            new_ore_counts = _add(new_ore_counts, robot_counts)
+            new_robot_counts = _increment(robot_counts, robot_idx)
+            next_states.append(
+                State(
+                    minute=new_minute + 1,
+                    ore_counts=new_ore_counts,
+                    robot_counts=new_robot_counts,
+                )
+            )
+
+    return next_states
 
 
 def sum_quality_levels(puzzle_input):
@@ -49,25 +81,19 @@ def sum_quality_levels(puzzle_input):
             geode=geode_robot_cost,
         )
 
-        stack = [State(minute=1, ore_counts=Minerals(), robot_counts=Minerals(ore=1))]
+        stack = [State(minute=0, ore_counts=Minerals(), robot_counts=Minerals(ore=1))]
         while len(stack) > 0:
-            minute, ore_counts, robot_counts = stack.pop()
-            can_build_more = False
-            for robot_idx in range(len(robot_costs)):
-                can_build, time_needed = _build_plan(
-                    robot_idx=robot_idx,
-                    minute=minute,
-                    ore_counts=ore_counts,
-                    robot_counts=robot_counts,
-                    robot_costs=robot_costs,
-                )
-                if can_build:
-                    can_build_more = True
+            state = stack.pop()
+            next_states = _next_states(state, robot_costs)
 
-            if not can_build_more:
-                geodes_produced = ore_counts.geode
-                geodes_produced += robot_counts.geode * (TIME_LIMIT - minute)
+            if len(next_states) == 0:
+                # We can't build more robots from this state
+                geodes_produced = state.ore_counts.geode
+                geodes_produced += state.robot_counts.geode * (
+                    TIME_LIMIT - state.minute
+                )
                 most_geodes_produced = max(geodes_produced, most_geodes_produced)
+            stack += next_states
         quality_level_sum += blueprint_idx * most_geodes_produced
     return quality_level_sum
 
