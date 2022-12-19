@@ -6,6 +6,7 @@ from util import read_puzzle_input
 Minerals = namedtuple(
     "Minerals", ["ore", "clay", "obsidian", "geode"], defaults=[0, 0, 0, 0]
 )
+GEODE_IDX = 3
 State = namedtuple("State", ["minute", "ore_counts", "robot_counts"])
 
 
@@ -43,7 +44,7 @@ def _next_states(state, robot_costs):
 
         # Do we want to produce more of this robot? Will we be able to use the material?
         max_needed = max(cost[robot_idx] for cost in robot_costs)
-        if robot_counts[robot_idx] >= max_needed:
+        if robot_counts[robot_idx] >= max_needed and robot_idx != GEODE_IDX:
             continue
 
         # We need to have enough time
