@@ -41,10 +41,17 @@ def _next_states(state, robot_costs):
             # TODO: We can avoid calculating this every time
             continue
 
+        # Do we want to produce more of this robot? Will we be able to use the material?
+        max_needed = max(cost[robot_idx] for cost in robot_costs)
+        if robot_counts[robot_idx] >= max_needed:
+            continue
+
         # We need to have enough time
         new_minute = minute
         new_ore_counts = ore_counts
         while new_minute < TIME_LIMIT and _greater_than(cost, new_ore_counts):
+            # TODO: Can be sped up
+            # calculate number of steps needed instead of going one at a time
             new_minute += 1
             new_ore_counts = _add(new_ore_counts, robot_counts)
 
