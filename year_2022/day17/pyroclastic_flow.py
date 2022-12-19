@@ -1,5 +1,3 @@
-import numpy as np
-
 from util import read_puzzle_input
 
 ROOM_WIDTH = 7
@@ -16,45 +14,34 @@ RIGHT = ">"
 
 
 def _jet_stream_move_invalid(next_coords, room):
-    if any(x >= ROOM_WIDTH or x < 0 for x, _ in next_coords):
-        return True
-
-    for room_coord in room:
-        for coord in next_coords:
-            if np.array_equal(room_coord, coord):
-                return True
-    return False
+    return any(
+        coord[0] >= ROOM_WIDTH or coord[0] < 0 or coord in room for coord in next_coords
+    )
 
 
 def _move_down_invalid(next_coords, room):
-    if any(y < 0 for _, y in next_coords):
-        return True
+    return any(coord[1] < 0 or coord in room for coord in next_coords)
 
-    for room_coord in room:
-        for coord in next_coords:
-            if np.array_equal(room_coord, coord):
-                return True
 
-    return False
+def _add(point_a, point_b):
+    return (point_a[0] + point_b[0], point_a[1] + point_b[1])
 
 
 def rock_tower_height(puzzle_input, rock_limit=2022):
     jet_pattern = puzzle_input.strip()
-    room = []
+    room = set()
     num_rocks_fallen = 0
     jet_pushes = 0
     while num_rocks_fallen < rock_limit:
         next_rock = SHAPE_ORDER[num_rocks_fallen % len(SHAPE_ORDER)]
         rock_height = max(y for _, y in room) + 3 if num_rocks_fallen > 0 else 3
-        rock_coords = [
-            np.array((2, rock_height)) + np.array(coord) for coord in next_rock
-        ]
+        rock_coords = [_add((2, rock_height), coord) for coord in next_rock]
 
         while True:
             # Get pushed by the gas jet
             direction = jet_pattern[jet_pushes % len(jet_pattern)]
-            push = np.array((1, 0)) if direction == RIGHT else np.array((-1, 0))
-            next_coords = [push + coord for coord in rock_coords]
+            push = (1, 0) if direction == RIGHT else (-1, 0)
+            next_coords = [_add(push, coord) for coord in rock_coords]
             if _jet_stream_move_invalid(next_coords, room):
                 # Invalid move
                 pass
@@ -64,14 +51,14 @@ def rock_tower_height(puzzle_input, rock_limit=2022):
             jet_pushes += 1
 
             # Move down
-            next_coords = [np.array((0, -1)) + coord for coord in rock_coords]
+            next_coords = [_add((0, -1), coord) for coord in rock_coords]
             if _move_down_invalid(next_coords, room):
                 # Invalid move
                 break
             rock_coords = next_coords
-        room += rock_coords
+        room.update(rock_coords)
         num_rocks_fallen += 1
-    return 0
+    return max(y for _, y in room)
 
 
 if __name__ == "__main__":
