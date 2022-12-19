@@ -30,7 +30,6 @@ def sum_interesting_signal_strengths(puzzle_input):
             signal_strengths.append(cycle_value * X)
             X += V
             cycle_value += 1
-    print(image)
     return sum(
         signal_strengths[i] for i in range(len(signal_strengths)) if (i - 19) % 40 == 0
     )

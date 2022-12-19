@@ -11,7 +11,7 @@ def test_rock_tower_height():
 def test_rock_tower_height_part_2():
     assert (
         rock_tower_height(
-            read_puzzle_input("test_input.txt", rock_limit=1_000_000_000_000)
+            read_puzzle_input("test_input.txt"), rock_limit=1_000_000_000_000
         )
         == 1_514_285_714_288
     )
