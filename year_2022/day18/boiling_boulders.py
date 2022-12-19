@@ -24,47 +24,39 @@ def approximate_surface_area(puzzle_input):
 
 def exterior_surface_area(puzzle_input):
     cubes = set()
-    x_limits = {}
-    y_limits = {}
-    z_limits = {}
+    max_x = 0
+    max_y = 0
+    max_z = 0
     for line in puzzle_input.strip().split("\n"):
         x, y, z = [int(num) for num in line.split(",")]
         cubes.add((x, y, z))
+        max_x = max(x + 1, max_x)
+        max_y = max(y + 1, max_y)
+        max_z = max(z + 1, max_z)
 
-        if (y, z) not in x_limits:
-            x_limits[y, z] = (x, x)
-        else:
-            x_min, x_max = x_limits[y, z]
-            x_limits[y, z] = (min(x_min, x), max(x_max, x))
-
-        if (x, z) not in y_limits:
-            y_limits[x, z] = (y, y)
-        else:
-            y_min, y_max = y_limits[x, z]
-            y_limits[x, z] = (min(y_min, y), max(y_max, y))
-
-        if (x, y) not in z_limits:
-            z_limits[x, y] = (z, z)
-        else:
-            z_min, z_max = z_limits[x, y]
-            z_limits[x, y] = (min(z_min, z), max(z_max, z))
-
-    surface_area = 0
-    for x, y, z in cubes:
-        x_min, x_max = x_limits[y, z]
-        y_min, y_max = y_limits[x, z]
-        z_min, z_max = z_limits[x, y]
-
-        comparisons = [
-            (x, x_min),
-            (x, x_max),
-            (y, y_min),
-            (y, y_max),
-            (z, z_min),
-            (z, z_max),
-        ]
-        surface_area += sum(coord == limit for coord, limit in comparisons)
-    return surface_area
+    exterior_surface_area = 0
+    # Start at 0, 0, 0 and let water flow out
+    # Where we get stopped, we found an exterior surface
+    stack = [(0, 0, 0)]
+    explored = set(stack)
+    while len(stack) > 0:
+        x, y, z = stack.pop()
+        for adjacent_cube in [
+            (x + 1, y, z),
+            (x - 1, y, z),
+            (x, y + 1, z),
+            (x, y - 1, z),
+            (x, y, z + 1),
+            (x, y, z - 1),
+        ]:
+            if x < 0 or y < 0 or z < 0 or x > max_x or y > max_y or z > max_z:
+                continue
+            elif adjacent_cube in cubes:
+                exterior_surface_area += 1
+            elif adjacent_cube not in explored:
+                explored.add(adjacent_cube)
+                stack.append(adjacent_cube)
+    return exterior_surface_area
 
 
 if __name__ == "__main__":
