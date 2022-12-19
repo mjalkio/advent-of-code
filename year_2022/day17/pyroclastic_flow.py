@@ -17,6 +17,7 @@ RIGHT = ">"
 PRINT_BUFFER = 7
 
 CacheKey = namedtuple("CacheKey", ["top_blocks", "block_type", "wind_direction"])
+CACHE_HEIGHT = 20
 
 
 def _jet_stream_move_invalid(next_coords, room):
@@ -67,12 +68,15 @@ def rock_tower_height(puzzle_input, rock_limit=2022):
         new_rock_y = tower_height + 2
         rock_coords = [_add((2, new_rock_y), coord) for coord in next_rock]
 
-        top_blocks = [0] * ROOM_WIDTH
-        for x, y in room:
-            if y > top_blocks[x]:
-                top_blocks[x] = y
-        for i in range(len(top_blocks)):
-            top_blocks[i] -= tower_height - 1
+        top_blocks = []
+        for y in range(tower_height - CACHE_HEIGHT, tower_height):
+            layer = []
+            for x in range(ROOM_WIDTH):
+                if (x, y) in room:
+                    layer.append(1)
+                else:
+                    layer.append(0)
+            top_blocks.append(tuple(layer))
         top_blocks = tuple(top_blocks)
 
         key = CacheKey(
@@ -82,7 +86,6 @@ def rock_tower_height(puzzle_input, rock_limit=2022):
         )
 
         if cache is not None and key in cache:
-            # Found a loop!
             cached_rocks_fallen, cached_tower_height = cache[key]
             loop_size = num_rocks_fallen - cached_rocks_fallen
             num_loops_to_limit = (rock_limit - num_rocks_fallen) // loop_size
@@ -93,7 +96,7 @@ def rock_tower_height(puzzle_input, rock_limit=2022):
             )
 
             cache = None  # Remove the cache so we can finish "normally"
-        elif cache is not None and num_rocks_fallen > 3000:
+        elif cache is not None and num_rocks_fallen > 3_000:
             cache[key] = num_rocks_fallen, tower_height
 
         while True:
