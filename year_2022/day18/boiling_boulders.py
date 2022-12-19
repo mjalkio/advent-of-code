@@ -37,7 +37,7 @@ def exterior_surface_area(puzzle_input):
     exterior_surface_area = 0
     # Start at 0, 0, 0 and let water flow out
     # Where we get stopped, we found an exterior surface
-    stack = [(0, 0, 0)]
+    stack = [(-1, -1, -1)]
     explored = set(stack)
     while len(stack) > 0:
         x, y, z = stack.pop()
@@ -49,7 +49,7 @@ def exterior_surface_area(puzzle_input):
             (x, y, z + 1),
             (x, y, z - 1),
         ]:
-            if x < 0 or y < 0 or z < 0 or x > max_x or y > max_y or z > max_z:
+            if x < -1 or y < -1 or z < -1 or x > max_x or y > max_y or z > max_z:
                 continue
             elif adjacent_cube in cubes:
                 exterior_surface_area += 1
