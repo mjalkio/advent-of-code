@@ -53,9 +53,13 @@ def most_pressure_possible(puzzle_input):
             current_location = order[i]
             if minute > NUM_MINUTES:
                 break
-            pressure_released += flow_rates[order[i]] * (NUM_MINUTES - minute)
+            pressure_released += flow_rates[current_location] * (
+                NUM_MINUTES - minute + 1
+            )
             i += 1
-        most_pressure_possible = max(pressure_released, most_pressure_possible)
+        if pressure_released > most_pressure_possible:
+            most_pressure_possible = pressure_released
+            print(most_pressure_possible)
 
     return most_pressure_possible
 
