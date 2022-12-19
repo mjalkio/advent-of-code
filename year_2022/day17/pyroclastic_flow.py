@@ -3,14 +3,16 @@ from util import read_puzzle_input
 ROOM_WIDTH = 7
 
 HORIZONTAL_LINE = ((0, 0), (1, 0), (2, 0), (3, 0))
-PLUS = ((1, 0), (0, 1), (1, 1), (2, 1), (2, 2))
+PLUS = ((1, 1), (0, 2), (1, 2), (2, 2), (1, 3))
 L = ((0, 0), (1, 0), (2, 0), (2, 1), (2, 2))
-VERTICAL_LINE = ((0, 0), (0, 1), (0, 2), (0, 3))
-BOX = ((0, 0), (1, 0), (0, 1), (1, 1))
+VERTICAL_LINE = ((0, 1), (0, 2), (0, 3), (0, 4))
+BOX = ((0, 1), (1, 1), (0, 2), (1, 2))
 
 SHAPE_ORDER = (HORIZONTAL_LINE, PLUS, L, VERTICAL_LINE, BOX)
 
 RIGHT = ">"
+
+PRINT_BUFFER = 6
 
 
 def _jet_stream_move_invalid(next_coords, room):
@@ -25,6 +27,26 @@ def _move_down_invalid(next_coords, room):
 
 def _add(point_a, point_b):
     return (point_a[0] + point_b[0], point_a[1] + point_b[1])
+
+
+def _print_room(room, rock_coords):
+    str_room = ""
+    if len(room) == 0:
+        max_y = PRINT_BUFFER
+    else:
+        max_y = max(y for _, y in room) + PRINT_BUFFER
+    for y in reversed(range(max_y + 1)):
+        str_room += "|"
+        for x in range(ROOM_WIDTH):
+            if (x, y) in room:
+                str_room += "#"
+            elif (x, y) in rock_coords:
+                str_room += "@"
+            else:
+                str_room += "."
+        str_room += "|\n"
+    str_room += "+-------+"
+    print(str_room)
 
 
 def rock_tower_height(puzzle_input, rock_limit=2022):
