@@ -16,7 +16,7 @@ def _print_list(node, numbers):
     print(", ".join(lst))
 
 
-def grove_coordinates_sum(puzzle_input):
+def grove_coordinates_sum(puzzle_input, compute_correctly=False):
     numbers = [int(num) for num in puzzle_input.strip().split("\n")]
     node_map = {}
 
@@ -75,4 +75,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {grove_coordinates_sum(puzzle_input)}")
-    print(f"Part 2: {grove_coordinates_sum(puzzle_input)}")
+    print(f"Part 2: {grove_coordinates_sum(puzzle_input, compute_correctly=True)}")
