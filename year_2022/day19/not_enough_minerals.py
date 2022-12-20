@@ -1,3 +1,4 @@
+import math
 from collections import namedtuple
 
 from util import read_puzzle_input
@@ -11,6 +12,7 @@ State = namedtuple("State", ["minute", "ore_counts", "robot_counts"])
 
 
 TIME_LIMIT_PART_1 = 24
+TIME_LIMIT_PART_2 = 32
 
 
 def _add(a, b):
@@ -111,7 +113,11 @@ def sum_quality_levels(puzzle_input):
 
 
 def geode_count_product(puzzle_input):
-    return 0
+    blueprints = puzzle_input.strip().split("\n")[:3]
+    return math.prod(
+        _get_most_geodes_produced(blueprint, time_limit=TIME_LIMIT_PART_2)
+        for blueprint in blueprints
+    )
 
 
 if __name__ == "__main__":

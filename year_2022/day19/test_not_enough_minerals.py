@@ -10,4 +10,4 @@ def test_sum_quality_levels():
 
 
 def test_geode_count_product():
-    assert geode_count_product(read_puzzle_input("test_input.txt")) == 62
+    assert geode_count_product(read_puzzle_input("test_input.txt")) == 56 * 62
