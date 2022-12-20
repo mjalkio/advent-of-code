@@ -2,8 +2,7 @@ from util import read_puzzle_input
 
 
 class Node:
-    def __init__(self, initial_idx, val, next_node=None, prev_node=None):
-        self.initial_idx = initial_idx
+    def __init__(self, val, next_node=None, prev_node=None):
         self.val = val
         self.next = next_node
         self.prev = prev_node
@@ -19,11 +18,14 @@ def _print_list(node, numbers):
 
 def grove_coordinates_sum(puzzle_input):
     numbers = [int(num) for num in puzzle_input.strip().split("\n")]
+    node_map = {}
 
-    tail = Node(initial_idx=len(numbers) - 1, val=numbers[-1], next_node=None)
+    tail = Node(val=numbers[-1], next_node=None)
+    node_map[len(numbers) - 1] = tail
     next_node = tail
     for i in reversed(range(len(numbers) - 1)):
-        node = Node(initial_idx=i, val=numbers[i], next_node=next_node)
+        node = Node(val=numbers[i], next_node=next_node)
+        node_map[i] = node
         next_node.prev = node
         next_node = node
     head = next_node
@@ -31,8 +33,7 @@ def grove_coordinates_sum(puzzle_input):
     tail.next = head
 
     for initial_idx in range(len(numbers)):
-        while node.initial_idx != initial_idx:
-            node = node.next
+        node = node_map[initial_idx]
 
         if node.val > 0:
             swap_1 = node
