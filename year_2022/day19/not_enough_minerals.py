@@ -90,12 +90,20 @@ def _get_most_geodes_produced(blueprint, time_limit):
     stack = [State(minute=0, ore_counts=Minerals(), robot_counts=Minerals(ore=1))]
     while len(stack) > 0:
         state = stack.pop()
+        time_remaining = time_limit - state.minute
+        upper_bound = (
+            state.ore_counts.geode
+            + state.robot_counts.geode * time_remaining
+            + sum(range(time_remaining))
+        )
+        if most_geodes_produced >= upper_bound:
+            continue
         next_states = _next_states(state, robot_costs, time_limit)
 
         if len(next_states) == 0:
             # We can't build more robots from this state
             geodes_produced = state.ore_counts.geode
-            geodes_produced += state.robot_counts.geode * (time_limit - state.minute)
+            geodes_produced += state.robot_counts.geode * time_remaining
             most_geodes_produced = max(geodes_produced, most_geodes_produced)
         stack += next_states
     return most_geodes_produced
