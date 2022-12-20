@@ -106,8 +106,12 @@ def sum_quality_levels(puzzle_input):
     return quality_level_sum
 
 
+def geode_count_product(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {sum_quality_levels(puzzle_input)}")
-    print(f"Part 2: {sum_quality_levels(puzzle_input)}")
+    print(f"Part 2: {geode_count_product(puzzle_input)}")
