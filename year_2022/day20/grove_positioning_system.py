@@ -35,23 +35,26 @@ def grove_coordinates_sum(puzzle_input):
     for initial_idx in range(len(numbers)):
         node = node_map[initial_idx]
 
+        if node.val == 0:
+            continue
+
+        # Remove the node from wherever it was in the loop
+        node.prev.next = node.next
+        node.next.prev = node.prev
+
         if node.val > 0:
             swap_1 = node
-            for _ in range(node.val % len(numbers)):
+            for _ in range(node.val):
                 swap_1 = swap_1.next
 
         elif node.val < 0:
             swap_1 = node.prev
-            for _ in range(abs(node.val) % len(numbers)):
+            for _ in range(abs(node.val)):
                 swap_1 = swap_1.prev
-        elif node.val == 0:
-            continue
 
         swap_2 = swap_1.next
         swap_2.prev = node
         swap_1.next = node
-        node.prev.next = node.next
-        node.next.prev = node.prev
         node.prev = swap_1
         node.next = swap_2
 
