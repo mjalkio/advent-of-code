@@ -36,12 +36,12 @@ def grove_coordinates_sum(puzzle_input):
 
         if node.val > 0:
             swap_1 = node
-            for _ in range(node.val):
+            for _ in range(node.val % len(numbers)):
                 swap_1 = swap_1.next
 
         elif node.val < 0:
             swap_1 = node.prev
-            for _ in range(abs(node.val)):
+            for _ in range(abs(node.val) % len(numbers)):
                 swap_1 = swap_1.prev
         elif node.val == 0:
             continue
