@@ -1,5 +1,7 @@
 from util import read_puzzle_input
 
+DECRYPTION_KEY = 811589153
+
 
 class Node:
     def __init__(self, val, next_node=None, prev_node=None):
@@ -18,6 +20,8 @@ def _print_list(node, numbers):
 
 def grove_coordinates_sum(puzzle_input, compute_correctly=False):
     numbers = [int(num) for num in puzzle_input.strip().split("\n")]
+    if compute_correctly:
+        numbers = [num * DECRYPTION_KEY for num in numbers]
     node_map = {}
 
     tail = Node(val=numbers[-1], next_node=None)
@@ -32,31 +36,34 @@ def grove_coordinates_sum(puzzle_input, compute_correctly=False):
     head.prev = tail
     tail.next = head
 
-    for initial_idx in range(len(numbers)):
-        node = node_map[initial_idx]
+    num_cycles = 10 if compute_correctly else 1
 
-        if node.val == 0:
-            continue
+    for _ in range(num_cycles):
+        for initial_idx in range(len(numbers)):
+            node = node_map[initial_idx]
 
-        # Remove the node from wherever it was in the loop
-        node.prev.next = node.next
-        node.next.prev = node.prev
+            if node.val == 0:
+                continue
 
-        if node.val > 0:
-            swap_1 = node
-            for _ in range(node.val % (len(numbers) - 1)):
-                swap_1 = swap_1.next
+            # Remove the node from wherever it was in the loop
+            node.prev.next = node.next
+            node.next.prev = node.prev
 
-        elif node.val < 0:
-            swap_1 = node.prev
-            for _ in range(abs(node.val) % (len(numbers) - 1)):
-                swap_1 = swap_1.prev
+            if node.val > 0:
+                swap_1 = node
+                for _ in range(node.val % (len(numbers) - 1)):
+                    swap_1 = swap_1.next
 
-        swap_2 = swap_1.next
-        swap_2.prev = node
-        swap_1.next = node
-        node.prev = swap_1
-        node.next = swap_2
+            elif node.val < 0:
+                swap_1 = node.prev
+                for _ in range(abs(node.val) % (len(numbers) - 1)):
+                    swap_1 = swap_1.prev
+
+            swap_2 = swap_1.next
+            swap_2.prev = node
+            swap_1.next = node
+            node.prev = swap_1
+            node.next = swap_2
 
     while node.val != 0:
         node = node.next
