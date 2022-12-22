@@ -1,7 +1,25 @@
+from collections import namedtuple
+
 from util import read_puzzle_input
 
 RIGHT = "R"
 LEFT = "L"
+UP = "^"
+DOWN = "v"
+
+OPEN_TILE = "."
+SOLID_WALL = "#"
+
+STARTING_Y = 1
+
+FACING = {
+    RIGHT: 0,
+    DOWN: 1,
+    LEFT: 2,
+    UP: 3,
+}
+
+Position = namedtuple("Position", ["x", "y", "facing"])
 
 
 def _parse_input(puzzle_input):
@@ -30,7 +48,12 @@ def _parse_input(puzzle_input):
 
 def final_password(puzzle_input):
     board, path = _parse_input(puzzle_input)
-    return 0
+    pos = Position(
+        x=min(x for x, y in board if board[x, y] == OPEN_TILE and y == STARTING_Y),
+        y=STARTING_Y,
+        facing=FACING[RIGHT],
+    )
+    return 1000 * pos.y + 4 * pos.x + pos.facing
 
 
 if __name__ == "__main__":
