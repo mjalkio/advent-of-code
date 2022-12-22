@@ -59,16 +59,22 @@ def _step(pos, board):
     if potential_pos not in board:
         # Wrap around
         if facing in (RIGHT, DOWN):
-            wrap_func = max
-        else:
             wrap_func = min
+        else:
+            wrap_func = max
 
         if facing in (UP, DOWN):
-            potential_pos = (x, wrap_func(y for x, y in board))
+            potential_pos = (
+                x,
+                wrap_func(wrap_y for wrap_x, wrap_y in board if wrap_x == x),
+            )
         else:
-            potential_pos = (wrap_func(x for x, y in board), y)
+            potential_pos = (
+                wrap_func(wrap_x for wrap_x, wrap_y in board if wrap_y == y),
+                y,
+            )
 
-    if potential_pos == SOLID_WALL:
+    if board[potential_pos] == SOLID_WALL:
         return pos
     else:
         return Position(x=potential_pos[0], y=potential_pos[1], facing=facing)
