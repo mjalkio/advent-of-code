@@ -46,7 +46,27 @@ def _parse_input(puzzle_input):
     return board_map, path_lst
 
 
-def _step(pos, board):
+def _wrap(pos, board, is_cube):
+    x, y, facing = pos
+    if facing in (FACING[RIGHT], FACING[DOWN]):
+        wrap_func = min
+    else:
+        wrap_func = max
+
+    if facing in (FACING[UP], FACING[DOWN]):
+        potential_pos = (
+            x,
+            wrap_func(wrap_y for wrap_x, wrap_y in board if wrap_x == x),
+        )
+    else:
+        potential_pos = (
+            wrap_func(wrap_x for wrap_x, wrap_y in board if wrap_y == y),
+            y,
+        )
+    return potential_pos
+
+
+def _step(pos, board, is_cube=False):
     x, y, facing = pos
     potential_new_positions = {
         FACING[RIGHT]: (x + 1, y),
@@ -56,22 +76,7 @@ def _step(pos, board):
     }
     potential_pos = potential_new_positions[facing]
     if potential_pos not in board:
-        # Wrap around
-        if facing in (FACING[RIGHT], FACING[DOWN]):
-            wrap_func = min
-        else:
-            wrap_func = max
-
-        if facing in (FACING[UP], FACING[DOWN]):
-            potential_pos = (
-                x,
-                wrap_func(wrap_y for wrap_x, wrap_y in board if wrap_x == x),
-            )
-        else:
-            potential_pos = (
-                wrap_func(wrap_x for wrap_x, wrap_y in board if wrap_y == y),
-                y,
-            )
+        potential_pos = _wrap(pos, board, is_cube)
 
     if board[potential_pos] == SOLID_WALL:
         return pos
@@ -79,7 +84,7 @@ def _step(pos, board):
         return Position(x=potential_pos[0], y=potential_pos[1], facing=facing)
 
 
-def final_password(puzzle_input):
+def final_password(puzzle_input, is_cube=False):
     board, path = _parse_input(puzzle_input)
     pos = Position(
         x=min(x for x, y in board if board[x, y] == OPEN_TILE and y == STARTING_Y),
@@ -90,7 +95,7 @@ def final_password(puzzle_input):
     for step in path:
         if isinstance(step, int):
             for _ in range(step):
-                pos = _step(pos, board)
+                pos = _step(pos, board, is_cube=is_cube)
             continue
 
         facing = pos.facing
@@ -107,4 +112,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {final_password(puzzle_input)}")
-    print(f"Part 2: {final_password(puzzle_input)}")
+    print(f"Part 2: {final_password(puzzle_input, is_cube=True)}")
