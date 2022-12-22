@@ -55,15 +55,14 @@ def _step(pos, board):
         FACING[UP]: (x, y - 1),
     }
     potential_pos = potential_new_positions[facing]
-
     if potential_pos not in board:
         # Wrap around
-        if facing in (RIGHT, DOWN):
+        if facing in (FACING[RIGHT], FACING[DOWN]):
             wrap_func = min
         else:
             wrap_func = max
 
-        if facing in (UP, DOWN):
+        if facing in (FACING[UP], FACING[DOWN]):
             potential_pos = (
                 x,
                 wrap_func(wrap_y for wrap_x, wrap_y in board if wrap_x == x),
