@@ -46,6 +46,34 @@ def _parse_input(puzzle_input):
     return board_map, path_lst
 
 
+def _step(pos, board):
+    x, y, facing = pos
+    potential_new_positions = {
+        FACING[RIGHT]: (x + 1, y),
+        FACING[LEFT]: (x - 1, y),
+        FACING[DOWN]: (x, y + 1),
+        FACING[UP]: (x, y - 1),
+    }
+    potential_pos = potential_new_positions[facing]
+
+    if potential_pos not in board:
+        # Wrap around
+        if facing in (RIGHT, DOWN):
+            wrap_func = max
+        else:
+            wrap_func = min
+
+        if facing in (UP, DOWN):
+            potential_pos = (x, wrap_func(y for x, y in board))
+        else:
+            potential_pos = (wrap_func(x for x, y in board), y)
+
+    if potential_pos == SOLID_WALL:
+        return pos
+    else:
+        return Position(x=potential_pos[0], y=potential_pos[1], facing=facing)
+
+
 def final_password(puzzle_input):
     board, path = _parse_input(puzzle_input)
     pos = Position(
@@ -53,6 +81,20 @@ def final_password(puzzle_input):
         y=STARTING_Y,
         facing=FACING[RIGHT],
     )
+
+    for step in path:
+        if isinstance(step, int):
+            for _ in range(step):
+                pos = _step(pos, board)
+            continue
+
+        facing = pos.facing
+        if step == RIGHT:
+            facing += 1
+        elif step == LEFT:
+            facing -= 1
+        facing = facing % len(FACING)
+        pos = Position(x=pos.x, y=pos.y, facing=facing)
     return 1000 * pos.y + 4 * pos.x + pos.facing
 
 
