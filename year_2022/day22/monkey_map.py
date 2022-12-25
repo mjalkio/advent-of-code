@@ -46,7 +46,7 @@ def _parse_input(puzzle_input):
     return board_map, path_lst
 
 
-def _wrap(pos, board, is_cube):
+def _wrap_2d(pos, board):
     x, y, facing = pos
     if facing in (FACING[RIGHT], FACING[DOWN]):
         wrap_func = min
@@ -64,6 +64,17 @@ def _wrap(pos, board, is_cube):
             y,
         )
     return potential_pos
+
+
+def _wrap_cube(pos, board):
+    pass
+
+
+def _wrap(pos, board, is_cube):
+    if is_cube:
+        return _wrap_cube(pos, board)
+    else:
+        return _wrap_2d(pos, board)
 
 
 def _step(pos, board, is_cube=False):
