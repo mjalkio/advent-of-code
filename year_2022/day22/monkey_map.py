@@ -80,7 +80,7 @@ def _wrap_cube(pos, board):
         return Position(x=1, y=151 - pos.y, facing=FACING[RIGHT])
     if pos.x == 1 and pos.facing == FACING[LEFT] and pos.y in range(101, 151):
         # 5 -> 2
-        return Position(x=51, y=51 - (pos.y - 100), facing=FACING[DOWN])
+        return Position(x=51, y=51 - (pos.y - 100), facing=FACING[RIGHT])
 
     if pos.y == 200 and pos.facing == FACING[DOWN] and pos.x in range(1, 51):
         # 6 -> 1
