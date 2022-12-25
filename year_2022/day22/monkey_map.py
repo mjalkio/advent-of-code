@@ -54,20 +54,68 @@ def _wrap_2d(pos, board):
         wrap_func = max
 
     if facing in (FACING[UP], FACING[DOWN]):
-        potential_pos = (
+        return (
             x,
             wrap_func(wrap_y for wrap_x, wrap_y in board if wrap_x == x),
+            facing,
         )
     else:
-        potential_pos = (
+        return (
             wrap_func(wrap_x for wrap_x, wrap_y in board if wrap_y == y),
             y,
+            facing,
         )
-    return potential_pos
 
 
 def _wrap_cube(pos, board):
-    pass
+    if pos.y == 1 and pos.facing == FACING[UP] and pos.x in range(51, 101):
+        # 2 -> 6
+        return Position(x=1, y=pos.x + 100, facing=FACING[RIGHT])
+    if pos.x == 1 and pos.facing == FACING[LEFT] and pos.y in range(151, 201):
+        # 6 -> 2
+        return Position(x=pos.y - 100, y=1, facing=FACING[DOWN])
+
+    if pos.x == 51 and pos.facing == FACING[LEFT] and pos.y in range(1, 51):
+        # 2 -> 5
+        return Position(x=1, y=151 - pos.y, facing=FACING[RIGHT])
+    if pos.x == 1 and pos.facing == FACING[LEFT] and pos.y in range(101, 151):
+        # 5 -> 2
+        return Position(x=51, y=51 - (pos.y - 100), facing=FACING[DOWN])
+
+    if pos.y == 200 and pos.facing == FACING[DOWN] and pos.x in range(1, 51):
+        # 6 -> 1
+        return Position(x=100 + pos.x, y=1, facing=FACING[DOWN])
+    if pos.y == 1 and pos.facing == FACING[UP] and pos.x in range(101, 151):
+        # 1 -> 6
+        return Position(x=pos.x - 100, y=200, facing=FACING[UP])
+
+    if pos.x == 100 and pos.facing == FACING[RIGHT] and pos.y in range(51, 101):
+        # 3 -> 1
+        return Position(x=pos.y + 50, y=50, facing=FACING[UP])
+    if pos.y == 50 and pos.facing == FACING[DOWN] and pos.x in range(101, 151):
+        # 1 -> 3
+        return Position(x=100, y=50 + (pos.x - 100), facing=FACING[LEFT])
+
+    if pos.x == 150 and pos.facing == FACING[RIGHT] and pos.y in range(1, 51):
+        # 1 -> 4
+        return Position(x=100, y=151 - pos.y, facing=FACING[LEFT])
+    if pos.x == 100 and pos.facing == FACING[RIGHT] and pos.y in range(101, 151):
+        # 4 -> 1
+        return Position(x=150, y=51 - (pos.y - 100), facing=FACING[LEFT])
+
+    if pos.x == 51 and pos.facing == FACING[LEFT] and pos.y in range(51, 101):
+        # 3 -> 5
+        return Position(x=pos.y - 50, y=101, facing=FACING[DOWN])
+    if pos.y == 101 and pos.facing == FACING[UP] and pos.x in range(1, 51):
+        # 5 -> 3
+        return Position(x=51, y=50 + pos.x, facing=FACING[RIGHT])
+
+    if pos.y == 150 and pos.facing == FACING[DOWN] and pos.x in range(51, 101):
+        # 4 -> 6
+        return Position(x=50, y=100 + pos.x, facing=FACING[LEFT])
+    if pos.x == 50 and pos.facing == FACING[RIGHT] and pos.y in range(151, 201):
+        # 6 -> 4
+        return Position(x=pos.y - 100, y=150, facing=FACING[UP])
 
 
 def _wrap(pos, board, is_cube):
@@ -85,14 +133,17 @@ def _step(pos, board, is_cube=False):
         FACING[DOWN]: (x, y + 1),
         FACING[UP]: (x, y - 1),
     }
-    potential_pos = potential_new_positions[facing]
-    if potential_pos not in board:
-        potential_pos = _wrap(pos, board, is_cube)
+    x, y = potential_new_positions[facing]
+    if (x, y) not in board:
+        x, y, facing = _wrap(pos, board, is_cube)
+    if (x, y) not in board:
+        import pdb
 
-    if board[potential_pos] == SOLID_WALL:
+        pdb.set_trace()
+    if board[x, y] == SOLID_WALL:
         return pos
     else:
-        return Position(x=potential_pos[0], y=potential_pos[1], facing=facing)
+        return Position(x=x, y=y, facing=facing)
 
 
 def final_password(puzzle_input, is_cube=False):
