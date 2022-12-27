@@ -5,6 +5,7 @@ from util import read_puzzle_input
 STARTING_POS = (1, 0)
 GOAL_POS = (6, -5)
 
+GROUND = "."
 WALL = "#"
 
 UP = "^"
@@ -14,76 +15,77 @@ RIGHT = ">"
 
 
 def _parse_input(puzzle_input):
-    blizzards = defaultdict(str)
+    grid = defaultdict(str)
     for y, line in enumerate(puzzle_input.strip().split("\n")):
         for x in range(len(line)):
-            if line[x] != ".":
-                blizzards[x, -y] = line[x]
-    return blizzards
+            grid[x, -y] = line[x]
+    return grid
 
 
-def _print(blizzards):
-    min_x = min(x for x, y in blizzards)
-    min_y = min(y for x, y in blizzards)
-    max_x = max(x for x, y in blizzards)
-    max_y = max(y for x, y in blizzards)
+def _print(grid):
+    min_x = min(x for x, y in grid)
+    min_y = min(y for x, y in grid)
+    max_x = max(x for x, y in grid)
+    max_y = max(y for x, y in grid)
 
     for y in reversed(range(min_y, max_y + 1)):
         line = ""
         for x in range(min_x, max_x + 1):
-            if (x, y) not in blizzards:
-                line += "."
-            elif len(blizzards[x, y]) > 1:
-                line += str(len(blizzards[x, y]))
+            if len(grid[x, y]) > 1:
+                line += str(len(grid[x, y]))
             else:
-                line += blizzards[x, y][0]
+                line += grid[x, y][0]
         print(line)
 
 
-def _move(blizzards):
-    min_x = min(x for x, y in blizzards if blizzards[x, y] != WALL)
-    min_y = min(y for x, y in blizzards if blizzards[x, y] != WALL)
-    max_x = max(x for x, y in blizzards if blizzards[x, y] != WALL)
-    max_y = max(y for x, y in blizzards if blizzards[x, y] != WALL)
+def _move(grid):
+    min_x = min(x for x, y in grid if grid[x, y] != WALL)
+    min_y = min(y for x, y in grid if grid[x, y] != WALL)
+    max_x = max(x for x, y in grid if grid[x, y] != WALL)
+    max_y = max(y for x, y in grid if grid[x, y] != WALL)
 
-    new_blizzards = defaultdict(str)
-    for (x, y) in blizzards:
-        if blizzards[x, y] == WALL:
-            new_blizzards[x, y] = WALL
+    new_grid = defaultdict(str)
+    for (x, y) in grid:
+        if grid[x, y] == WALL:
+            new_grid[x, y] = WALL
             continue
 
-        for b in blizzards[x, y]:
+        for b in grid[x, y]:
             if b == UP:
-                if blizzards[x, y + 1] == WALL:
-                    new_blizzards[x, min_y] += b
+                if grid[x, y + 1] == WALL:
+                    new_grid[x, min_y] += b
                 else:
-                    new_blizzards[x, y + 1] += b
+                    new_grid[x, y + 1] += b
 
             if b == DOWN:
-                if blizzards[x, y - 1] == WALL:
-                    new_blizzards[x, max_y] += b
+                if grid[x, y - 1] == WALL:
+                    new_grid[x, max_y] += b
                 else:
-                    new_blizzards[x, y - 1] += b
+                    new_grid[x, y - 1] += b
 
             if b == RIGHT:
-                if blizzards[x + 1, y] == WALL:
-                    new_blizzards[min_x, y] += b
+                if grid[x + 1, y] == WALL:
+                    new_grid[min_x, y] += b
                 else:
-                    new_blizzards[x + 1, y] += b
+                    new_grid[x + 1, y] += b
 
             if b == LEFT:
-                if blizzards[x - 1, y] == WALL:
-                    new_blizzards[max_x, y] += b
+                if grid[x - 1, y] == WALL:
+                    new_grid[max_x, y] += b
                 else:
-                    new_blizzards[x - 1, y] += b
+                    new_grid[x - 1, y] += b
 
-    return new_blizzards
+    for x in range(min_x, max_x + 1):
+        for y in range(min_y, max_y + 1):
+            if (x, y) not in new_grid:
+                new_grid[x, y] = GROUND
+    return new_grid
 
 
 def num_minutes_to_goal(puzzle_input):
-    blizzards = _parse_input(puzzle_input)
-    new_blizzards = _move(blizzards)
-    return new_blizzards
+    grid = _parse_input(puzzle_input)
+    new_grid = _move(grid)
+    return new_grid
 
 
 if __name__ == "__main__":
