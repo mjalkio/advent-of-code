@@ -2,9 +2,6 @@ from collections import defaultdict
 
 from util import read_puzzle_input
 
-STARTING_POS = (1, 0)
-GOAL_POS = (6, -5)
-
 GROUND = "."
 WALL = "#"
 
@@ -39,16 +36,21 @@ def _print(grid):
 
 
 def _move(grid):
-    min_x = min(x for x, y in grid if grid[x, y] != WALL)
-    min_y = min(y for x, y in grid if grid[x, y] != WALL)
-    max_x = max(x for x, y in grid if grid[x, y] != WALL)
-    max_y = max(y for x, y in grid if grid[x, y] != WALL)
+    min_x = min(x for x, y in grid) + 1
+    min_y = min(y for x, y in grid) + 1
+    max_x = max(x for x, y in grid) - 1
+    max_y = max(y for x, y in grid) - 1
 
     new_grid = defaultdict(str)
     for (x, y) in grid:
         if grid[x, y] == WALL:
             new_grid[x, y] = WALL
             continue
+
+        if y < min_y or y > max_y:
+            # Start point and goal point
+            assert grid[x, y] == GROUND
+            new_grid[x, y] = GROUND
 
         for b in grid[x, y]:
             if b == UP:
@@ -79,6 +81,7 @@ def _move(grid):
         for y in range(min_y, max_y + 1):
             if (x, y) not in new_grid:
                 new_grid[x, y] = GROUND
+
     return new_grid
 
 
