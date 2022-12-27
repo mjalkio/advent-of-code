@@ -100,7 +100,14 @@ def num_empty_ground_tiles(puzzle_input, num_rounds=10):
 
 
 def get_stable_round(puzzle_input):
-    return 0
+    elves = _parse_input(puzzle_input)
+    round_num = 1
+    new_elves = _simulate_round(elves, round_num)
+    while elves != new_elves:
+        round_num += 1
+        elves = new_elves
+        new_elves = _simulate_round(elves, round_num)
+    return round_num + 1
 
 
 if __name__ == "__main__":
