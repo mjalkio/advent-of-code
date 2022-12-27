@@ -90,7 +90,7 @@ def _move(grid):
 def num_minutes_to_goal(puzzle_input):
     grid = _parse_input(puzzle_input)
     goal_x = max(x for x, y in grid) - 1
-    goal_y = max(y for x, y in grid)
+    goal_y = min(y for x, y in grid)
     grid_states = {0: grid}
 
     # Breadth-first search (BFS)
