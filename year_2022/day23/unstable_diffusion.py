@@ -51,33 +51,41 @@ def _plan(elf, elves, directions):
     return None
 
 
-def num_empty_ground_tiles(puzzle_input, num_rounds=10):
+def _parse_input(puzzle_input):
     elves = set()
     for y, line in enumerate(puzzle_input.strip().split("\n")):
         for x in range(len(line)):
             if line[x] == "#":
                 elves.add((x, -y))
+    return elves
 
+
+def _simulate_round(elves, round_num):
+    directions = (
+        DIRECTION_ORDER[round_num % len(DIRECTION_ORDER) :]
+        + DIRECTION_ORDER[: round_num % len(DIRECTION_ORDER)]
+    )
+    proposed_moves = {}
+    for elf in elves:
+        if _has_adjacent(elf=elf, elves=elves):
+            proposal = _plan(elf, elves, directions)
+            if proposal is not None:
+                proposed_moves[elf] = proposal
+    proposal_counts = Counter(proposed_moves.values())
+
+    new_elves = set()
+    for elf in elves:
+        if elf in proposed_moves and proposal_counts[proposed_moves[elf]] == 1:
+            new_elves.add(proposed_moves[elf])
+        else:
+            new_elves.add(elf)
+    return new_elves
+
+
+def num_empty_ground_tiles(puzzle_input, num_rounds=10):
+    elves = _parse_input(puzzle_input)
     for round_num in range(num_rounds):
-        directions = (
-            DIRECTION_ORDER[round_num % len(DIRECTION_ORDER) :]
-            + DIRECTION_ORDER[: round_num % len(DIRECTION_ORDER)]
-        )
-        proposed_moves = {}
-        for elf in elves:
-            if _has_adjacent(elf=elf, elves=elves):
-                proposal = _plan(elf, elves, directions)
-                if proposal is not None:
-                    proposed_moves[elf] = proposal
-        proposal_counts = Counter(proposed_moves.values())
-
-        new_elves = set()
-        for elf in elves:
-            if elf in proposed_moves and proposal_counts[proposed_moves[elf]] == 1:
-                new_elves.add(proposed_moves[elf])
-            else:
-                new_elves.add(elf)
-        elves = new_elves
+        elves = _simulate_round(elves, round_num)
 
     min_x = min(x for x, y in elves)
     min_y = min(y for x, y in elves)
