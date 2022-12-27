@@ -96,24 +96,30 @@ def num_minutes_to_goal(puzzle_input):
     # Breadth-first search (BFS)
     queue = deque([State(minute_num=0, x=1, y=0)])
     while len(queue) > 0:
-        x, y, minute_num = queue.popleft()
+        state = queue.popleft()
 
-        if x == goal_x and y == goal_y:
-            return minute_num
+        if state.x == goal_x and state.y == goal_y:
+            return state.minute_num
 
-        if minute_num + 1 not in grid_states:
-            grid_states[minute_num + 1] = _move(grid_states[minute_num])
+        if state.minute_num + 1 not in grid_states:
+            grid_states[state.minute_num + 1] = _move(grid_states[state.minute_num])
 
-        grid = grid_states[minute_num + 1]
+        grid = grid_states[state.minute_num + 1]
 
-        potential_moves = [(x, y), (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+        potential_moves = [
+            (state.x, state.y),
+            (state.x + 1, state.y),
+            (state.x - 1, state.y),
+            (state.x, state.y + 1),
+            (state.x, state.y - 1),
+        ]
         valid_moves = [
             (x, y)
             for (x, y) in potential_moves
             if (x, y) in grid and grid[x, y] == GROUND
         ]
         for x, y in valid_moves:
-            queue.append(State(x=x, y=y, minute_num=minute_num + 1))
+            queue.append(State(x=x, y=y, minute_num=state.minute_num + 1))
 
 
 if __name__ == "__main__":
