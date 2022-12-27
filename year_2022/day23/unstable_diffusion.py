@@ -78,7 +78,17 @@ def num_empty_ground_tiles(puzzle_input, num_rounds=10):
             else:
                 new_elves.add(elf)
         elves = new_elves
-    return 0
+
+    min_x = min(x for x, y in elves)
+    min_y = min(y for x, y in elves)
+    max_x = max(x for x, y in elves)
+    max_y = max(y for x, y in elves)
+    num_empty = 0
+    for x in range(min_x, max_x + 1):
+        for y in range(min_y, max_y + 1):
+            if (x, y) not in elves:
+                num_empty += 1
+    return num_empty
 
 
 if __name__ == "__main__":
