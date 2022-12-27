@@ -1,13 +1,25 @@
 from util import read_puzzle_input
 
 
+SNAFU_MAP = {
+    "2": 2,
+    "1": 1,
+    "0": 0,
+    "-": -1,
+    "=": -2,
+}
+
+
 def sum_fuel_requirements(puzzle_input):
     snafu_nums = puzzle_input.strip().split("\n")
     return sum(snafu_to_decimal(num) for num in snafu_nums)
 
 
 def snafu_to_decimal(number):
-    return 0
+    decimal_number = 0
+    for i, char in enumerate(reversed(number)):
+        decimal_number += 5 ** i * SNAFU_MAP[char]
+    return decimal_number
 
 
 def decimal_to_snafu(number):
