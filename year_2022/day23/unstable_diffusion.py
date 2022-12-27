@@ -91,8 +91,12 @@ def num_empty_ground_tiles(puzzle_input, num_rounds=10):
     return num_empty
 
 
+def get_stable_round(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_empty_ground_tiles(puzzle_input)}")
-    print(f"Part 2: {num_empty_ground_tiles(puzzle_input)}")
+    print(f"Part 2: {get_stable_round(puzzle_input)}")
