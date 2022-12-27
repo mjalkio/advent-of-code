@@ -99,9 +99,24 @@ def num_empty_ground_tiles(puzzle_input, num_rounds=10):
     return num_empty
 
 
+def _print(elves):
+    min_x = min(x for x, y in elves)
+    min_y = min(y for x, y in elves)
+    max_x = max(x for x, y in elves)
+    max_y = max(y for x, y in elves)
+    for y in reversed(range(min_y, max_y + 1)):
+        line = ""
+        for x in range(min_x, max_x + 1):
+            if (x, y) not in elves:
+                line += "."
+            else:
+                line += "#"
+        print(line)
+
+
 def get_stable_round(puzzle_input):
     elves = _parse_input(puzzle_input)
-    round_num = 1
+    round_num = 0
     new_elves = _simulate_round(elves, round_num)
     while elves != new_elves:
         round_num += 1
