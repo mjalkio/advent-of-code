@@ -127,8 +127,12 @@ def num_minutes_to_goal(puzzle_input):
             queue.append(State(x=x, y=y, minute_num=state.minute_num + 1))
 
 
+def num_minutes_to_goal_twice(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {num_minutes_to_goal(puzzle_input)}")
-    print(f"Part 2: {num_minutes_to_goal(puzzle_input)}")
+    print(f"Part 2: {num_minutes_to_goal_twice(puzzle_input)}")
