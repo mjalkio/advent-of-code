@@ -128,7 +128,56 @@ def num_minutes_to_goal(puzzle_input):
 
 
 def num_minutes_to_goal_twice(puzzle_input):
-    return 0
+    # I am too lazy to refactor and reuse more
+    grid = _parse_input(puzzle_input)
+    initial_x = 1
+    initial_y = 0
+    goal_x = max(x for x, y in grid) - 1
+    goal_y = min(y for x, y in grid)
+    grid_states = {0: grid}
+    goals = {
+        0: (goal_x, goal_y),
+        1: (initial_x, initial_y),
+        2: (goal_x, goal_y),
+    }
+
+    # Breadth-first search (BFS)
+    queue = deque([State(minute_num=0, x=initial_x, y=initial_y)])
+    visited = set()
+    goal_num = 0
+    while len(queue) > 0:
+        state = queue.popleft()
+
+        if state in visited:
+            continue
+        visited.add(state)
+
+        if state.x == goals[goal_num][0] and state.y == goals[goal_num][1]:
+            goal_num += 1
+            if goal_num not in goals:
+                return state.minute_num
+            visited = set()
+            queue = deque()
+
+        if state.minute_num + 1 not in grid_states:
+            grid_states[state.minute_num + 1] = _move(grid_states[state.minute_num])
+
+        grid = grid_states[state.minute_num + 1]
+
+        potential_moves = [
+            (state.x, state.y),
+            (state.x + 1, state.y),
+            (state.x - 1, state.y),
+            (state.x, state.y + 1),
+            (state.x, state.y - 1),
+        ]
+        valid_moves = [
+            (x, y)
+            for (x, y) in potential_moves
+            if (x, y) in grid and grid[x, y] == GROUND
+        ]
+        for x, y in valid_moves:
+            queue.append(State(x=x, y=y, minute_num=state.minute_num + 1))
 
 
 if __name__ == "__main__":
