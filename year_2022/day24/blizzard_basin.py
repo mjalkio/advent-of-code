@@ -95,8 +95,13 @@ def num_minutes_to_goal(puzzle_input):
 
     # Breadth-first search (BFS)
     queue = deque([State(minute_num=0, x=1, y=0)])
+    visited = set()
     while len(queue) > 0:
         state = queue.popleft()
+
+        if state in visited:
+            continue
+        visited.add(state)
 
         if state.x == goal_x and state.y == goal_y:
             return state.minute_num
