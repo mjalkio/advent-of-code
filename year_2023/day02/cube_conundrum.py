@@ -25,8 +25,13 @@ def sum_possible_games(puzzle_input, bag={"red": 12, "green": 13, "blue": 14}):
     return answer
 
 
+def sum_min_set_powers(puzzle_input):
+    answer = 0
+    return answer
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {sum_possible_games(puzzle_input)}")
-    print(f"Part 2: {sum_possible_games(puzzle_input)}")
+    print(f"Part 2: {sum_min_set_powers(puzzle_input)}")
