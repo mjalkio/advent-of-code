@@ -7,7 +7,7 @@ from util import read_puzzle_input
 
 def snailfish_magnitude(number):
     def _magnitude(number):
-        if type(number) == int:
+        if isinstance(number, int):
             return number
 
         left = _magnitude(number[0])

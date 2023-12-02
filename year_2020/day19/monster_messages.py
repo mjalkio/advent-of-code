@@ -30,7 +30,7 @@ def get_valid_messages(rule_definitions, max_valid_message_length=100):
                 # We've already included the valid messages for this rule
                 continue
 
-            if not type(subrule_lists[0][0]) == int:
+            if not isinstance(subrule_lists[0][0], int):
                 # If it's not a digit, it's a single character rule
                 # Single character rules can be added immediately
                 single_character_rule = subrule_lists[0][0]
