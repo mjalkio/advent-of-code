@@ -18,8 +18,9 @@ def read_puzzle_input(file_name="puzzle_input.txt"):
         puzzle_input_file_contents = f.read()
 
     # Sublime always adds a trailing newline, let's remove that
-    puzzle_input = puzzle_input_file_contents[:-1]
-    return puzzle_input
+    if puzzle_input_file_contents[-1] == "\n":
+        puzzle_input_file_contents = puzzle_input_file_contents[:-1]
+    return puzzle_input_file_contents
 
 
 def setup_day(year=""):

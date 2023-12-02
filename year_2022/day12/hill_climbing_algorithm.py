@@ -40,7 +40,7 @@ def _bfs(heightmap, starting_pos, best_signal_pos):
             (curr_x, curr_y + 1),
             (curr_x, curr_y - 1),
         ]
-        for (x, y) in neighbors:
+        for x, y in neighbors:
             if (
                 (x, y) not in heightmap
                 or (x, y) in visited

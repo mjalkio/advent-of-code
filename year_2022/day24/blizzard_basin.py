@@ -44,7 +44,7 @@ def _move(grid):
     max_y = max(y for x, y in grid) - 1
 
     new_grid = defaultdict(str)
-    for (x, y) in grid:
+    for x, y in grid:
         if grid[x, y] == WALL:
             new_grid[x, y] = WALL
             continue

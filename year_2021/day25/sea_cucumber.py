@@ -25,7 +25,7 @@ def get_num_steps_no_movement(puzzle_input):
             if ((x + 1) % x_wrap, y) not in locations:
                 east_movers.add((x, y))
 
-        for (x, y) in east_movers:
+        for x, y in east_movers:
             del locations[(x, y)]
             locations[((x + 1) % x_wrap, y)] = EAST
 
@@ -36,7 +36,7 @@ def get_num_steps_no_movement(puzzle_input):
             if (x, (y + 1) % y_wrap) not in locations:
                 south_movers.add((x, y))
 
-        for (x, y) in south_movers:
+        for x, y in south_movers:
             del locations[(x, y)]
             locations[(x, (y + 1) % y_wrap)] = SOUTH
 

@@ -61,7 +61,7 @@ def get_lowest_risk_path_risk(puzzle_input, use_full_map=False):
         x = current_node.x
         y = current_node.y
         neighbors = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
-        for (x, y) in neighbors:
+        for x, y in neighbors:
             if (x, y) not in risk_map:
                 continue
             risk_to = current_node.lowest_risk_to + risk_map[(x, y)]

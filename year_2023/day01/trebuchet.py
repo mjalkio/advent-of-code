@@ -2,7 +2,11 @@ from util import read_puzzle_input
 
 
 def sum_calibration_values(puzzle_input):
-    return 0
+    answer = 0
+    for value in puzzle_input.split("\n"):
+        digits = [c for c in value if c.isdigit()]
+        answer += int(digits[0] + digits[-1])
+    return answer
 
 
 if __name__ == "__main__":

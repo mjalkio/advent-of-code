@@ -22,7 +22,7 @@ def _get_num_occupied_seats(seat_layout):
 
 def _get_surrounding_chairs(seat_layout):
     surrounding_chairs = defaultdict(list)
-    for (i, j) in seat_layout.keys():
+    for i, j in seat_layout.keys():
         for ii in range(i - 1, i + 2):
             for jj in range(j - 1, j + 2):
                 if ii == i and jj == j:
@@ -41,7 +41,7 @@ def get_surrounding_chairs_part_2(seat_layout):
             if i != 0 or j != 0:
                 directions.append((i, j))
 
-    for (x, y) in seat_layout.keys():
+    for x, y in seat_layout.keys():
         for dx, dy in directions:
             possible_surrounding_x = x + dx
             possible_surrounding_y = y + dy
