@@ -26,8 +26,7 @@ def _is_part_number(lines, line_num, start, end):
     return False
 
 
-def sum_part_numbers(puzzle_input):
-    lines = puzzle_input.split("\n")
+def _get_potential_parts(lines):
     potential_parts = []
     for line_num, line in enumerate(lines):
         i = 0
@@ -42,6 +41,12 @@ def sum_part_numbers(puzzle_input):
                 potential_parts.append((num, line_num, start, end))
             else:
                 i += 1
+    return potential_parts
+
+
+def sum_part_numbers(puzzle_input):
+    lines = puzzle_input.split("\n")
+    potential_parts = _get_potential_parts(lines)
 
     answer = 0
     for num, line_num, start, end in potential_parts:
@@ -50,8 +55,29 @@ def sum_part_numbers(puzzle_input):
     return answer
 
 
-def sum_gear_ratios(puzzle_input):
+def _get_gear_ratio(lines, potential_parts, line_num, x):
+    adjacent_parts = []
+    for num, part_line_num, start, end in potential_parts:
+        if part_line_num in (line_num, line_num + 1, line_num - 1):
+            if x in range(start - 1, end + 1):
+                adjacent_parts.append(int(num))
+
+    if len(adjacent_parts) == 2:
+        return adjacent_parts[0] * adjacent_parts[1]
     return 0
+
+
+def sum_gear_ratios(puzzle_input):
+    lines = puzzle_input.split("\n")
+    potential_parts = _get_potential_parts(lines)
+
+    answer = 0
+    for line_num, line in enumerate(lines):
+        for x in range(len(line)):
+            if line[x] == "*":
+                answer += _get_gear_ratio(lines, potential_parts, line_num, x)
+
+    return answer
 
 
 if __name__ == "__main__":
