@@ -22,7 +22,15 @@ def get_product_num_ways_beat_record(puzzle_input):
 
 
 def get_num_ways_to_beat_record(puzzle_input):
-    return 0
+    time_input, distance_input = puzzle_input.split("\n")
+    time = int(time_input.split("Time:")[1].replace(" ", ""))
+    record = int(distance_input.split("Distance:")[1].replace(" ", ""))
+    num_ways = 0
+    for button_hold in range(1, time):
+        distance = button_hold * (time - button_hold)
+        if distance > record:
+            num_ways += 1
+    return num_ways
 
 
 if __name__ == "__main__":
