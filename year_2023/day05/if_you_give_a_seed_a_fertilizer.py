@@ -87,6 +87,10 @@ def get_lowest_location_number(puzzle_input, use_ranges=False):
                 start=m_range.source_range.end, end=s_range.end
             )
             map_idx += 1
+        while seed_idx < len(seed_ranges):
+            new_seed_ranges.append(seed_ranges[seed_idx])
+            seed_idx += 1
+
         new_seed_ranges.sort()
         seed_ranges = new_seed_ranges
     return min(s_range.start for s_range in seed_ranges)
