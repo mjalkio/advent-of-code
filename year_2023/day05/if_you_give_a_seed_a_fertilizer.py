@@ -6,9 +6,18 @@ from util import read_puzzle_input
 Map = namedtuple("Map", ["dest_start", "source_start", "range_length"])
 
 
-def get_lowest_location_number(puzzle_input):
+def get_lowest_location_number(puzzle_input, use_ranges=False):
     lines = puzzle_input.split("\n")
     seeds = [int(seed) for seed in lines.pop(0).split(": ")[1].split(" ")]
+    if use_ranges:
+        new_seeds = []
+        while len(seeds) > 0:
+            start = seeds.pop(0)
+            num_values = seeds.pop(0)
+            for i in range(num_values):
+                new_seeds.append(start + i)
+        seeds = new_seeds
+
     while len(lines) > 0:
         lines = lines[2:]
         maps = []
@@ -27,4 +36,4 @@ if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_lowest_location_number(puzzle_input)}")
-    print(f"Part 2: {get_lowest_location_number(puzzle_input)}")
+    print(f"Part 2: {get_lowest_location_number(puzzle_input, use_ranges=True)}")
