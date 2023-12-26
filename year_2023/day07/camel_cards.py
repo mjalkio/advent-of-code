@@ -52,7 +52,7 @@ def _compare_hands(a, b):
         for a_char, b_char in zip(a.hand, b.hand):
             if a_char == b_char:
                 continue
-            if CHARACTERS.index(a_char) > CHARACTERS.index(b_char):
+            if CHARACTERS.index(a_char) < CHARACTERS.index(b_char):
                 return 1
             return -1
 
