@@ -21,6 +21,7 @@ CHARACTERS_WITH_JOKERS = [
     "2",
     "J",
 ]
+JOKER = "J"
 
 Play = namedtuple("Play", ["hand", "bid"])
 
@@ -37,6 +38,15 @@ class HandType(Enum):
 
 def _get_hand_type(hand, use_jokers=False):
     counts = Counter(hand)
+    if use_jokers and JOKER in counts:
+        joker_count = counts[JOKER]
+        if joker_count == 5:
+            return HandType.FIVE_OF_KIND
+
+        del counts[JOKER]
+        most_common = counts.most_common(1)
+        counts[most_common[0][0]] += joker_count
+
     if len(counts) == 1:
         return HandType.FIVE_OF_KIND
 
