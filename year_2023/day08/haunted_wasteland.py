@@ -27,8 +27,12 @@ def get_num_steps(puzzle_input):
     return num_steps
 
 
+def get_num_steps_ghost(puzzle_input):
+    return 0
+
+
 if __name__ == "__main__":
     puzzle_input = read_puzzle_input()
 
     print(f"Part 1: {get_num_steps(puzzle_input)}")
-    print(f"Part 2: {get_num_steps(puzzle_input)}")
+    print(f"Part 2: {get_num_steps_ghost(puzzle_input)}")
