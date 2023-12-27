@@ -1,3 +1,5 @@
+import math
+
 from util import read_puzzle_input
 
 
@@ -40,13 +42,17 @@ def get_num_steps_ghost(puzzle_input):
         left, right = connections[1:-1].split(", ")
         nodes[node] = {LEFT: left, RIGHT: right}
 
-    current_nodes = [n for n in nodes if n.endswith(START_CHAR)]
-    num_steps = 0
-    while any(not n.endswith(END_CHAR) for n in current_nodes):
-        next_instruction = instructions[num_steps % len(instructions)]
-        current_nodes = [nodes[n][next_instruction] for n in current_nodes]
-        num_steps += 1
-    return num_steps
+    start_nodes = [n for n in nodes if n.endswith(START_CHAR)]
+    steps_to_z = []
+    for current_node in start_nodes:
+        num_steps = 0
+        while not current_node.endswith(END_CHAR):
+            next_instruction = instructions[num_steps % len(instructions)]
+            current_node = nodes[current_node][next_instruction]
+            num_steps += 1
+        steps_to_z.append(num_steps)
+
+    return math.lcm(*steps_to_z)
 
 
 if __name__ == "__main__":
