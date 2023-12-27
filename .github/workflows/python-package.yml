@@ -14,8 +14,7 @@ jobs:
     strategy:
       matrix:
         python-version: [
-          # Can't go earlier than 3.8 because I use math.prod
-          '3.8',
+          # Can't go earlier than 3.9 because I use math.lcm
           '3.9',
           '3.10',
           '3.11',
