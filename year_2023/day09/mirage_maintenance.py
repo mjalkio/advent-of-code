@@ -14,9 +14,15 @@ def sum_extrapolated_values(puzzle_input, backwards=False):
 
         sequences[-1].append(0)
         for i in reversed(range(len(sequences) - 1)):
-            sequences[i].append(sequences[i][-1] + sequences[i + 1][-1])
+            if backwards:
+                sequences[i].insert(0, (sequences[i + 1][0] - sequences[i][0]) * -1)
+            else:
+                sequences[i].append(sequences[i][-1] + sequences[i + 1][-1])
 
-        extrapolated_sum += sequences[0][-1]
+        if backwards:
+            extrapolated_sum += sequences[0][0]
+        else:
+            extrapolated_sum += sequences[0][-1]
     return extrapolated_sum
 
 
