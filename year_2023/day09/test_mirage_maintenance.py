@@ -6,3 +6,10 @@ from year_2023.day09.mirage_maintenance import (
 
 def test_sum_extrapolated_values():
     assert sum_extrapolated_values(read_puzzle_input("test_input.txt")) == 114
+
+
+def test_sum_extrapolated_values_backwards():
+    assert (
+        sum_extrapolated_values(read_puzzle_input("test_input.txt"), backwards=True)
+        == 2
+    )
